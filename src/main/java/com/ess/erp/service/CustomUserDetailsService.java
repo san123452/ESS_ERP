@@ -1,4 +1,4 @@
-package com.ess.erp.hr;
+package com.ess.erp.service;
 
 import com.ess.erp.domain.UserDTO;
 import com.ess.erp.mapper.UserMapper;
