@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ess.erp.mapper.ClientMapper">
+
+    <insert id="insertClient" parameterType="com.ess.erp.domain.ClientDTO">
+        INSERT INTO TB_ACCOUNT (
+            ACCT_CD, ACCT_NM, ACCT_TYPE, BIZ_NO, MANAGER_NM, PHONE, EMAIL, USE_YN, REG_DT, MOD_DT
+        ) VALUES (
+            #{acctCd}, #{acctNm}, #{acctType}, #{bizNo}, #{managerNm}, #{phone}, #{email}, 'Y', NOW(), NOW()
+        )
+    </insert>
+
+    <select id="selectClientList" resultType="com.ess.erp.domain.ClientDTO">
+        SELECT 
+            ACCT_CD, ACCT_NM, ACCT_TYPE, BIZ_NO, MANAGER_NM, PHONE, EMAIL, USE_YN, REG_DT, MOD_DT
+        FROM TB_ACCOUNT
+        WHERE USE_YN = 'Y'
+        ORDER BY REG_DT DESC
+    </select>
+
+</mapper>
