@@ -22,6 +22,7 @@
 
     <div class="header">
         <h1>[물류/영업] 거래처 관리</h1>
+        
     </div>
 
     <div class="form-box">
