@@ -18,4 +18,10 @@
         ORDER BY REG_DT DESC
     </select>
 
+    <update id="deleteClient">
+        UPDATE TB_ACCOUNT 
+        SET USE_YN = 'N', MOD_DT = NOW() 
+        WHERE ACCT_CD = #{acctCd}
+    </update>
+
 </mapper>
