@@ -22,15 +22,16 @@
 <div class="login-container">
     <h2>🏢 ESS ERP System</h2>
     
-    <form action="/login" method="post">
+   <form action="/loginProc" method="post">
+        
         <div class="input-group">
-            <label for="userId">ID (사번)</label>
-            <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
+            <label for="empId">ID (사번)</label>
+            <input type="text" id="empId" name="empId" placeholder="아이디를 입력하세요" required>
         </div>
         
         <div class="input-group">
-            <label for="userPw">Password</label>
-            <input type="password" id="userPw" name="userPw" placeholder="비밀번호를 입력하세요" required>
+            <label for="empPw">Password</label>
+            <input type="password" id="empPw" name="empPw" placeholder="비밀번호를 입력하세요" required>
         </div>
         
         <button type="submit" class="login-btn">로그인</button>
