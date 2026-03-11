@@ -8,3 +8,4 @@ public class ClientDTO {
     private String businessNo;  // 사업자번호
     private String clientType;  // 매출처/매입처
 }
+// test
