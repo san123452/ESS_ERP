@@ -9,21 +9,18 @@ import java.util.List; // 여러개 담는 자료형
 @Service
 public class EmployeeService {
 
-    // Mapper 사용 선언
-    // EmployeeMapper.java와 연결
+    // Mapper.java 사용 선언
+
     private final EmployeeMapper employeeMapper;
 
-    // 생성자
-    // Spring이 자동으로 EmployeeMapper 연결해줌
+    //Mapper를 Service에 연결해주는 준비 작업
     public EmployeeService(EmployeeMapper employeeMapper) {
         this.employeeMapper = employeeMapper;
     }
 
-    // 사원 목록 조회 메서드
-    // Controller에서 이 메서드를 호출함
-    // List = 사원 여러명을 묶어서 반환
+    // 사원 목록 조회 메서드 (Service -> Mapper한테 데이터 꺼내달라고 시킴)
     public List<EmployeeDTO> getEmpList() {
-        // EmployeeMapper.xml의 selectEmpList SQL 실행
+    	
         // DB에서 사원 목록 가져와서 반환
         return employeeMapper.selectEmpList();
     }

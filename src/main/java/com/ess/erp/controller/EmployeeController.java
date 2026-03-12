@@ -11,12 +11,10 @@ import com.ess.erp.service.EmployeeService;              // Service 연결
 @Controller
 public class EmployeeController {
 
-    // Service 사용 선언
     // EmployeeService.java와 연결
     private final EmployeeService employeeService;
 
-    // 생성자
-    // Spring이 자동으로 EmployeeService 연결해줌
+    // (생성자)service.java 준비
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
