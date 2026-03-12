@@ -15,9 +15,7 @@
             POSITION  AS position,
             USE_YN    AS useYn,
             REG_DT    AS regDt
-        FROM TB_EMP
-        WHERE USE_YN = 'Y'
-        ORDER BY EMP_ID
+        FROM tb_emp WHERE USE_YN = 'Y' ORDER BY EMP_ID
     </select>
 
 </mapper>
