@@ -7,7 +7,7 @@
 <title>ESS ERP - 인사 관리</title>
 <style>
     body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; }
-    .header { background: #2c3e50; color: white; padding: 10px; margin-bottom: 20px; }
+    .header { background: #2c3e50; color: white; padding: 10px; margin-bottom: 20px;  }
     table { width: 100%; border-collapse: collapse; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
     th { background-color: #f8f9fa; color: #333; }
@@ -16,6 +16,7 @@
 <body>
     <div class="header">
         <h1>[인사] 사원 목록</h1>
+        
     </div>
     <table>
         <thead>
@@ -38,7 +39,9 @@
     <c:if test="${empty list}">
         <tr><td colspan="4">등록된 사원 정보가 없습니다.</td></tr>
     </c:if>
+    
 </tbody>
-
+	</table>>
+	<a href="/hr/employee/add">등록하기</a>
 </body>
 </html>
