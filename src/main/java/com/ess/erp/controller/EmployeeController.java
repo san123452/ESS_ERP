@@ -1,14 +1,19 @@
 package com.ess.erp.controller;
 
-import java.util.List;                                    // 여러개 담는 자료형
-import org.springframework.stereotype.Controller;         // Controller 어노테이션
-import org.springframework.ui.Model;                      // JSP로 데이터 전달하는 그릇
-import org.springframework.web.bind.annotation.GetMapping;// URL 연결 어노테이션
-import com.ess.erp.domain.EmployeeDTO;                   // 사원 데이터 담는 그릇
-import com.ess.erp.service.EmployeeService;              // Service 연결
+import java.util.List;                                   
+import org.springframework.stereotype.Controller;         
+import org.springframework.ui.Model;                      
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.ess.erp.domain.EmployeeDTO;                   
+import com.ess.erp.service.EmployeeService;              
 
 // Spring에게 이 클래스가 Controller임을 알려줌
 @Controller
+@RequestMapping(value="/hr/employee")
 public class EmployeeController {
 
     // EmployeeService.java와 연결
@@ -18,17 +23,33 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-    @GetMapping("/hr/employee/list")
+    // 1. 목록조회
+    @GetMapping("/list")
     public String empList(Model model) {
 
         // Service 호출해서 사원 목록 가져오기
         List<EmployeeDTO> list = employeeService.getEmpList();
 
-        // JSP로 데이터 전달
-        // list 라는 이름으로 JSP에서 사용 가능
         model.addAttribute("list", list);
-
         return "hr/employeeList";
     }
+    // 2. 상세조회
+    @GetMapping("/detail/{empId}")
+    public String empDetail(@PathVariable String empId, Model model) {
+        EmployeeDTO empid = employeeService.getEmpOne(empId);
+        model.addAttribute("emp", empid);
+        return "hr/employeeDetail";
+    }
+    // 3. 사원 등록 화면 보여주기
+    @GetMapping("/add")
+    public String empAdd() {
+    	return "hr/employeeAdd";
+    }
+    // 4. 사원 등록 처리
+    @PostMapping("/add")
+    public String empAddPost(EmployeeDTO employeeDTO) {
+    	employeeService.insertEmployee(employeeDTO);
+    	return "redirect:/hr/employee/list";
+    }
+    
 }

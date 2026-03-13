@@ -26,19 +26,19 @@
                 <th>직급</th>
             </tr>
         </thead>
-        <tbody>
-            <c:forEach var="emp" items="${list}">
-            <tr>
-                <td><strong>${emp.empId}</strong></td>
-                <td>${emp.empName}</td>
-                <td>${emp.deptCode}</td>
-                <td>${emp.position}</td>
-            </tr>
-            </c:forEach>
-            <c:if test="${empty list}">
-                <tr><td colspan="4">등록된 사원 정보가 없습니다.</td></tr>
-            </c:if>
-        </tbody>
-    </table>
+<tbody>
+    <c:forEach var="emp" items="${list}">
+    <tr>
+        <td><strong>${emp.empId}</strong></td>
+        <td><a href="/hr/employee/detail/${emp.empId}">${emp.empName}</a></td>
+        <td>${emp.deptCode}</td>
+        <td>${emp.position}</td>
+    </tr>
+    </c:forEach>
+    <c:if test="${empty list}">
+        <tr><td colspan="4">등록된 사원 정보가 없습니다.</td></tr>
+    </c:if>
+</tbody>
+
 </body>
 </html>

@@ -5,17 +5,47 @@
 
 <mapper namespace="com.ess.erp.mapper.EmployeeMapper">
 
-    <!-- 사원 목록 조회 -->
-    <select id="selectEmpList" 
-            resultType="com.ess.erp.domain.EmployeeDTO">
-        SELECT 
-            EMP_ID    AS empId,
-            EMP_NM    AS empName,
-            DEPT_CD   AS deptCode,
-            POSITION  AS position,
-            USE_YN    AS useYn,
-            REG_DT    AS regDt
-        FROM tb_emp WHERE USE_YN = 'Y' ORDER BY EMP_ID
-    </select>
+	<!-- 사원 목록 조회 -->
+	<select id="selectEmpList" resultType="com.ess.erp.domain.EmployeeDTO">
+	    SELECT
+	        EMP_ID    AS empId,
+	        EMP_NM    AS empName,
+	        DEPT_CD   AS deptCode,
+	        POSITION  AS position,
+	        USE_YN    AS useYn,
+	        REG_DT    AS hireDate
+	    FROM tb_emp WHERE USE_YN = 'Y' ORDER BY EMP_ID
+	</select>
+	
+	<!-- 사원 상세 조회 -->
+	<select id="selectEmpOne" resultType="com.ess.erp.domain.EmployeeDTO">
+	    SELECT
+	        EMP_ID    AS empId,
+	        EMP_NM    AS empName,
+	        DEPT_CD   AS deptCode,
+	        POSITION  AS position,
+	        USE_YN    AS useYn,
+	        REG_DT    AS hireDate
+	    FROM tb_emp WHERE EMP_ID = #{empId}
+	</select>
+	
+	<!-- 사원 등록 -->
+	<insert id="insertEmployee" parameterType="com.ess.erp.domain.EmployeeDTO">
+	    INSERT INTO tb_emp (
+	        EMP_ID,
+	        EMP_PW,
+	        EMP_NM,
+	        DEPT_CD,
+	        POSITION,
+	        USE_YN
+	    ) VALUES (
+	        #{empId},
+	        #{empPw},
+	        #{empName},
+	        #{deptCode},
+	        #{position},
+	        #{useYn}
+	    )
+	</insert>
 
 </mapper>
