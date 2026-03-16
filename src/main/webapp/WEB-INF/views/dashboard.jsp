@@ -44,6 +44,29 @@
         <hr>
         <p style="color: #666; font-size: 14px;">이제 팀원들이 올 수 있도록 깃허브에 마지막으로 푸시하고 퇴근하시면 됩니다.</p>
     </div>
+<!-- ========================================== -->
+<!-- [임시] 기능 테스트용 링크 (나중에 꼭 지우세요!) -->
+<!-- ========================================== -->
+<div style="border: 3px dashed red; padding: 20px; margin: 30px; background-color: #fff0f0; border-radius: 10px;">
+    <h3 style="color: red; margin-top: 0;"> 임시  페이지이동  버튼 </h3>
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <!-- 인사 파트 (주희님) -->
+        <a href="/hr/employee/list" style="padding: 10px 15px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">👥 사원 목록 조회 (임시)</a>
+        <a href="/hr/employee/add" style="padding: 10px 15px; background: #81C784; color: white; text-decoration: none; border-radius: 5px;">➕ 사원 등록 화면 (임시)</a>
+        
+        <!-- 물류 파트 (Garden준님) -->
+        <a href="/logis/client/list" style="padding: 10px 15px; background: #2196F3; color: white; text-decoration: none; border-radius: 5px;">🏢 거래처 관리 (임시)</a>
+        <a href="/logis/order/add" style="padding: 10px 15px; background: #64B5F6; color: white; text-decoration: none; border-radius: 5px;">📝 발주 전표 등록 (임시)</a>
+        
+        <!-- 생산 파트 (강산님) -->
+        <a href="/prod/item/list" style="padding: 10px 15px; background: #FF9800; color: white; text-decoration: none; border-radius: 5px;">📦 품목 관리 (임시)</a>
+    </div>
+</div>
+<!-- ========================================== -->
+
+
+
 </div>
 
 </body>

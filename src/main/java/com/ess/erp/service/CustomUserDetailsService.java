@@ -9,8 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -54,12 +59,18 @@ public class CustomUserDetailsService implements UserDetailsService {
         boolean matches = passwordEncoder.matches("1234", dbPw);
         System.out.println("====> [최종 매칭 테스트]: " + (matches ? "성공(MATCH!)" : "실패(MISMATCH)"));
 
-        String roleName = (user.getRole() != null) ? user.getRole() : "ROLE_USER";
-        String cleanRole = roleName.replace("ROLE_", "");
+        // v5 다중 권한(List) 반영
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+            for (String roleCd : user.getRoles()) {
+                if (roleCd != null && !roleCd.isEmpty()) {
+                    authorities.add(new SimpleGrantedAuthority(roleCd));
+                }
+            }
+        } else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
 
-        return User.withUsername(user.getEmpId())
-                .password(dbPw)
-                .roles(cleanRole)
-                .build();
+        return new User(user.getEmpId(), dbPw, authorities);
     }
 }

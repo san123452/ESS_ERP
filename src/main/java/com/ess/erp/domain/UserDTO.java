@@ -1,10 +1,12 @@
 package com.ess.erp.domain;
 
+import java.util.List;
+
 public class UserDTO {
     private String empId;
     private String empPw;
     private String empName;
-    private String role;
+    private List<String> roles; // 다중 권한 저장을 위해 List로 변경
 
     // 롬복 없이 직접 만드는 Getter / Setter
     public String getEmpId() { return empId; }
@@ -13,6 +15,6 @@ public class UserDTO {
     public void setEmpPw(String empPw) { this.empPw = empPw; }
     public String getEmpName() { return empName; }
     public void setEmpName(String empName) { this.empName = empName; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public List<String> getRoles() { return roles; }
+    public void setRoles(List<String> roles) { this.roles = roles; }
 }

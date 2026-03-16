@@ -2,15 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ess.erp.mapper.UserMapper">
-    <select id="findByEmpId" resultType="com.ess.erp.domain.UserDTO">
+
+    <resultMap id="UserResultMap" type="com.ess.erp.domain.UserDTO">
+        <id property="empId" column="EMP_ID"/>
+        <result property="empPw" column="EMP_PW"/>
+        <result property="empName" column="EMP_NM"/>
+        <!-- 여러 개의 권한 코드를 List<String> roles에 담기 -->
+        <collection property="roles" ofType="string">
+            <result column="ROLE_CD"/>
+        </collection>
+    </resultMap>
+
+    <select id="findByEmpId" resultMap="UserResultMap">
         SELECT 
-            E.EMP_ID as empId, 
-            E.EMP_PW as empPw, 
-            E.EMP_NM as empName, 
-            R.ROLE_CD as role
+            E.EMP_ID, 
+            E.EMP_PW, 
+            E.EMP_NM, 
+            ER.ROLE_CD
         FROM TB_EMP E
         LEFT JOIN TB_EMP_ROLE ER ON E.EMP_ID = ER.EMP_ID
-        LEFT JOIN TB_ROLE R ON ER.ROLE_CD = R.ROLE_CD
         WHERE E.EMP_ID = #{empId} AND E.USE_YN = 'Y'
     </select>
 </mapper>
