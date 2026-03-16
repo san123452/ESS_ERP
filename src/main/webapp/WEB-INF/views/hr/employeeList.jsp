@@ -41,7 +41,7 @@
     </c:if>
     
 </tbody>
-	</table>>
+	</table>
 	<a href="/hr/employee/add">등록하기</a>
 </body>
 </html>

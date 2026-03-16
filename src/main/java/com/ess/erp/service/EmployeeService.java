@@ -40,6 +40,15 @@ public class EmployeeService {
         // DB에 저장
         return employeeMapper.insertEmployee(employeeDTO);
     }
+    // 사원등록 수정
+    public int updateEmployee(EmployeeDTO employeeDTO) {
+    	return employeeMapper.updateEmployee(employeeDTO);
+    }
+    // 사원등록 삭제
+    public int deleteEmployee(String empId) {
+    	return employeeMapper.deleteEmployee(empId);
+    }
+    
     
     
 }

@@ -47,5 +47,17 @@
 	        #{useYn}
 	    )
 	</insert>
-
+	<!-- 사원 등록수정 -->
+	<update id="updateEmployee" parameterType="com.ess.erp.domain.EmployeeDTO">
+	    UPDATE tb_emp SET
+	        EMP_NM   = #{empName},
+	        DEPT_CD  = #{deptCode},
+	        POSITION = #{position},
+	        USE_YN   = #{useYn}
+	    WHERE EMP_ID = #{empId}
+	</update>
+	<!-- 사원 등록삭제 -->
+	<delete id="deleteEmployee" parameterType="String">
+		DELETE FROM tb_emp WHERE EMP_ID =#{empId}
+	</delete>
 </mapper>

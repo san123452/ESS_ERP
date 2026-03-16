@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ess.erp.domain.EmployeeDTO;                   
 import com.ess.erp.service.EmployeeService;              
@@ -51,5 +52,16 @@ public class EmployeeController {
     	employeeService.insertEmployee(employeeDTO);
     	return "redirect:/hr/employee/list";
     }
-    
+    // 5.사원 등록수정
+    @PostMapping("/update")
+    public String empUpdate(EmployeeDTO employeeDTO) {
+    	employeeService.updateEmployee(employeeDTO);
+    	return "redirect:/hr/employee/detail/"+ employeeDTO.getEmpId();
+    }
+    // 6.사원 목록삭제
+    @PostMapping("/delete")
+    public String empDelete(@RequestParam String empId) {
+    	employeeService.deleteEmployee(empId);
+    	return "redirect:/hr/employee/list";
+    }
 }

@@ -12,4 +12,9 @@ public interface EmployeeMapper {
     EmployeeDTO selectEmpOne(String empId);
     // 사원 등록
     int insertEmployee(EmployeeDTO employeeDTO);
+    // 사원 수정
+    int updateEmployee(EmployeeDTO employeeDTO);
+    // 사원 삭제
+    int deleteEmployee(String empId);
+    
 }
