@@ -34,8 +34,8 @@ public class EmployeeService {
     public int insertEmployee(EmployeeDTO employeeDTO) {
 
         // 비밀번호 암호화
-        String emcodedPw = passwordEncoder.encode(employeeDTO.getEmpPw());
-        employeeDTO.setEmpPw(emcodedPw);
+        String encodedPw = passwordEncoder.encode(employeeDTO.getEmpPw());
+        employeeDTO.setEmpPw(encodedPw);
 
         // DB에 저장
         return employeeMapper.insertEmployee(employeeDTO);
