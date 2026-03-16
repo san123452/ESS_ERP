@@ -14,10 +14,12 @@
 </style>
 </head>
 <body>
+<a href="/dashboard" class="btn-back">🏠 메인으로 돌아가기</a>
     <div class="header">
         <h1>[인사] 사원 목록</h1>
         
     </div>
+    
     <table>
         <thead>
             <tr>
@@ -42,6 +44,7 @@
     
 </tbody>
 	</table>
+	
 	<a href="/hr/employee/add">등록하기</a>
 </body>
 </html>
