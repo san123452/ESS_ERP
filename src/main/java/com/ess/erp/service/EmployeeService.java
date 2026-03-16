@@ -42,6 +42,12 @@ public class EmployeeService {
     }
     // 사원등록 수정
     public int updateEmployee(EmployeeDTO employeeDTO) {
+        // 비밀번호가 입력된 경우에만 암호화 진행
+        if (employeeDTO.getEmpPw() != null && !employeeDTO.getEmpPw().isEmpty()) {
+            String encodedPw = passwordEncoder.encode(employeeDTO.getEmpPw());
+            employeeDTO.setEmpPw(encodedPw);
+        }
+
     	return employeeMapper.updateEmployee(employeeDTO);
     }
     // 사원등록 삭제
