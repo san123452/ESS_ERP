@@ -22,6 +22,20 @@
     .btn-submit:hover { background-color: #219150; }
     .btn-back { display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none; font-size: 14px; }
 </style>
+<script>
+    // 품목 선택 시 단가 자동 입력 함수
+    function updatePrice() {
+        const select = document.getElementById('itemSelect');
+        const selectedOption = select.options[select.selectedIndex];
+        const price = selectedOption.getAttribute('data-price');
+        
+        if(price) {
+            document.getElementById('unitPrice').value = price;
+        } else {
+            document.getElementById('unitPrice').value = '';
+        }
+    }
+</script>
 </head>
 <body>
 
@@ -41,22 +55,34 @@
                     </c:forEach>
                 </select>
             </div>
+            
             <div class="form-group">
-                <label>품목 코드</label>
-                <input type="text" name="details[0].itemCode" placeholder="예: ITEM-001" required>
+                <label>품목 선택</label>
+                <select name="details[0].itemCd" id="itemSelect" onchange="updatePrice()" required>
+                    <option value="" data-price="">-- 품목을 선택하세요 --</option>
+                    <c:forEach var="item" items="${itemList}">
+                        <option value="${item.itemCd}" data-price="${item.price}">
+                            ${item.itemNm} (${item.itemCd})
+                        </option>
+                    </c:forEach>
+                </select>
             </div>
+            
             <div class="form-group">
                 <label>발주 수량</label>
                 <input type="number" name="details[0].qty" min="1" placeholder="수량을 입력하세요" required>
             </div>
+            
             <div class="form-group">
-                <label>단가</label>
-                <input type="number" name="details[0].unitPrice" placeholder="단가를 입력하세요" required>
+                <label>단가 (품목 선택 시 자동입력)</label>
+                <input type="number" name="details[0].unitPrice" id="unitPrice" placeholder="단가를 입력하세요" required>
             </div>
+            
             <div class="form-group">
                 <label>비고</label>
                 <input type="text" name="remark" placeholder="특이사항 입력">
             </div>
+            
             <button type="submit" class="btn-submit">발주 전표 등록하기</button>
         </form>
         <a href="/logis/order/list" class="btn-back">목록으로 돌아가기</a>

@@ -9,7 +9,7 @@
 
     <insert id="insertOrderDetail">
         INSERT INTO TB_ORDER_DETAIL (ORDER_NO, ITEM_CD, QTY, UNIT_PRICE, AMT)
-        VALUES (#{orderNo}, #{itemCode}, #{qty}, #{unitPrice}, #{qty} * #{unitPrice})
+        VALUES (#{orderNo}, #{itemCd}, #{qty}, #{unitPrice}, #{qty} * #{unitPrice})
     </insert>
     
     <select id="getOrderCountByDate" resultType="int">
@@ -25,7 +25,7 @@
             ORDER_DATE as orderDate
         FROM TB_ORDER
         WHERE ORDER_TYPE = 'BUY'
-        ORDER BY REG_DT DESC
+        ORDER BY ORDER_DATE DESC
     </select>
 
     <resultMap id="OrderDetailMap" type="com.ess.erp.domain.OrderDTO">
@@ -35,7 +35,7 @@
         <result property="status" column="STATUS" />
         <result property="remark" column="REMARK" />
         <collection property="details" ofType="com.ess.erp.domain.OrderDetailDTO">
-            <result property="itemCode" column="ITEM_CD" />
+            <result property="itemCd" column="ITEM_CD" />
             <result property="qty" column="QTY" />
             <result property="unitPrice" column="UNIT_PRICE" />
             <result property="amt" column="AMT" />
@@ -54,5 +54,30 @@
     <update id="updateOrderStatus">
         UPDATE TB_ORDER SET STATUS = #{status} WHERE ORDER_NO = #{orderNo}
     </update>
+
+    <select id="getItemList" resultType="com.ess.erp.domain.ItemDTO">
+        SELECT ITEM_CD, ITEM_NM, PRICE FROM TB_ITEM WHERE USE_YN = 'Y'
+    </select>
+
+    <update id="updateItemStock">
+        UPDATE TB_ITEM 
+        SET STOCK_QTY = STOCK_QTY + #{qty} 
+        WHERE ITEM_CD = #{itemCd}
+    </update>
+
+    <insert id="insertItemLog">
+	    INSERT INTO TB_ITEM_LOG (
+	        ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID
+	    )
+	    SELECT 
+	        #{itemCd}, 
+	        'IN', 
+	        #{qty}, 
+	        STOCK_QTY - #{qty}, 
+	        STOCK_QTY, 
+	        #{orderNo}, 
+	        #{empId}  FROM TB_ITEM 
+	    WHERE ITEM_CD = #{itemCd}
+	</insert>
 
 </mapper>

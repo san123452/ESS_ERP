@@ -19,6 +19,7 @@ public class OrderController {
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("clientList", clientService.getClientList());
+        model.addAttribute("itemList", orderService.getItemList()); 
         return "logistics/orderAdd";
     }
 
@@ -40,9 +41,5 @@ public class OrderController {
         return "logistics/orderDetail";
     }
 
-    @GetMapping("/confirm")
-    public String confirm(@RequestParam("no") String orderNo) {
-        orderService.confirmOrder(orderNo);
-        return "redirect:/logis/order/detail?no=" + orderNo;
-    }
+   
 }
