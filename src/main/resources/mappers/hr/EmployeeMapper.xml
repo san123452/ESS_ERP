@@ -14,7 +14,7 @@
 	        POSITION  AS position,
 	        USE_YN    AS useYn,
 	        REG_DT    AS hireDate
-	    FROM tb_emp WHERE USE_YN = 'Y' ORDER BY EMP_ID
+	    FROM TB_EMP WHERE USE_YN = 'Y' ORDER BY EMP_ID
 	</select>
 	
 	<!-- 사원 상세 조회 -->
@@ -26,12 +26,12 @@
 	        POSITION  AS position,
 	        USE_YN    AS useYn,
 	        REG_DT    AS hireDate
-	    FROM tb_emp WHERE EMP_ID = #{empId}
+	    FROM TB_EMP WHERE EMP_ID = #{empId}
 	</select>
 	
 	<!-- 사원 등록 -->
 	<insert id="insertEmployee" parameterType="com.ess.erp.domain.EmployeeDTO">
-	    INSERT INTO tb_emp (
+	    INSERT INTO TB_EMP (
 	        EMP_ID,
 	        EMP_PW,
 	        EMP_NM,
@@ -49,7 +49,7 @@
 	</insert>
 	<!-- 사원 등록수정 -->
 	<update id="updateEmployee" parameterType="com.ess.erp.domain.EmployeeDTO">
-	    UPDATE tb_emp SET
+	    UPDATE TB_EMP SET
 	        EMP_NM   = #{empName},
 	        DEPT_CD  = #{deptCode},
 	        POSITION = #{position},
@@ -58,6 +58,6 @@
 	</update>
 	<!-- 사원 등록삭제 -->
 	<delete id="deleteEmployee" parameterType="String">
-		DELETE FROM tb_emp WHERE EMP_ID =#{empId}
+		DELETE FROM TB_EMP WHERE EMP_ID =#{empId}
 	</delete>
 </mapper>
