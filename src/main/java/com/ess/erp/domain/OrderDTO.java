@@ -14,6 +14,8 @@ public class OrderDTO {
     private String dueDate;      // DUE_DATE
     private String status;       // STATUS (WAIT, CONF, DONE, CANCEL)
     private String remark;       // REMARK
+    
+    private String acctNm;		 // 거래처명을 담기 위한 필드
 
     // TB_ORDER_DETAIL (상세 목록)
     private List<OrderDetailDTO> details; 

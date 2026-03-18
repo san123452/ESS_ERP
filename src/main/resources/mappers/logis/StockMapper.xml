@@ -7,10 +7,19 @@
         FROM TB_ITEM 
         WHERE ITEM_CD = #{itemCd}
     </select>
-
+    
+	<select id="selectCurrentStock" resultType="int">
+        SELECT IFNULL(STOCK_QTY, 0) 
+        FROM TB_ITEM 
+        WHERE ITEM_CD = #{itemCd}
+    </select>
+    
     <insert id="insertItemLog">
-        INSERT INTO TB_ITEM_LOG (ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT)
-        VALUES (#{itemCd}, #{inoutType}, #{qty}, #{beforeQty}, #{afterQty}, #{refNo}, #{empId}, NOW())
+        INSERT INTO TB_ITEM_LOG (
+        ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT
+        ) VALUES (
+        #{itemCd}, #{inoutType}, #{qty}, #{beforeQty}, #{afterQty}, #{refNo}, #{empId}, NOW()
+        )
     </insert>
 
     <update id="updateItemStock">

@@ -23,5 +23,13 @@
         SET USE_YN = 'N', MOD_DT = NOW() 
         WHERE ACCT_CD = #{acctCd}
     </update>
+    
+    <select id="getClientListByType" resultType="com.ess.erp.domain.ClientDTO">
+	    SELECT ACCT_CD, ACCT_NM, ACCT_TYPE 
+	    FROM TB_ACCOUNT 
+	    WHERE USE_YN = 'Y'
+	      AND (ACCT_TYPE = #{type} OR ACCT_TYPE = 'BOTH')
+	    ORDER BY ACCT_NM ASC
+	</select>
 
 </mapper>

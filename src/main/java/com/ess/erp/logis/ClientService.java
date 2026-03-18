@@ -26,6 +26,10 @@ public class ClientService {
     public List<ClientDTO> getClientList() {
         return clientMapper.selectClientList();
     }
+    
+    public List<ClientDTO> getClientListByType(String type) {
+        return clientMapper.getClientListByType(type);
+    }
 
     @Transactional
     public void removeClient(String acctCd) {

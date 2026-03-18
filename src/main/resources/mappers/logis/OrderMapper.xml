@@ -3,8 +3,8 @@
 <mapper namespace="com.ess.erp.mapper.OrderMapper">
 
     <insert id="insertOrder">
-        INSERT INTO TB_ORDER (ORDER_NO, ORDER_TYPE, ACCT_CD, ORDER_DATE, STATUS, REMARK)
-        VALUES (#{orderNo}, #{orderType}, #{acctCd}, NOW(), 'WAIT', #{remark})
+        INSERT INTO TB_ORDER (ORDER_NO, ORDER_TYPE, ACCT_CD, ORDER_DATE, DUE_DATE, STATUS, REMARK, EMP_ID)
+        VALUES (#{orderNo}, #{orderType}, #{acctCd}, NOW(), #{dueDate}, 'WAIT', #{remark}, #{empId})
     </insert>
 
     <insert id="insertOrderDetail">
@@ -14,7 +14,7 @@
     
     <select id="getOrderCountByDate" resultType="int">
         SELECT COUNT(*) FROM TB_ORDER 
-        WHERE ORDER_NO LIKE CONCAT('PO-', #{dateStr}, '%')
+        WHERE ORDER_NO LIKE CONCAT('%-', #{dateStr}, '-%')
     </select>
     
     <select id="getOrderList" resultType="com.ess.erp.domain.OrderDTO">
@@ -22,16 +22,32 @@
             ORDER_NO as orderNo,
             ACCT_CD as acctCd,
             STATUS as status,
-            ORDER_DATE as orderDate
+            ORDER_DATE as orderDate,
+            DUE_DATE as dueDate
         FROM TB_ORDER
         WHERE ORDER_TYPE = 'BUY'
         ORDER BY ORDER_DATE DESC
+    </select>
+
+    <select id="getOrderSellList" resultType="com.ess.erp.domain.OrderDTO">
+        SELECT 
+            O.ORDER_NO as orderNo,
+            O.ACCT_CD as acctCd,
+            A.ACCT_NM as acctNm,
+            O.STATUS as status,
+            O.ORDER_DATE as orderDate,
+            O.DUE_DATE as dueDate
+        FROM TB_ORDER O
+        LEFT JOIN TB_ACCOUNT A ON O.ACCT_CD = A.ACCT_CD
+        WHERE O.ORDER_TYPE = 'SELL'
+        ORDER BY O.ORDER_DATE DESC
     </select>
 
     <resultMap id="OrderDetailMap" type="com.ess.erp.domain.OrderDTO">
         <id property="orderNo" column="ORDER_NO" />
         <result property="acctCd" column="ACCT_CD" />
         <result property="orderDate" column="ORDER_DATE" />
+        <result property="dueDate" column="DUE_DATE" />
         <result property="status" column="STATUS" />
         <result property="remark" column="REMARK" />
         <collection property="details" ofType="com.ess.erp.domain.OrderDetailDTO">
@@ -44,19 +60,25 @@
 
     <select id="getOrderDetail" resultMap="OrderDetailMap">
         SELECT 
-            A.ORDER_NO, A.ACCT_CD, A.ORDER_DATE, A.STATUS, A.REMARK,
+            A.ORDER_NO, A.ACCT_CD, A.ORDER_DATE, A.DUE_DATE, A.STATUS, A.REMARK,
             B.ITEM_CD, B.QTY, B.UNIT_PRICE, B.AMT
         FROM TB_ORDER A
         LEFT JOIN TB_ORDER_DETAIL B ON A.ORDER_NO = B.ORDER_NO
         WHERE A.ORDER_NO = #{orderNo}
     </select>
 
+    <select id="getItemList" resultType="com.ess.erp.domain.ItemDTO">
+        SELECT ITEM_CD, ITEM_NM, PRICE, STOCK_QTY as stockQty, UNIT 
+        FROM TB_ITEM 
+        WHERE USE_YN = 'Y'
+    </select>
+
     <update id="updateOrderStatus">
         UPDATE TB_ORDER SET STATUS = #{status} WHERE ORDER_NO = #{orderNo}
     </update>
 
-    <select id="getItemList" resultType="com.ess.erp.domain.ItemDTO">
-        SELECT ITEM_CD, ITEM_NM, PRICE FROM TB_ITEM WHERE USE_YN = 'Y'
+    <select id="getItemStockQty" resultType="int">
+        SELECT IFNULL(STOCK_QTY, 0) FROM TB_ITEM WHERE ITEM_CD = #{itemCd}
     </select>
 
     <update id="updateItemStock">
@@ -66,18 +88,19 @@
     </update>
 
     <insert id="insertItemLog">
-	    INSERT INTO TB_ITEM_LOG (
-	        ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID
-	    )
+	    INSERT INTO TB_ITEM_LOG (ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT)
 	    SELECT 
-	        #{itemCd}, 
-	        'IN', 
-	        #{qty}, 
-	        STOCK_QTY - #{qty}, 
-	        STOCK_QTY, 
-	        #{orderNo}, 
-	        #{empId}  FROM TB_ITEM 
+	        #{itemCd}, 'IN', #{qty}, STOCK_QTY - #{qty}, STOCK_QTY, #{orderNo}, #{empId}, NOW()
+	    FROM TB_ITEM 
 	    WHERE ITEM_CD = #{itemCd}
 	</insert>
+
+    <insert id="insertOutboundLog">
+        INSERT INTO TB_ITEM_LOG (ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT)
+        SELECT 
+            #{itemCd}, 'OUT', #{qty}, STOCK_QTY + #{qty}, STOCK_QTY, #{orderNo}, #{empId}, NOW()
+        FROM TB_ITEM 
+        WHERE ITEM_CD = #{itemCd}
+    </insert>
 
 </mapper>
