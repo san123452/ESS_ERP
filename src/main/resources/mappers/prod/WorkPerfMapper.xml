@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ess.erp.mapper.WorkPerfMapper">
+
+    <insert id="insertWorkPerf">
+        INSERT INTO TB_WORK_PERF (
+            WORK_NO, GOOD_QTY, BAD_QTY, BAD_REASON, PERF_DATE, EMP_ID
+        ) VALUES (
+            #{workNo}, #{goodQty}, #{badQty}, #{badReason}, NOW(), #{empId}
+        )
+    </insert>
+
+    <!-- 완제품 1개를 만들 때 필요한 하위 부품 목록 (USE_YN='Y' 인것만) -->
+    <select id="selectBomChildren" resultType="com.ess.erp.domain.BomDTO">
+        SELECT CHILD_CD as childCd, REQ_QTY as reqQty
+        FROM TB_BOM 
+        WHERE PARENT_CD = #{parentCd} AND USE_YN = 'Y'
+    </select>
+
+    <update id="updateWorkOrderStatus">
+        UPDATE TB_WORK_ORDER SET STATUS = #{status}, MOD_DT = NOW() WHERE WORK_NO = #{workNo}
+    </update>
+
+    <select id="selectItemCdByWorkNo" resultType="String">
+        SELECT ITEM_CD FROM TB_WORK_ORDER WHERE WORK_NO = #{workNo}
+    </select>
+</mapper>

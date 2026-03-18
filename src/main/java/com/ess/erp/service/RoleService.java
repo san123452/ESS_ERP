@@ -12,10 +12,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class RoleService {
 
     private final RoleMapper roleMapper;
+
+    // 롬복 에러 방지를 위해 직접 생성자 주입 코드를 작성합니다.
+    public RoleService(RoleMapper roleMapper) {
+        this.roleMapper = roleMapper;
+    }
 
     // 사원별 권한 상태 목록 조회
     public List<Map<String, Object>> getEmpRoleStatus(String empId) {
