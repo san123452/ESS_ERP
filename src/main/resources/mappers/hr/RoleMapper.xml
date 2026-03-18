@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ess.erp.mapper.RoleMapper">
+
+	<!-- 역할 전체 목록 조회 (사원 보유 여부 포함) -->
+	<select id="selectEmpRoleStatus" parameterType="String" resultType="map">
+	    SELECT
+	        tb_role.ROLE_CD,
+	        tb_role.ROLE_NM,
+	        tb_emp_role.IS_DEFAULT,
+	        IF(tb_emp_role.EMP_ID IS NOT NULL, 'Y', 'N') AS HAS_ROLE
+	    FROM tb_role
+	    LEFT JOIN TB_EMP_ROLE
+	        ON tb_role.ROLE_CD = tb_emp_role.ROLE_CD
+	        AND tb_emp_role.EMP_ID = #{empId}
+	</select>
+	
+	<!-- 수동 권한 부여 -->
+	<insert id="insertEmpRole" parameterType="map">
+			INSERT INTO tb_emp_role (EMP_ID, ROLE_CD, IS_DEFAULT)
+			VALUES (#{empId}, #{roleCd}, 'N') 
+	</insert>
+	
+	<!-- 수동 권한 해제 (기본 권한 보호) -->
+	<delete id="deleteEmpRole" parameterType="map">
+	    DELETE FROM tb_emp_role 
+	    WHERE EMP_ID = #{empId}
+	    AND IS_DEFAULT = 'N'
+	</delete>
+	
+
+	
+</mapper>

@@ -50,6 +50,7 @@
         <br>
         <button class="btn btn-update" onclick="enableEdit()">수정</button>
         <button class="btn btn-delete" onclick="enableDelete()">퇴사처리</button>
+        <a class="btn btn-update" href="/hr/role/manage?empId=${emp.empId}">권한 관리</a>
         <a class="btn btn-list" href="/hr/employee/list">목록으로</a>
     </div>
 
