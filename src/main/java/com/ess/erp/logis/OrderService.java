@@ -47,8 +47,36 @@ public class OrderService {
         }
     }
 
+    // [추가] 수주(판매) 전표 등록 로직
+    @Transactional
+    public void registerSellOrder(OrderDTO dto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserId = (auth != null) ? auth.getName() : "SYSTEM";
+        dto.setEmpId(currentUserId);
+        
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        int nextSeq = orderMapper.getSellOrderCountByDate(today) + 1;
+        String orderNo = String.format("SO-%s-%03d", today, nextSeq); // 'SO-' 접두사 사용
+        dto.setOrderNo(orderNo);
+        dto.setOrderType("SELL");
+
+        orderMapper.insertOrder(dto);
+
+        if (dto.getDetails() != null) {
+            for (OrderDetailDTO detail : dto.getDetails()) {
+                detail.setOrderNo(orderNo);
+                orderMapper.insertOrderDetail(detail);
+            }
+        }
+    }
+
     public List<OrderDTO> getOrderList() {
         return orderMapper.getOrderList();
+    }
+
+    // [추가] 수주(판매) 목록 조회
+    public List<OrderDTO> getOrderSellList() {
+        return orderMapper.getOrderSellList();
     }
 
     public OrderDTO getOrderDetail(String orderNo) {

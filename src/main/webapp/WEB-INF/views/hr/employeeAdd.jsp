@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ESS ERP - 사원 등록</title>
+<link rel="stylesheet" href="/css/common.css">
 <style>
     body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background: #f5f5f5; }
     .form-wrap { max-width: 600px; margin: 0 auto; }

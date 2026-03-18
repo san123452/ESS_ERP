@@ -12,9 +12,4 @@ public class MainController {
         return "index"; // src/main/webapp/WEB-INF/views/index.jsp를 호출
     }
 
-    // 2. 로그인 성공 후 /dashboard로 리다이렉트 되었을 때 보여줄 페이지
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard"; // src/main/webapp/WEB-INF/views/dashboard.jsp를 호출
-    }
 }

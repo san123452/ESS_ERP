@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>생산 실적 등록</title>
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
     <h2>실적 등록 폼 (모달 또는 새창용)</h2>

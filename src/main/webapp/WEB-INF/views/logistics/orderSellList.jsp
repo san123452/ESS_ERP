@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ESS ERP - 수주 전표 관리</title>
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background-color: #f4f7f6; color: #333; }
         .header { background: #2c3e50; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }

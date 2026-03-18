@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ESS ERP - 수주 등록</title>
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background-color: #f4f7f6; color: #333; }
         .container { max-width: 800px; margin: 0 auto; }

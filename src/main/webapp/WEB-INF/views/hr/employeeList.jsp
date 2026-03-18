@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ESS ERP - 인사 관리</title>
+<link rel="stylesheet" href="/css/common.css">
 <style>
     body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; }
     .header { background: #2c3e50; color: white; padding: 10px; margin-bottom: 20px;  }

@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>발주 상세 내역</title>
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background-color: #f4f7f6; }
         .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 900px; margin: 0 auto; }

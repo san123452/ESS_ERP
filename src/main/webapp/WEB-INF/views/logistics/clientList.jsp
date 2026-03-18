@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ESS ERP - 물류 관리</title>
+<link rel="stylesheet" href="/css/common.css">
 <style>
     body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; }
     .header { background: #34495e; color: white; padding: 10px; margin-bottom: 20px; }

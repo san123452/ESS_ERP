@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ESS ERP - Login</title>
+<link rel="stylesheet" href="/css/common.css">
 <style>
     /* 간단하고 깔끔한 ERP 스타일 디자인 */
     body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }

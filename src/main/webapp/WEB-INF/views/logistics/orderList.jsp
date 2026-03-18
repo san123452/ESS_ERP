@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ESS ERP - 발주 전표 현황</title>
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background-color: #f4f7f6; }
         .header { background: #2c3e50; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 20px; }

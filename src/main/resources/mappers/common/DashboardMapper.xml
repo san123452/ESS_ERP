@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ess.erp.mapper.DashboardMapper">
+
+    <select id="selectSafeStockAlert" resultType="map">
+        SELECT ITEM_CD as itemCd, ITEM_NM as itemNm, STOCK_QTY as stockQty, SAFE_QTY as safeQty
+        FROM TB_ITEM
+        WHERE STOCK_QTY &lt;= SAFE_QTY AND USE_YN = 'Y'
+    </select>
+
+    <select id="selectDelayedOrderAlert" resultType="map">
+        SELECT ORDER_NO as orderNo, ORDER_TYPE as orderType, STATUS as status, DUE_DATE as dueDate
+        FROM TB_ORDER
+        WHERE DUE_DATE &lt; CURDATE() AND STATUS != 'DONE'
+    </select>
+
+    <select id="selectUserMenuList" resultType="map">
+        SELECT DISTINCT M.MENU_NO as menuNo, M.MENU_NM as menuNm, 
+               M.MENU_URL as menuUrl, M.PARENT_NO as parentNo, 
+               M.MENU_ORD as menuOrd, M.ICON_CLASS as iconClass
+        FROM TB_MENU M
+        JOIN TB_ROLE_MENU RM ON M.MENU_NO = RM.MENU_NO
+        WHERE RM.ROLE_CD IN 
+        <foreach collection="roles" item="role" open="(" separator="," close=")">
+            #{role}
+        </foreach>
+        AND M.USE_YN = 'Y'
+        ORDER BY M.PARENT_NO IS NULL DESC, M.PARENT_NO ASC, M.MENU_ORD ASC
+    </select>
+</mapper>

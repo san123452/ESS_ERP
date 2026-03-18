@@ -83,20 +83,6 @@ public class OrderController {
         model.addAttribute("orderSellList", orderService.getOrderSellList());
         return "logistics/orderSellList";
     }
-    /** 출고 확정 처리 (재고 부족 검증 포함) */
-    @PostMapping("/outbound")
-    public String outboundConfirm(@RequestParam("no") String orderNo, RedirectAttributes rttr) {
-        try {
-            // 서비스에서 재고 부족 시 RuntimeException을 던짐
-            orderService.processOutbound(orderNo);
-            rttr.addFlashAttribute("msg", "출고 처리가 정상적으로 완료되었습니다.");
-            
-        } catch (RuntimeException e) {
-            // 재고 부족 에러 메시지를 가로채서 JSP의 alert으로 전달
-            rttr.addFlashAttribute("errorMsg", e.getMessage());
-        }
-        return "redirect:/logis/order/sell/list";
-    }
     /* =================================================================
      * 공통 기능
      * ================================================================= */

@@ -1,73 +1,161 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ESS ERP - Dashboard</title>
+<title>앞날창창창</title>
+<!-- Bootstrap 5 & FontAwesome -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="/css/common.css">
 <style>
-    body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; }
-    .sidebar { width: 250px; height: 100vh; background-color: #2c3e50; color: white; padding: 20px; box-sizing: border-box; }
-    .main-content { flex: 1; padding: 40px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .welcome-msg { font-size: 24px; color: #333; font-weight: bold; }
-    .status-badge { display: inline-block; padding: 5px 15px; background-color: #27ae60; color: white; border-radius: 20px; font-size: 14px; }
-    .logout-btn { color: #e74c3c; text-decoration: none; font-weight: bold; }
+    /* Bootstrap 호환을 위해 common.css 일부 덮어쓰기 */
+    body { padding: 0 !important; margin: 0; background-color: #f0f2f5; display: flex; height: 100vh; overflow: hidden; }
+    .sidebar { width: 260px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+    .sidebar .nav-link { color: rgba(255,255,255,.8); transition: 0.3s; padding: 10px 20px; display: flex; align-items: center; gap: 10px; }
+    .sidebar .nav-link:hover { color: white; background-color: #34495e; }
+    .sidebar .nav-item .submenu .nav-link { padding-left: 50px; font-size: 0.9em; }
+    .main-content { flex-grow: 1; overflow-y: auto; padding: 30px; }
+    .widget-card { transition: transform 0.2s; }
+    .widget-card:hover { transform: translateY(-5px); }
+    .icon-box { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 </style>
 </head>
 <body>
+<!-- 사이드바 영역 -->
+<div class="sidebar shadow">
+    <div class="p-4 text-center border-bottom border-secondary">
+        <h4 class="m-0 fw-bold"><i class="fas fa-industry text-primary"></i> ESS ERP</h4>
+        <small class="text-white-50">Enterprise System</small>
+    </div>
+    
+    <div class="flex-grow-1 overflow-auto py-3">
+        <ul class="nav flex-column mb-auto">
+            <!-- 권한별 동적 메뉴 렌더링 (TB_ROLE_MENU 연동) -->
+            <c:forEach var="menu" items="${sidebarMenuList}" varStatus="vs">
+                <c:if test="${empty menu.parentNo}">
+                    
+                    <!-- 하위 메뉴 존재 여부 확인 -->
+                    <c:set var="hasSub" value="false"/>
+                    <c:forEach var="checkSub" items="${sidebarMenuList}">
+                        <c:if test="${checkSub.parentNo == menu.menuNo}"><c:set var="hasSub" value="true"/></c:if>
+                    </c:forEach>
 
-<div class="sidebar">
-    <h2>🏢 ESS ERP</h2>
-    <hr>
-    <p>생산/보안 관리 (강산)</p>
-    <ul style="list-style: none; padding: 0; line-height: 2.5;">
-        <li>📊 대시보드</li>
-        <li>📦 품목 관리</li>
-        <li>⚙️ BOM 관리</li>
-        <li>🔒 권한 설정</li>
-    </ul>
+                    <li class="nav-item mt-2">
+                        <c:choose>
+                            <c:when test="${hasSub}">
+                                <!-- 하위 메뉴가 있으면 아코디언 토글 적용 -->
+                                <a class="nav-link text-white fw-bold d-flex justify-content-between align-items-center" 
+                                   data-bs-toggle="collapse" href="#menuCollapse${vs.index}" role="button" aria-expanded="false">
+                                    <span><i class="fas ${not empty menu.iconClass ? menu.iconClass : 'fa-folder'}"></i> ${menu.menuNm}</span>
+                                    <i class="fas fa-chevron-down" style="font-size: 0.8em;"></i>
+                                </a>
+                                <div class="collapse show" id="menuCollapse${vs.index}">
+                                    <ul class="nav flex-column submenu">
+                                        <c:forEach var="sub" items="${sidebarMenuList}">
+                                            <c:if test="${sub.parentNo == menu.menuNo}">
+                                                <li class="nav-item"><a class="nav-link" href="${sub.menuUrl}">${sub.menuNm}</a></li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- 하위 메뉴가 없는 단일 메뉴 (예: 대시보드) -->
+                                <a class="nav-link text-white fw-bold" href="${not empty menu.menuUrl ? menu.menuUrl : '#'}">
+                                    <i class="fas ${not empty menu.iconClass ? menu.iconClass : 'fa-folder'}"></i> ${menu.menuNm}
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </li>
+                </c:if>
+            </c:forEach>
+        </ul>
+    </div>
+    <div class="p-3 border-top border-secondary text-center">
+        <a href="/logout" class="btn btn-outline-danger w-100"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
+    </div>
 </div>
 
-<div class="main-content">
-    <div class="header">
-        <div class="welcome-msg">
-            안녕하세요, <span style="color: #4A90E2;">강산 조장님!</span> 👋
+<!-- 메인 컨텐츠 영역 -->
+<div class="main-content bg-light">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0 text-dark">📊 시스템 현황 대시보드</h2>
+        <div class="badge bg-success px-3 py-2 fs-6 rounded-pill shadow-sm">
+            <i class="fas fa-user-shield"></i> 권한 및 보안 활성화됨
         </div>
         <a href="/logout" class="logout-btn">로그아웃</a>
     </div>
-
-    <div class="card">
-        <h3>🚀 시스템 상륙 성공!</h3>
-        <p>현재 <span class="status-badge">보안 모드 활성화(Security OK)</span> 상태입니다.</p>
-        <p>로그인 세션이 정상적으로 생성되어 <strong>/dashboard</strong> 경로로 진입하였습니다.</p>
-        <hr>
-        <p style="color: #666; font-size: 14px;">이제 팀원들이 올 수 있도록 깃허브에 마지막으로 푸시하고 퇴근하시면 됩니다.</p>
-    </div>
-<!-- ========================================== -->
-<!-- [임시] 기능 테스트용 링크 (나중에 꼭 지우세요!) -->
-<!-- ========================================== -->
-<div style="border: 3px dashed red; padding: 20px; margin: 30px; background-color: #fff0f0; border-radius: 10px;">
-    <h3 style="color: red; margin-top: 0;"> 임시  페이지이동  버튼 </h3>
-    
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <!-- 인사 파트 (주희님) -->
-        <a href="/hr/employee/list" style="padding: 10px 15px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">👥 사원 목록 조회 (임시)</a>
-        <a href="/hr/employee/add" style="padding: 10px 15px; background: #81C784; color: white; text-decoration: none; border-radius: 5px;">➕ 사원 등록 화면 (임시)</a>
+    <!-- 1. 경고 위젯 영역 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card widget-card shadow-sm border-0 border-start border-danger border-5">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-danger bg-opacity-10 text-danger me-3"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div>
+                        <h6 class="text-muted fw-bold mb-1">안전재고 미달 품목</h6>
+                        <h3 class="mb-0 text-danger fw-bold">${safeStockList.size()} <small class="fs-6 text-muted">건</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <!-- 물류 파트 (Garden준님) -->
-        <a href="/logis/client/list" style="padding: 10px 15px; background: #2196F3; color: white; text-decoration: none; border-radius: 5px;">🏢 거래처 관리 (임시)</a>
-        <a href="/logis/order/add" style="padding: 10px 15px; background: #64B5F6; color: white; text-decoration: none; border-radius: 5px;">📝 발주 전표 등록 (임시)</a>
-        
-        <!-- 생산 파트 (강산님) -->
-        <a href="/prod/item/list" style="padding: 10px 15px; background: #FF9800; color: white; text-decoration: none; border-radius: 5px;">📦 품목 관리 (임시)</a>
+        <div class="col-md-6">
+            <div class="card widget-card shadow-sm border-0 border-start border-warning border-5">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-warning bg-opacity-10 text-warning me-3"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h6 class="text-muted fw-bold mb-1">납기 지연 전표</h6>
+                        <h3 class="mb-0 text-warning fw-bold">${delayedOrderList.size()} <small class="fs-6 text-muted">건</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 2. 상세 내역 테이블 영역 -->
+    <div class="row g-4">
+        <!-- 좌측: 안전재고 미달 목록 -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3"><h5 class="card-title mb-0 fw-bold text-danger"><i class="fas fa-box-open"></i> 안전재고 조치 필요 (발주요망)</h5></div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 text-center align-middle">
+                        <thead class="table-light"><tr><th>품목코드</th><th>품목명</th><th>현재고</th><th>안전재고</th></tr></thead>
+                        <tbody>
+                            <c:if test="${empty safeStockList}"><tr><td colspan="4" class="py-4 text-muted">모든 품목의 재고가 안전합니다.</td></tr></c:if>
+                            <c:forEach var="item" items="${safeStockList}">
+                                <tr><td class="fw-bold text-primary">${item.itemCd}</td><td>${item.itemNm}</td><td class="text-danger fw-bold">${item.stockQty}</td><td class="text-muted">${item.safeQty}</td></tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 우측: 납기 지연 목록 -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3"><h5 class="card-title mb-0 fw-bold text-warning"><i class="fas fa-truck-loading"></i> 납기 지연 / 출촉 필요</h5></div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 text-center align-middle">
+                        <thead class="table-light"><tr><th>전표번호</th><th>유형</th><th>상태</th><th>납기일</th></tr></thead>
+                        <tbody>
+                            <c:if test="${empty delayedOrderList}"><tr><td colspan="4" class="py-4 text-muted">지연된 전표가 없습니다.</td></tr></c:if>
+                            <c:forEach var="order" items="${delayedOrderList}">
+                                <tr><td class="fw-bold text-primary">${order.orderNo}</td><td>${order.orderType == 'BUY' ? '발주' : '수주'}</td><td><span class="badge bg-secondary">${order.status}</span></td><td class="text-danger fw-bold">${order.dueDate}</td></tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-<!-- ========================================== -->
 
-
-
-</div>
-
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

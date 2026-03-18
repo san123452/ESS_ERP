@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>품목 관리 - ESS ERP</title>
+    <link rel="stylesheet" href="/css/common.css">
     <style>
         body { font-family: sans-serif; padding: 20px; }
         .form-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }

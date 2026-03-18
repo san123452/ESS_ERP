@@ -1,6 +1,7 @@
 package com.ess.erp.logis;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ess.erp.domain.ClientDTO;
@@ -26,9 +27,12 @@ public class ClientService {
     public List<ClientDTO> getClientList() {
         return clientMapper.selectClientList();
     }
-    
+
+    // [추가] 매입처(IN) / 매출처(OUT) 필터링 기능 (BOTH는 양쪽 다 보이게)
     public List<ClientDTO> getClientListByType(String type) {
-        return clientMapper.getClientListByType(type);
+        return clientMapper.selectClientList().stream()
+                .filter(c -> c.getAcctType().equals(type) || c.getAcctType().equals("BOTH"))
+                .collect(Collectors.toList());
     }
 
     @Transactional
