@@ -32,9 +32,14 @@ public class StockService {
         
         // 1. 발주 전표의 상세 품목 리스트를 가져옴 (ITEM_CD, QTY 등)
         OrderDTO order = orderMapper.getOrderDetail(orderNo);
-        for (OrderDetailDTO detail : order.getDetails()) {
-            // [리팩토링] 강산 님의 공통 모듈 호출 한 줄로 재고 증가 및 수불 이력 완벽 처리!
-            commonItemService.updateStockAndLog(detail.getItemCd(), detail.getQty(), "IN", orderNo, empId);
+        
+        // [수정] Null 완벽 방어막 추가: order나 세부 내역이 없을 땐 튕겨내기
+        if (order != null && order.getDetails() != null) {
+            for (OrderDetailDTO detail : order.getDetails()) {
+                if (detail.getItemCd() != null && !detail.getItemCd().isEmpty()) {
+                    commonItemService.updateStockAndLog(detail.getItemCd(), detail.getQty(), "IN", orderNo, empId);
+                }
+            }
         }
         // 6. 전표 마감: 발주 상태를 '대기(WAIT)'에서 '완료(DONE)'로 변경
         stockMapper.updateOrderStatus(orderNo, "DONE");
@@ -50,10 +55,13 @@ public class StockService {
     
         // 1. 수주(판매) 전표 상세 내역 조회
         OrderDTO order = orderMapper.getOrderDetail(orderNo);
-        for (OrderDetailDTO detail : order.getDetails()) {
-            // [리팩토링] 강산 님의 공통 모듈 호출! 출고는 수량을 음수(-)로 넘겨줍니다.
-            // 재고 부족 시 RuntimeException 롤백 방어막까지 CommonItemService에서 자동으로 작동합니다.
-            commonItemService.updateStockAndLog(detail.getItemCd(), -detail.getQty(), "OUT", orderNo, empId);
+        
+        if (order != null && order.getDetails() != null) {
+            for (OrderDetailDTO detail : order.getDetails()) {
+                if (detail.getItemCd() != null && !detail.getItemCd().isEmpty()) {
+                    commonItemService.updateStockAndLog(detail.getItemCd(), -detail.getQty(), "OUT", orderNo, empId);
+                }
+            }
         }
         // 6. 전표 마감: 수주 상태를 '완료(DONE)'로 변경
         stockMapper.updateOrderStatus(orderNo, "DONE");

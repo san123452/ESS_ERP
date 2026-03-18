@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.ui.Model;
 
 @Controller
 public class WorkPerfController {
@@ -33,7 +34,13 @@ public class WorkPerfController {
             // 재고 부족 등의 에러 발생 시 처리
             rttr.addFlashAttribute("error", e.getMessage());
         }
-        // [수정] 아직 지시 목록 화면(/list)이 없어서 404 에러가 나므로, 테스트를 위해 폼 화면으로 다시 리다이렉트 합니다.
-        return "redirect:/prod/work/perf/add"; 
+        // 실적 등록이 완료되면 다시 작업지시 목록으로 돌아갑니다.
+        return "redirect:/prod/work/order/list"; 
+    }
+
+    // 3. 생산 실적 목록 화면 (임시 더미 페이지 연결)
+    @GetMapping("/prod/work/perf/list")
+    public String workPerfList() {
+        return "prod/workPerfList"; 
     }
 }

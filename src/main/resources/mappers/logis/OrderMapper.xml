@@ -12,13 +12,15 @@
         VALUES (#{orderNo}, #{itemCd}, #{qty}, #{unitPrice}, #{qty} * #{unitPrice})
     </insert>
     
+    <!-- [수정] COUNT(*) 대신 가장 뒷자리 숫자 3자리의 MAX 값을 가져와서 +1 하도록 변경 -->
     <select id="getOrderCountByDate" resultType="int">
-        SELECT COUNT(*) FROM TB_ORDER 
+        SELECT IFNULL(MAX(CAST(RIGHT(ORDER_NO, 3) AS UNSIGNED)), 0) FROM TB_ORDER 
         WHERE ORDER_NO LIKE CONCAT('PO-', #{dateStr}, '%')
     </select>
 
+    <!-- 수주(SELL) 쪽도 똑같이 방어 -->
     <select id="getSellOrderCountByDate" resultType="int">
-        SELECT COUNT(*) FROM TB_ORDER 
+        SELECT IFNULL(MAX(CAST(RIGHT(ORDER_NO, 3) AS UNSIGNED)), 0) FROM TB_ORDER 
         WHERE ORDER_NO LIKE CONCAT('SO-', #{dateStr}, '%')
     </select>
     

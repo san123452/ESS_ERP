@@ -17,9 +17,8 @@
     </c:if>
     
     <form action="/prod/work/perf/add" method="post">
-        <!-- 실제로는 화면의 목록에서 선택한 작업지시번호를 hidden이나 텍스트로 가져옵니다 -->
         <label>작업지시 번호: </label>
-        <input type="text" name="workNo" value="WK-20260318-001" readonly/><br/><br/>
+        <input type="text" name="workNo" value="${workNo}" readonly/><br/><br/>
         
         <label>양품 수량 (완제품 입고): </label>
         <input type="number" name="goodQty" required min="1" /><br/><br/>

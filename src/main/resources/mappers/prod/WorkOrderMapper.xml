@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ess.erp.mapper.WorkOrderMapper">
+
+    <select id="selectWorkOrderList" resultType="map">
+        SELECT 
+            W.WORK_NO as workNo, W.ITEM_CD as itemCd, I.ITEM_NM as itemNm,
+            W.WORK_QTY as workQty, W.EMP_ID as empId, W.WORK_DATE as workDate,
+            W.DUE_DATE as dueDate, W.STATUS as status
+        FROM TB_WORK_ORDER W
+        LEFT JOIN TB_ITEM I ON W.ITEM_CD = I.ITEM_CD
+        ORDER BY W.WORK_DATE DESC
+    </select>
+
+</mapper>

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.ui.Model;
+import com.ess.erp.mapper.StockMapper;
 
 /**
  * [물류/재고 관리 컨트롤러]
@@ -18,6 +20,9 @@ public class StockController {
 
     @Autowired
     private StockService stockService;
+    
+    @Autowired
+    private StockMapper stockMapper;
 
     /**
      * 발주 전표 입고 확정 처리
@@ -28,7 +33,11 @@ public class StockController {
     public String inboundConfirm(@RequestParam("no") String orderNo, RedirectAttributes rttr) {
         // 1. [보안] : 시큐리티 세션에서 현재 로그인한 사원번호(ID) 추출
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String empId = (auth != null) ? auth.getName() : "SYSTEM";
+        String empId = null;
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            empId = auth.getName();
+        }
+        
         // 2. 서비스 호출: 재고 증가 + 수불 로그 기록 + 전표 완료 처리
         stockService.processInbound(orderNo, empId);
         // 3. 알림 메시지 전달 (일회성 메시지)
@@ -46,7 +55,11 @@ public class StockController {
     public String outboundConfirm(@RequestParam("orderNo") String orderNo, RedirectAttributes rttr) {
         // 1. [보안] 현재 처리 중인 담당자 ID 추출
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String empId = (auth != null) ? auth.getName() : "SYSTEM";
+        String empId = null;
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            empId = auth.getName();
+        }
+        
         try {
             // 2. 서비스 호출: 재고 검증 + 재고 차감 + 수불 로그 + 전표 완료
             stockService.processOutbound(orderNo, empId);
@@ -59,5 +72,17 @@ public class StockController {
         }
         // 5. 리다이렉트: 영업팀 수주 목록 페이지로 이동
         return "redirect:/logis/order/sell/list";
+    }
+
+    @GetMapping("/stock/list")
+    public String stockList(Model model) {
+        model.addAttribute("stockList", stockMapper.selectStockList());
+        return "logistics/stockList";
+    }
+
+    @GetMapping("/stock/log/list")
+    public String stockLogList(Model model) {
+        model.addAttribute("logList", stockMapper.selectStockLogList());
+        return "logistics/stockLogList";
     }
 }

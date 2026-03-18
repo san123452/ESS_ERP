@@ -7,19 +7,10 @@
         FROM TB_ITEM 
         WHERE ITEM_CD = #{itemCd}
     </select>
-    
-	<select id="selectCurrentStock" resultType="int">
-        SELECT IFNULL(STOCK_QTY, 0) 
-        FROM TB_ITEM 
-        WHERE ITEM_CD = #{itemCd}
-    </select>
-    
+
     <insert id="insertItemLog">
-        INSERT INTO TB_ITEM_LOG (
-        ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT
-        ) VALUES (
-        #{itemCd}, #{inoutType}, #{qty}, #{beforeQty}, #{afterQty}, #{refNo}, #{empId}, NOW()
-        )
+        INSERT INTO TB_ITEM_LOG (ITEM_CD, INOUT_TYPE, QTY, BEFORE_QTY, AFTER_QTY, REF_NO, EMP_ID, REG_DT)
+        VALUES (#{itemCd}, #{inoutType}, #{qty}, #{beforeQty}, #{afterQty}, #{refNo}, #{empId}, NOW())
     </insert>
 
     <update id="updateItemStock">
@@ -34,4 +25,19 @@
         WHERE ORDER_NO = #{orderNo}
     </update>
 
+    <select id="selectStockList" resultType="map">
+        SELECT ITEM_CD as itemCd, ITEM_NM as itemNm, ITEM_TYPE as itemType, 
+               STOCK_QTY as stockQty, SAFE_QTY as safeQty, WH_LOCATION as whLocation
+        FROM TB_ITEM
+        WHERE USE_YN = 'Y'
+        ORDER BY ITEM_CD
+    </select>
+
+    <select id="selectStockLogList" resultType="map">
+        SELECT LOG_NO as logNo, ITEM_CD as itemCd, INOUT_TYPE as inoutType,
+               QTY as qty, BEFORE_QTY as beforeQty, AFTER_QTY as afterQty,
+               REF_NO as refNo, EMP_ID as empId, REG_DT as regDt
+        FROM TB_ITEM_LOG
+        ORDER BY REG_DT DESC
+    </select>
 </mapper>
