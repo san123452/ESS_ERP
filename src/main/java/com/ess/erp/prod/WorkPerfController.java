@@ -3,10 +3,13 @@ package com.ess.erp.prod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import com.ess.erp.domain.WorkPerfDTO;
 
 @Controller
 public class WorkPerfController {
@@ -22,13 +25,19 @@ public class WorkPerfController {
 
     // 실적 등록 요청 처리
     @PostMapping("/prod/work/perf/add")
-    public String addWorkPerformance(@RequestParam("workNo") String workNo,
-                                     @RequestParam("goodQty") int goodQty,
-                                     @RequestParam("badQty") int badQty,
-                                     @RequestParam(value="badReason", required=false) String badReason,
-                                     RedirectAttributes rttr) {
+    public String addWorkPerformance(@ModelAttribute WorkPerfDTO perfDTO, RedirectAttributes rttr) {
+        
+        // [추가] 시큐리티 세션에서 현재 로그인한 작업자 사번 추출해서 DTO에 넣기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            perfDTO.setEmpId(auth.getName());
+        } else {
+            perfDTO.setEmpId("SYSTEM"); // 테스트용 기본값
+        }
+
         try {
-            workPerfService.processWorkPerformance(workNo, goodQty, badQty, badReason);
+            // 개별 파라미터가 아니라 DTO 바구니 하나를 통째로 넘김
+            workPerfService.processWorkPerformance(perfDTO);
             rttr.addFlashAttribute("msg", "실적 등록 및 재고 변동이 완료되었습니다.");
         } catch (RuntimeException e) {
             // 재고 부족 등의 에러 발생 시 처리
