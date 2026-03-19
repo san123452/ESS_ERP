@@ -43,9 +43,10 @@
             <span class="form-label">부서</span>
             <select class="form-select" name="deptCode">
                 <option value="">부서 선택</option>
-                <option value="MGMT">관리팀</option>
-                <option value="PROD">생산팀</option>
-                <option value="SALE">영업팀</option>
+                <option value="D001">인사팀</option>
+                <option value="D002">생산팀</option>
+                <option value="D003">영업팀</option>
+                <option value="D004">물류팀</option>
             </select>
         </div>
         <div class="form-row">
