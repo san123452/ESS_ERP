@@ -77,6 +77,10 @@
                     <td><input type="text" name="empName" value="${emp.empName}"/></td>
                 </tr>
                 <tr>
+                    <th>비밀번호 변경</th>
+                    <td><input type="password" name="empPw" placeholder="변경 시에만 입력 (미입력시 유지)"/></td>
+                </tr>
+                <tr>
                     <th>소속부서</th>
                     <td>
                         <select name="deptCode">
