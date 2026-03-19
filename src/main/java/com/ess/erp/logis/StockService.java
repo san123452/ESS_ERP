@@ -21,6 +21,9 @@ public class StockService {
     
     @Autowired
     private CommonItemService commonItemService; // 강산 님이 만든 공통 재고 서비스 주입
+    
+    @Autowired
+    private CommonItemMapper commonItemMapper; // 재고 조회용 매퍼 추가 주입
 
     /**
      * 발주 전표 입고 처리 (Purchase Order Inbound)
@@ -59,6 +62,12 @@ public class StockService {
         if (order != null && order.getDetails() != null) {
             for (OrderDetailDTO detail : order.getDetails()) {
                 if (detail.getItemCd() != null && !detail.getItemCd().isEmpty()) {
+                    // [재고 검증 로직] 출고 전 현재 창고 재고를 확인하여 부족할 경우 예외 발생 (트랜잭션 롤백)
+                    int currentStock = commonItemMapper.selectCurrentStock(detail.getItemCd());
+                    if (currentStock < detail.getQty()) {
+                        throw new RuntimeException("재고가 부족하여 출고할 수 없습니다. (품목코드: " + detail.getItemCd() + ", 현재고: " + currentStock + ", 출고요청: " + detail.getQty() + ")");
+                    }
+                    
                     commonItemService.updateStockAndLog(detail.getItemCd(), -detail.getQty(), "OUT", orderNo, empId);
                 }
             }

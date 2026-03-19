@@ -4,13 +4,15 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
+import com.ess.erp.domain.ItemDTO;
+import com.ess.erp.domain.OrderDTO;
 
 @Mapper
 public interface DashboardMapper {
-    // 1. 안전재고 미달 품목 조회
-    List<Map<String, Object>> selectSafeStockAlert();
-    // 2. 납기 지연 전표 조회
-    List<Map<String, Object>> selectDelayedOrderAlert();
-    // 3. 권한별 접근 가능 메뉴 조회
+    List<ItemDTO> selectLowStockItems();
+    
+    List<OrderDTO> selectDelayedOrders();
+    
+    // [추가] 사용자의 권한 리스트를 기반으로 접근 가능한 메뉴 리스트를 조회
     List<Map<String, Object>> selectUserMenuList(@Param("roles") List<String> roles);
 }

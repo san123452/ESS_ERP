@@ -1,50 +1,47 @@
 package com.ess.erp.prod;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.context.SecurityContextHolder;
 import com.ess.erp.mapper.WorkPerfMapper;
-import com.ess.erp.CommonItemService;
+import com.ess.erp.domain.WorkPerfDTO;
 import com.ess.erp.domain.BomDTO;
+import com.ess.erp.CommonItemService;
+import java.util.List;
 
 @Service
 public class WorkPerfService {
-    
+
     @Autowired
     private WorkPerfMapper workPerfMapper;
     
     @Autowired
-    private CommonItemService commonItemService; // 공통 재고 서비스 주입
+    private CommonItemService commonItemService; // 강산 님이 만든 공통 재고 서비스
 
-    // 하나의 로직이라도 실패(재고부족 등)하면 모두 롤백되도록 Transactional 필수
-    @Transactional
-    public void processWorkPerformance(String workNo, int goodQty, int badQty, String badReason) {
-        // [Cross-Check 2] 시큐리티 컨텍스트에서 현재 로그인한 유저 ID(사번) 가져오기
-        String empId = SecurityContextHolder.getContext().getAuthentication().getName();
+    @Transactional // 하나라도 실패하면 전체 롤백
+    public void processWorkPerformance(WorkPerfDTO perfDTO) {
+        // 1. 생산 실적 등록 (TB_WORK_PERF)
+        workPerfMapper.insertWorkPerf(perfDTO);
 
-        // 1. 실적 테이블(TB_WORK_PERF)에 INSERT
-        Map<String, Object> param = new HashMap<>();
-        param.put("workNo", workNo); param.put("goodQty", goodQty);
-        param.put("badQty", badQty); param.put("badReason", badReason);
-        param.put("empId", empId);
-        workPerfMapper.insertWorkPerf(param);
+        // 2. 해당 작업지시(WORK_NO)가 어떤 완제품(ITEM_CD)을 만드는지 조회
+        String itemCd = workPerfMapper.selectItemCdByWorkNo(perfDTO.getWorkNo());
 
-        // 2. 완제품 품목코드 찾기 및 BOM 하위 부품 가져오기
-        String parentItemCd = workPerfMapper.selectItemCdByWorkNo(workNo);
-        List<BomDTO> children = workPerfMapper.selectBomChildren(parentItemCd);
+        // 3. BOM을 참조하여 해당 완제품의 하위 원자재 목록과 소요량(REQ_QTY) 조회
+        List<BomDTO> children = workPerfMapper.selectBomChildren(itemCd);
 
-        // 3. [핵심] 원자재 차감 루프 (BOM 연쇄 계산)
-        for (BomDTO child : children) {
-            int consumeQty = child.getReqQty() * (goodQty + badQty); // 양품+불량만큼 부품은 소모됨
-            commonItemService.updateStockAndLog(child.getChildCd(), -consumeQty, "OUT", workNo, empId);
+        // 4. [핵심] 원자재 연쇄 차감 (원자재 소모량 = BOM 소요량 * 생산된 양품 수량)
+        if (children != null) {
+            for(BomDTO child : children) {
+                int deductQty = child.getReqQty() * perfDTO.getGoodQty();
+                // 공통 서비스를 활용해 재고 마이너스 처리 및 OUT 이력 기록
+                commonItemService.updateStockAndLog(child.getChildCd(), -deductQty, "OUT", perfDTO.getWorkNo(), perfDTO.getEmpId());
+            }
         }
-        // 4. 완제품 입고 (IN) - 양품(goodQty)만큼만 입고
-        commonItemService.updateStockAndLog(parentItemCd, goodQty, "IN", workNo, empId);
-        // 5. 작업 지시서 상태 업데이트
-        workPerfMapper.updateWorkOrderStatus(workNo, "DONE");
+
+        // 5. 완제품 입고 처리 (생산된 양품 수량만큼 재고 플러스 및 IN 이력 기록)
+        commonItemService.updateStockAndLog(itemCd, perfDTO.getGoodQty(), "IN", perfDTO.getWorkNo(), perfDTO.getEmpId());
+
+        // 6. 작업 지시 상태를 '완료(DONE)'로 업데이트
+        workPerfMapper.updateWorkOrderStatus(perfDTO.getWorkNo(), "DONE");
     }
 }

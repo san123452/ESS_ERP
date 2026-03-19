@@ -3,24 +3,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>앞날창창창</title>
-<!-- Bootstrap 5 & FontAwesome -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="/css/common.css">
-<style>
-    /* Bootstrap 호환을 위해 common.css 일부 덮어쓰기 */
-    body { padding: 0 !important; margin: 0; background-color: #f0f2f5; display: flex; height: 100vh; overflow: hidden; }
-    .sidebar { width: 260px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
-    .sidebar .nav-link { color: rgba(255,255,255,.8); transition: 0.3s; padding: 10px 20px; display: flex; align-items: center; gap: 10px; }
-    .sidebar .nav-link:hover { color: white; background-color: #34495e; }
-    .sidebar .nav-item .submenu .nav-link { padding-left: 50px; font-size: 0.9em; }
-    .main-content { flex-grow: 1; overflow-y: auto; padding: 30px; }
-    .widget-card { transition: transform 0.2s; }
-    .widget-card:hover { transform: translateY(-5px); }
-    .icon-box { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-</style>
+    <meta charset="UTF-8">
+    <title>ESS ERP - 메인 대시보드</title>
+    <!-- Bootstrap 5 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f0f2f5; display: flex; height: 100vh; overflow: hidden; margin: 0; }
+        .sidebar { width: 260px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar .nav-link { color: rgba(255,255,255,.8); transition: 0.3s; padding: 10px 20px; display: flex; align-items: center; gap: 10px; }
+        .sidebar .nav-link:hover { color: white; background-color: #34495e; }
+        .sidebar .nav-item .submenu .nav-link { padding-left: 50px; font-size: 0.9em; }
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 30px; }
+        .widget-card { transition: transform 0.2s; }
+        .widget-card:hover { transform: translateY(-5px); }
+        .icon-box { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    </style>
 </head>
 <body>
 <!-- 사이드바 영역 -->
@@ -73,20 +71,20 @@
             </c:forEach>
         </ul>
     </div>
-    <div class="p-3 border-top border-secondary text-center">
-        <a href="/logout" class="btn btn-outline-danger w-100"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
-    </div>
 </div>
 
 <!-- 메인 컨텐츠 영역 -->
 <div class="main-content bg-light">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold mb-0 text-dark">📊 시스템 현황 대시보드</h2>
-        <div class="badge bg-success px-3 py-2 fs-6 rounded-pill shadow-sm">
-            <i class="fas fa-user-shield"></i> 권한 및 보안 활성화됨
+        <div>
+            <span class="badge bg-success px-3 py-2 fs-6 rounded-pill shadow-sm me-2">
+                <i class="fas fa-user-shield"></i> 권한 및 보안 활성화됨
+            </span>
+            <a href="/logout" class="btn btn-outline-danger btn-sm fw-bold"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
         </div>
-        <a href="/logout" class="logout-btn">로그아웃</a>
     </div>
+
     <!-- 1. 경고 위젯 영역 -->
     <div class="row g-4 mb-4">
         <div class="col-md-6">
@@ -95,7 +93,7 @@
                     <div class="icon-box bg-danger bg-opacity-10 text-danger me-3"><i class="fas fa-exclamation-triangle"></i></div>
                     <div>
                         <h6 class="text-muted fw-bold mb-1">안전재고 미달 품목</h6>
-                        <h3 class="mb-0 text-danger fw-bold">${safeStockList.size()} <small class="fs-6 text-muted">건</small></h3>
+                        <h3 class="mb-0 text-danger fw-bold">${not empty lowStockList ? lowStockList.size() : 0} <small class="fs-6 text-muted">건</small></h3>
                     </div>
                 </div>
             </div>
@@ -107,7 +105,7 @@
                     <div class="icon-box bg-warning bg-opacity-10 text-warning me-3"><i class="fas fa-clock"></i></div>
                     <div>
                         <h6 class="text-muted fw-bold mb-1">납기 지연 전표</h6>
-                        <h3 class="mb-0 text-warning fw-bold">${delayedOrderList.size()} <small class="fs-6 text-muted">건</small></h3>
+                        <h3 class="mb-0 text-warning fw-bold">${not empty delayedOrderList ? delayedOrderList.size() : 0} <small class="fs-6 text-muted">건</small></h3>
                     </div>
                 </div>
             </div>
@@ -124,10 +122,16 @@
                     <table class="table table-hover mb-0 text-center align-middle">
                         <thead class="table-light"><tr><th>품목코드</th><th>품목명</th><th>현재고</th><th>안전재고</th></tr></thead>
                         <tbody>
-                            <c:if test="${empty safeStockList}"><tr><td colspan="4" class="py-4 text-muted">모든 품목의 재고가 안전합니다.</td></tr></c:if>
-                            <c:forEach var="item" items="${safeStockList}">
-                                <tr><td class="fw-bold text-primary">${item.itemCd}</td><td>${item.itemNm}</td><td class="text-danger fw-bold">${item.stockQty}</td><td class="text-muted">${item.safeQty}</td></tr>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${empty lowStockList}">
+                                    <tr><td colspan="4" class="py-4 text-muted">모든 품목의 재고가 안전합니다.</td></tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="item" items="${lowStockList}">
+                                        <tr><td class="fw-bold text-primary">${item.itemCd}</td><td>${item.itemNm}</td><td class="text-danger fw-bold">${item.stockQty}</td><td class="text-muted">${item.safeQty}</td></tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -142,17 +146,21 @@
                     <table class="table table-hover mb-0 text-center align-middle">
                         <thead class="table-light"><tr><th>전표번호</th><th>유형</th><th>상태</th><th>납기일</th></tr></thead>
                         <tbody>
-                            <c:if test="${empty delayedOrderList}"><tr><td colspan="4" class="py-4 text-muted">지연된 전표가 없습니다.</td></tr></c:if>
-                            <c:forEach var="order" items="${delayedOrderList}">
-                                <tr><td class="fw-bold text-primary">${order.orderNo}</td><td>${order.orderType == 'BUY' ? '발주' : '수주'}</td><td><span class="badge bg-secondary">${order.status}</span></td><td class="text-danger fw-bold">${order.dueDate}</td></tr>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${empty delayedOrderList}">
+                                    <tr><td colspan="4" class="py-4 text-muted">지연된 전표가 없습니다.</td></tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="order" items="${delayedOrderList}">
+                                        <tr><td class="fw-bold text-primary">${order.orderNo}</td><td>${order.orderType == 'BUY' ? '발주' : '수주'}</td><td><span class="badge bg-secondary">${order.status}</span></td><td class="text-danger fw-bold">${order.dueDate}</td></tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-
 </div>
 
 <!-- Bootstrap 5 JS -->
