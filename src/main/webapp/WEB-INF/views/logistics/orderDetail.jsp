@@ -32,7 +32,12 @@
         <thead><tr><th>품목 코드</th><th>수량</th><th>단가</th><th>합계</th></tr></thead>
         <tbody>
             <c:forEach var="item" items="${order.details}">
-                <tr><td>${item.itemCd}</td><td>${item.qty}</td><td>${item.unitPrice}원</td><td>${item.amt}원</td></tr>
+                <tr>
+                    <td>${item.itemCd}</td>
+                    <td><fmt:formatNumber value="${item.qty}" pattern="#,###"/></td>
+                    <td><fmt:formatNumber value="${item.unitPrice}" pattern="#,###"/>원</td>
+                    <td><fmt:formatNumber value="${item.amt}" pattern="#,###"/>원</td>
+                </tr>
             </c:forEach>
         </tbody>
     </table>

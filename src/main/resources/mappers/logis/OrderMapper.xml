@@ -9,16 +9,14 @@
 
     <insert id="insertOrderDetail">
         INSERT INTO TB_ORDER_DETAIL (ORDER_NO, ITEM_CD, QTY, UNIT_PRICE, AMT)
-        VALUES (#{orderNo}, #{itemCd}, #{qty}, #{unitPrice}, #{qty} * #{unitPrice})
+        VALUES (#{orderNo}, #{itemCd}, #{qty}, #{unitPrice}, CAST(#{qty} AS UNSIGNED) * CAST(#{unitPrice} AS UNSIGNED))
     </insert>
     
-    <!-- [수정] COUNT(*) 대신 가장 뒷자리 숫자 3자리의 MAX 값을 가져와서 +1 하도록 변경 -->
     <select id="getOrderCountByDate" resultType="int">
         SELECT IFNULL(MAX(CAST(RIGHT(ORDER_NO, 3) AS UNSIGNED)), 0) FROM TB_ORDER 
         WHERE ORDER_NO LIKE CONCAT('PO-', #{dateStr}, '%')
     </select>
 
-    <!-- 수주(SELL) 쪽도 똑같이 방어 -->
     <select id="getSellOrderCountByDate" resultType="int">
         SELECT IFNULL(MAX(CAST(RIGHT(ORDER_NO, 3) AS UNSIGNED)), 0) FROM TB_ORDER 
         WHERE ORDER_NO LIKE CONCAT('SO-', #{dateStr}, '%')
@@ -56,7 +54,7 @@
             <result property="itemCd" column="ITEM_CD" />
             <result property="qty" column="QTY" />
             <result property="unitPrice" column="UNIT_PRICE" />
-            <result property="amt" column="AMT" />
+            <result property="amt" column="AMT" javaType="long" />
         </collection>
     </resultMap>
 
@@ -74,14 +72,14 @@
     </update>
 
     <select id="getItemList" resultType="com.ess.erp.domain.ItemDTO">
-    SELECT 
-        ITEM_CD AS itemCd, 
-        ITEM_NM AS itemNm, 
-        STOCK_QTY AS stockQty, 
-        PRICE AS price 
-    FROM TB_ITEM
-    WHERE USE_YN = 'Y'
-</select>
+        SELECT 
+            ITEM_CD AS itemCd, 
+            ITEM_NM AS itemNm, 
+            STOCK_QTY AS stockQty, 
+            PRICE AS price 
+        FROM TB_ITEM
+        WHERE USE_YN = 'Y'
+    </select>
 
     <update id="updateItemStock">
         UPDATE TB_ITEM 

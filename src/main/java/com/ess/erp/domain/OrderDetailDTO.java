@@ -11,5 +11,5 @@ public class OrderDetailDTO {
     private int unitPrice;      // UNIT_PRICE (단가)
     private int supplyAmt;      // SUPPLY_AMT (공급가액)
     private int vatAmt;         // VAT_AMT (부가세)
-    private int amt;            // AMT (합계금액)
+    private long amt;           // AMT (합계금액)
 }
