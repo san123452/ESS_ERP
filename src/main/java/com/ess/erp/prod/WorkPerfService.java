@@ -7,6 +7,7 @@ import com.ess.erp.mapper.WorkPerfMapper;
 import com.ess.erp.domain.WorkPerfDTO;
 import com.ess.erp.domain.BomDTO;
 import com.ess.erp.CommonItemService;
+import com.ess.erp.mapper.CommonItemMapper;
 import java.util.List;
 
 @Service
@@ -17,6 +18,9 @@ public class WorkPerfService {
     
     @Autowired
     private CommonItemService commonItemService; // 강산 님이 만든 공통 재고 서비스
+    
+    @Autowired
+    private CommonItemMapper commonItemMapper; // 재고 검증용 매퍼 추가
 
     @Transactional // 하나라도 실패하면 전체 롤백
     public void processWorkPerformance(WorkPerfDTO perfDTO) {
@@ -33,6 +37,13 @@ public class WorkPerfService {
         if (children != null) {
             for(BomDTO child : children) {
                 int deductQty = child.getReqQty() * perfDTO.getGoodQty();
+                
+                // [추가] 원자재 재고 검증 로직 (마이너스 재고 방지)
+                int currentStock = commonItemMapper.selectCurrentStock(child.getChildCd());
+                if (currentStock < deductQty) {
+                    throw new RuntimeException("원자재 재고가 부족하여 생산을 진행할 수 없습니다. (필요 부품: " + child.getChildCd() + ", 현재고: " + currentStock + "개, 필요수량: " + deductQty + "개)");
+                }
+                
                 // 공통 서비스를 활용해 재고 마이너스 처리 및 OUT 이력 기록
                 commonItemService.updateStockAndLog(child.getChildCd(), -deductQty, "OUT", perfDTO.getWorkNo(), perfDTO.getEmpId());
             }
