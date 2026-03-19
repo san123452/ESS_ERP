@@ -30,8 +30,9 @@ public class CommonItemService {
             throw new RuntimeException("재고가 부족합니다. 품목코드: " + itemCd + " (현재고: " + beforeQty + ", 요청: " + Math.abs(qty) + ")");
         }
         
-        // 2. 재고 증감 업데이트 (음수면 알아서 차감됨)
-        commonItemMapper.updateItemStock(itemCd, qty);
+        // 2. 재고 증감 업데이트
+        // [수정] 변동량(qty) 대신, 자바에서 확실하게 계산을 끝낸 최종 재고(afterQty)를 덮어씌웁니다.
+        commonItemMapper.updateItemStock(itemCd, afterQty);
         // 3. 수불 이력 저장 (이력에는 QTY를 절대값으로 기록하여 가독성 확보)
         commonItemMapper.insertItemLog(itemCd, inoutType, Math.abs(qty), beforeQty, afterQty, refNo, empId);
     }

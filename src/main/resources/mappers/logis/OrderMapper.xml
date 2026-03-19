@@ -74,8 +74,14 @@
     </update>
 
     <select id="getItemList" resultType="com.ess.erp.domain.ItemDTO">
-        SELECT ITEM_CD, ITEM_NM, PRICE FROM TB_ITEM WHERE USE_YN = 'Y'
-    </select>
+    SELECT 
+        ITEM_CD AS itemCd, 
+        ITEM_NM AS itemNm, 
+        STOCK_QTY AS stockQty, 
+        PRICE AS price 
+    FROM TB_ITEM
+    WHERE USE_YN = 'Y'
+</select>
 
     <update id="updateItemStock">
         UPDATE TB_ITEM 
