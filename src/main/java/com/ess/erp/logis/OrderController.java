@@ -39,13 +39,6 @@ public class OrderController {
         model.addAttribute("orderList", orderService.getOrderList());
         return "logistics/orderList";
     }
-    /** 입고 확정 처리 (실재고 반영) */
-    @GetMapping("/confirm")
-    public String inboundConfirm(@RequestParam("no") String orderNo, RedirectAttributes rttr) {
-        orderService.confirmOrder(orderNo);
-        rttr.addFlashAttribute("msg", "입고 처리가 완료되었습니다.");
-        return "redirect:/logis/order/list";
-    }
 
     /* =================================================================
      * 수주(판매/출고) 관련 매핑

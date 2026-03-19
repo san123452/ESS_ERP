@@ -86,23 +86,4 @@ public class OrderService {
     public List<ItemDTO> getItemList() {
         return orderMapper.getItemList();
     }
-
-    @Transactional
-    public void confirmOrder(String orderNo) {
-    	// [추가] 현재 로그인한 사용자 ID 가져오기
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserId = (auth != null) ? auth.getName() : "SYSTEM";
-        
-        // 1. 상태를 DONE으로 업데이트 (JSP와 일치)
-        orderMapper.updateOrderStatus(orderNo, "DONE");
-        
-        // 2. 재고 반영 및 로그 기록 (프로젝트 규칙 준수)
-        OrderDTO order = orderMapper.getOrderDetail(orderNo);
-        if (order != null && order.getDetails() != null) {
-            for (OrderDetailDTO detail : order.getDetails()) {
-                // [수정] 개별 Mapper 대신 강산 님이 만든 공통 서비스 한 줄로 재고 증가 및 이력 저장 완벽 처리!
-                commonItemService.updateStockAndLog(detail.getItemCd(), detail.getQty(), "IN", orderNo, currentUserId);
-            }
-        }
-    }
 }
