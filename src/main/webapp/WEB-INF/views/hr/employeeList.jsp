@@ -35,7 +35,15 @@
     <tr>
         <td><strong>${emp.empId}</strong></td>
         <td><a href="/hr/employee/detail/${emp.empId}">${emp.empName}</a></td>
-        <td>${emp.deptCode}</td>
+        <td>
+            <c:choose>
+                <c:when test="${emp.deptCode == 'D001'}">인사팀</c:when>
+                <c:when test="${emp.deptCode == 'D002'}">생산팀</c:when>
+                <c:when test="${emp.deptCode == 'D003'}">영업팀</c:when>
+                <c:when test="${emp.deptCode == 'D004'}">물류팀</c:when>
+                <c:otherwise>${emp.deptCode}</c:otherwise>
+            </c:choose>
+        </td>
         <td>${emp.position}</td>
     </tr>
     </c:forEach>

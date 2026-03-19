@@ -37,7 +37,15 @@
             </tr>
             <tr>
                 <th>소속부서</th>
-                <td>${emp.deptCode}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${emp.deptCode == 'D001'}">인사팀</c:when>
+                        <c:when test="${emp.deptCode == 'D002'}">생산팀</c:when>
+                        <c:when test="${emp.deptCode == 'D003'}">영업팀</c:when>
+                        <c:when test="${emp.deptCode == 'D004'}">물류팀</c:when>
+                        <c:otherwise>${emp.deptCode}</c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
             <tr>
                 <th>직급</th>
@@ -73,9 +81,10 @@
                     <td>
                         <select name="deptCode">
                             <option value="">부서 선택</option>
-                            <option value="MGMT" ${emp.deptCode == 'MGMT' ? 'selected' : ''}>관리팀</option>
-                            <option value="PROD" ${emp.deptCode == 'PROD' ? 'selected' : ''}>생산팀</option>
-                            <option value="SALE" ${emp.deptCode == 'SALE' ? 'selected' : ''}>영업팀</option>
+                            <option value="D001" ${emp.deptCode == 'D001' ? 'selected' : ''}>인사팀</option>
+                            <option value="D002" ${emp.deptCode == 'D002' ? 'selected' : ''}>생산팀</option>
+                            <option value="D003" ${emp.deptCode == 'D003' ? 'selected' : ''}>영업팀</option>
+                            <option value="D004" ${emp.deptCode == 'D004' ? 'selected' : ''}>물류팀</option>
                         </select>
                     </td>
                 </tr>
