@@ -7,16 +7,41 @@
     <title>ESS ERP - 수주 등록</title>
     <link rel="stylesheet" href="/css/common.css">
     <style>
+        * { box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; background-color: #f4f7f6; color: #333; }
         .container { max-width: 800px; margin: 0 auto; }
         .header { background: #2c3e50; color: white; padding: 15px 20px; border-radius: 8px 8px 0 0; margin-bottom: 0; }
         .form-card { background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #2c3e50; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; border-top: 2px solid #2c3e50; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: center; }
-        th { background-color: #f8f9fa; font-weight: bold; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            border-top: 2px solid #2c3e50;
+            table-layout: fixed;
+        }
+        th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+        th { 
+		    background-color: #34495e;
+		    color: white;
+		    font-weight: bold;
+		    letter-spacing: 1px;
+		    border: 1px solid #2c3e50;
+		}
+        td input, td select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: block;
+        }
         .btn-submit { width: 100%; background-color: #27ae60; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 20px; transition: 0.3s; }
         .btn-submit:hover { background-color: #219150; }
         .btn-back { display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none; font-size: 14px; }
@@ -57,9 +82,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 50%;">품목명 (현재고)</th>
-                        <th>판매 수량</th>
-                        <th>판매 단가</th>
+                        <th style="width: 45%;">품목명 (현재고)</th>
+                        <th style="width: 25%;">판매 수량</th>
+                        <th style="width: 30%;">판매 단가</th>
                     </tr>
                 </thead>
                 <tbody>
