@@ -26,13 +26,20 @@ public class OrderController {
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("clientList", clientService.getClientListByType("IN"));
-        model.addAttribute("itemList", orderService.getItemList()); 
         
-        // [수정] 발주(구매) 전표에는 완제품(FIN)을 제외한 원자재(RAW)/반제품(HALF)만 노출
-        List<ItemDTO> buyItems = orderService.getItemList().stream()
-                .filter(item -> !"FIN".equals(item.getItemType()))
+        List<ItemDTO> allItems = orderService.getItemList();
+        
+        // [안전 로직 추가] itemType이 null이 아닐 때만 필터링
+        List<ItemDTO> buyItems = allItems.stream()
+                .filter(item -> item.getItemType() != null && !"FIN".equalsIgnoreCase(item.getItemType()))
                 .collect(Collectors.toList());
-        model.addAttribute("itemList", buyItems); 
+                
+        if (buyItems.isEmpty() && !allItems.isEmpty()) {
+            System.out.println("🚨 [발주 에러 방어] ITEM_TYPE 값이 없어 필터링 실패! 임시로 전체 목록을 보여줍니다.");
+            model.addAttribute("itemList", allItems);
+        } else {
+            model.addAttribute("itemList", buyItems); 
+        }
         return "logistics/orderAdd";
         }
     /** 발주 전표 저장 처리 */
@@ -57,13 +64,20 @@ public class OrderController {
     public String sellAddForm(Model model) {
         // 거래처 목록과 품목 목록을 뷰에 전달
     	model.addAttribute("clientList", clientService.getClientListByType("OUT"));
-        model.addAttribute("itemList", orderService.getItemList()); 
         
-        // [수정] 수주(판매) 전표에는 우리가 생산하는 완제품(FIN)만 노출
-        List<ItemDTO> sellItems = orderService.getItemList().stream()
-                .filter(item -> "FIN".equals(item.getItemType()))
+        List<ItemDTO> allItems = orderService.getItemList();
+        
+        // [안전 로직 추가] itemType이 null이 아닐 때만 필터링
+        List<ItemDTO> sellItems = allItems.stream()
+                .filter(item -> item.getItemType() != null && "FIN".equalsIgnoreCase(item.getItemType()))
                 .collect(Collectors.toList());
-        model.addAttribute("itemList", sellItems); 
+                
+        if (sellItems.isEmpty() && !allItems.isEmpty()) {
+            System.out.println("🚨 [수주 에러 방어] ITEM_TYPE 값이 없어 필터링 실패! 임시로 전체 목록을 보여줍니다.");
+            model.addAttribute("itemList", allItems);
+        } else {
+            model.addAttribute("itemList", sellItems); 
+        }
         return "logistics/orderSellAdd";
     }
 

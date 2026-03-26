@@ -76,7 +76,8 @@
             ITEM_CD AS itemCd, 
             ITEM_NM AS itemNm, 
             STOCK_QTY AS stockQty, 
-            PRICE AS price 
+            PRICE AS price,
+            ITEM_TYPE AS itemType
         FROM TB_ITEM
         WHERE USE_YN = 'Y'
     </select>
