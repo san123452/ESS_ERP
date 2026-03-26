@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ess.erp.domain.OrderDTO;
+import com.ess.erp.domain.ItemDTO;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/logis/order")
@@ -25,6 +27,12 @@ public class OrderController {
     public String addForm(Model model) {
         model.addAttribute("clientList", clientService.getClientListByType("IN"));
         model.addAttribute("itemList", orderService.getItemList()); 
+        
+        // [수정] 발주(구매) 전표에는 완제품(FIN)을 제외한 원자재(RAW)/반제품(HALF)만 노출
+        List<ItemDTO> buyItems = orderService.getItemList().stream()
+                .filter(item -> !"FIN".equals(item.getItemType()))
+                .collect(Collectors.toList());
+        model.addAttribute("itemList", buyItems); 
         return "logistics/orderAdd";
         }
     /** 발주 전표 저장 처리 */
@@ -50,6 +58,12 @@ public class OrderController {
         // 거래처 목록과 품목 목록을 뷰에 전달
     	model.addAttribute("clientList", clientService.getClientListByType("OUT"));
         model.addAttribute("itemList", orderService.getItemList()); 
+        
+        // [수정] 수주(판매) 전표에는 우리가 생산하는 완제품(FIN)만 노출
+        List<ItemDTO> sellItems = orderService.getItemList().stream()
+                .filter(item -> "FIN".equals(item.getItemType()))
+                .collect(Collectors.toList());
+        model.addAttribute("itemList", sellItems); 
         return "logistics/orderSellAdd";
     }
 
