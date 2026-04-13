@@ -1,7 +1,6 @@
 import pandas as pd
 import io
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
-from openpyxl.chart import LineChart, BarChart, Reference
 from openpyxl.utils import get_column_letter
 
 # ── 공통 스타일 상수 ──────────────────────────────────────────
@@ -61,8 +60,8 @@ def generate_excel_report(analysis_data):
         # ══════════════════════════════════════════════
         # [Sheet 1] 경영 요약 (Executive Summary)
         # ══════════════════════════════════════════════
-        ws = writer.book.create_sheet("Executive_Summary")
-        writer.sheets["Executive_Summary"] = ws
+        ws = writer.book.create_sheet("경영_요약")
+        writer.sheets["경영_요약"] = ws
 
         f  = raw.get('financial_summary', {})
         p  = raw.get('prediction', {})
@@ -132,8 +131,8 @@ def generate_excel_report(analysis_data):
         # ══════════════════════════════════════════════
         monthly_data = raw.get('monthly_performance', [])
         if monthly_data:
-            ws2 = writer.book.create_sheet("Monthly_PL")
-            writer.sheets["Monthly_PL"] = ws2
+            ws2 = writer.book.create_sheet("월별_손익")
+            writer.sheets["월별_손익"] = ws2
 
             ws2['A1'] = "월별 손익 현황"
             ws2['A1'].font = TITLE_FONT
@@ -185,25 +184,6 @@ def generate_excel_report(analysis_data):
                 elif ci > 1:
                     cell.number_format = NUM_FMT
                     cell.alignment     = C_RIGHT
-
-            # 월별 매출/이익 라인차트
-            chart = LineChart()
-            chart.title  = "월별 매출 및 이익 추이"
-            chart.y_axis.title = "금액 (원)"
-            chart.x_axis.title = "결산월"
-            chart.width  = 22
-            chart.height = 14
-            rev_ref  = Reference(ws2, min_col=2, min_row=2, max_row=last_r)
-            prof_ref = Reference(ws2, min_col=4, min_row=2, max_row=last_r)
-            cats_ref = Reference(ws2, min_col=1, min_row=3, max_row=last_r)
-            chart.add_data(rev_ref,  titles_from_data=True)
-            chart.add_data(prof_ref, titles_from_data=True)
-            chart.set_categories(cats_ref)
-            chart.series[0].graphicalProperties.line.solidFill  = "1F4E79"
-            chart.series[0].graphicalProperties.line.width      = 20000
-            chart.series[1].graphicalProperties.line.solidFill  = "70AD47"
-            chart.series[1].graphicalProperties.line.width      = 20000
-            ws2.add_chart(chart, "I2")
             _auto_col_width(ws2)
 
         # ══════════════════════════════════════════════
@@ -211,8 +191,8 @@ def generate_excel_report(analysis_data):
         # ══════════════════════════════════════════════
         quarterly_data = raw.get('quarterly_chart', [])
         if quarterly_data:
-            ws3 = writer.book.create_sheet("Quarterly_Performance")
-            writer.sheets["Quarterly_Performance"] = ws3
+            ws3 = writer.book.create_sheet("분기별_실적")
+            writer.sheets["분기별_실적"] = ws3
 
             ws3['A1'] = "분기별 경영 실적"
             ws3['A1'].font = TITLE_FONT
@@ -262,31 +242,14 @@ def generate_excel_report(analysis_data):
                 elif ci > 1:
                     cell.number_format = NUM_FMT
                     cell.alignment     = C_RIGHT
-
-            # 분기별 묶음 막대 차트 (매출/이익)
-            chart_q = BarChart()
-            chart_q.type    = "col"
-            chart_q.title   = "분기별 매출 및 이익"
-            chart_q.y_axis.title = "금액 (원)"
-            chart_q.width   = 20
-            chart_q.height  = 14
-            rev_ref  = Reference(ws3, min_col=2, min_row=2, max_row=last_r)
-            prof_ref = Reference(ws3, min_col=4, min_row=2, max_row=last_r)
-            cats_ref = Reference(ws3, min_col=1, min_row=3, max_row=last_r)
-            chart_q.add_data(rev_ref,  titles_from_data=True)
-            chart_q.add_data(prof_ref, titles_from_data=True)
-            chart_q.set_categories(cats_ref)
-            chart_q.series[0].graphicalProperties.solidFill = "1F4E79"
-            chart_q.series[1].graphicalProperties.solidFill = "70AD47"
-            ws3.add_chart(chart_q, "H2")
             _auto_col_width(ws3)
 
         # ══════════════════════════════════════════════
         # [Sheet 4] AI 장기 예측 (Financial Forecast)
         # ══════════════════════════════════════════════
         if 'long_term_forecast' in raw:
-            ws4 = writer.book.create_sheet("Financial_Forecast")
-            writer.sheets["Financial_Forecast"] = ws4
+            ws4 = writer.book.create_sheet("AI_장기_예측")
+            writer.sheets["AI_장기_예측"] = ws4
 
             ws4['A1'] = "AI 기반 12개월 매출 예측 (Holt-Winters)"
             ws4['A1'].font = TITLE_FONT
@@ -335,32 +298,14 @@ def generate_excel_report(analysis_data):
                 elif ci > 1:
                     cell.number_format = NUM_FMT
                     cell.alignment     = C_RIGHT
-
-            # 예측 매출 라인차트
-            chart_f = LineChart()
-            chart_f.title  = "12개월 매출 예측 추이"
-            chart_f.y_axis.title = "금액 (원)"
-            chart_f.width  = 22
-            chart_f.height = 14
-            rev_ref  = Reference(ws4, min_col=2, min_row=2, max_row=last_r)
-            prof_ref = Reference(ws4, min_col=4, min_row=2, max_row=last_r)
-            cats_ref = Reference(ws4, min_col=1, min_row=3, max_row=last_r)
-            chart_f.add_data(rev_ref,  titles_from_data=True)
-            chart_f.add_data(prof_ref, titles_from_data=True)
-            chart_f.set_categories(cats_ref)
-            chart_f.series[0].graphicalProperties.line.solidFill = "2E75B6"
-            chart_f.series[0].graphicalProperties.line.width      = 20000
-            chart_f.series[1].graphicalProperties.line.solidFill  = "70AD47"
-            chart_f.series[1].graphicalProperties.line.width      = 20000
-            ws4.add_chart(chart_f, "G2")
             _auto_col_width(ws4)
 
         # ══════════════════════════════════════════════
         # [Sheet 5] 품질 분석 (Quality Analysis)
         # ══════════════════════════════════════════════
         if 'quality_metrics' in raw:
-            ws5 = writer.book.create_sheet("Quality_Analysis")
-            writer.sheets["Quality_Analysis"] = ws5
+            ws5 = writer.book.create_sheet("품질_분석")
+            writer.sheets["품질_분석"] = ws5
 
             ws5['A1'] = "생산 품질 분석"
             ws5['A1'].font = TITLE_FONT
@@ -403,8 +348,8 @@ def generate_excel_report(analysis_data):
         # [Sheet 6] 취소율 분석 (Cancel Analysis)
         # ══════════════════════════════════════════════
         if 'cancel_analysis' in raw:
-            ws6 = writer.book.create_sheet("Cancel_Analysis")
-            writer.sheets["Cancel_Analysis"] = ws6
+            ws6 = writer.book.create_sheet("취소_분석")
+            writer.sheets["취소_분석"] = ws6
 
             ws6['A1'] = "수주 취소율 분석"
             ws6['A1'].font = TITLE_FONT
@@ -415,8 +360,8 @@ def generate_excel_report(analysis_data):
             c_rows = [
                 ("구분",         "건수",                    "비율(%)"),
                 ("전체 수주",    ca.get('total_orders',  0), "100.00"),
-                ("정상 수주",    ca.get('done_orders',   0), f"=B3/B2*100"),
-                ("취소 수주",    ca.get('cancel_orders', 0), f"=B4/B2*100"),
+                ("정상 수주",    ca.get('done_orders',   0), f"=B4/B3*100"),
+                ("취소 수주",    ca.get('cancel_orders', 0), f"=B5/B3*100"),
                 ("취소 매출손실(원)", ca.get('cancel_amount', 0), ""),
                 ("취소율",       "",                        ca.get('cancel_rate', 0)),
             ]
@@ -446,19 +391,6 @@ def generate_excel_report(analysis_data):
                         c = ws6.cell(row=ri, column=ci)
                         if not c.fill or c.fill.fgColor.rgb in ('00000000', 'FFFFFFFF'):
                             c.fill = ALT_FILL
-
-            # 취소/정상 수주 도넛 차트
-            from openpyxl.chart import PieChart
-            chart_c = PieChart()
-            chart_c.title  = "수주 현황 (정상 vs 취소)"
-            chart_c.width  = 16
-            chart_c.height = 12
-            data_ref = Reference(ws6, min_col=2, min_row=2, max_row=4)
-            cats_ref = Reference(ws6, min_col=1, min_row=3, max_row=4)
-            chart_c.add_data(data_ref, titles_from_data=True)
-            chart_c.set_categories(cats_ref)
-            chart_c.series[0].graphicalProperties.solidFill = "1F4E79"
-            ws6.add_chart(chart_c, "E2")
 
             ws6.column_dimensions['A'].width = 22
             ws6.column_dimensions['B'].width = 18

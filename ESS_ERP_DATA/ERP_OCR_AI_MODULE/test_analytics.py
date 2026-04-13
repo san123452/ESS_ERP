@@ -25,8 +25,9 @@ test_analytics.py v5
 # ── 기본 설정 ──────────────────────────────────────────────────
 START_DATE   = datetime.now() - timedelta(days=730)
 END_DATE     = datetime.now()
-PHASE2_START = datetime.now() - timedelta(days=450)
-PHASE3_START = datetime.now() - timedelta(days=180)
+PHASE2_START = START_DATE + timedelta(days=180) 
+PHASE3_START = datetime(2025, 1, 1)   # 25년 1분기~3분기 (위기기 시작)
+PHASE4_START = datetime(2025, 10, 1)  # 25년 4분기~ (회복 및 안정기 시작)
 
 SALES_EMP = '12345'
 MGMT_EMP  = '2026001'
@@ -87,6 +88,7 @@ HIGH_CANCEL_VENDORS = {f"AC{i:03d}" for i in range(35, 41)}
 
 # ── Phase 헬퍼 ────────────────────────────────────────────────
 def get_phase(dt):
+    if dt >= PHASE4_START: return 4
     if dt >= PHASE3_START: return 3
     if dt >= PHASE2_START: return 2
     return 1
@@ -96,20 +98,27 @@ def get_raw_price(item_cd, dt):
     phase = get_phase(dt)
     if phase == 1:   m = random.uniform(0.96, 1.04)
     elif phase == 2: m = random.uniform(1.02, 1.10)
-    else:            m = random.uniform(1.15, 1.28)
+    elif phase == 3: m = random.uniform(1.18, 1.35) # 위기기: 원가 대폭 폭등
+    else:            m = random.uniform(0.95, 1.03) # 회복기: 원가 안정화
     return int(base * m)
 
 def get_cancel_rate(vendor, dt):
     phase = get_phase(dt)
     if vendor in HIGH_CANCEL_VENDORS:
-        return 0.18 if phase == 3 else 0.06
+        if phase == 3: return 0.22 # 위기기: 취소율 급증
+        if phase == 4: return 0.05 # 회복기: 취소율 안정
+        return 0.06
     return 0.02
 
 def get_emp_and_sell_price(item_cd, phase):
     if phase == 3 and random.random() < 0.6:
-        return SALES_EMP, int(BASE_PRICES[item_cd] * random.uniform(0.87, 0.93))
+        # 위기기: 덤핑 판매로 인한 가격 하락
+        return SALES_EMP, int(BASE_PRICES[item_cd] * random.uniform(0.85, 0.91))
     elif phase == 2:
         return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(0.98, 1.03))
+    elif phase == 4:
+        # 회복기: 제값 받기 시작 + 프리미엄 전략
+        return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(1.02, 1.07))
     else:
         return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(0.99, 1.01))
 
@@ -265,8 +274,11 @@ while current_dt <= END_DATE:
             if p_can_produce:
                 # 재고 회복 → 지연 생산 실행
                 p_bad_rate  = 0.02
-                if get_phase(current_dt) == 3:
+                ph = get_phase(current_dt)
+                if ph == 3:
                     p_bad_rate = min(p_bad_rate * 1.8, 0.12)
+                elif ph == 4:
+                    p_bad_rate = 0.015
                 p_bad_qty   = max(0, int(p_work_qty * p_bad_rate))
                 p_good_qty  = max(0, p_work_qty - p_bad_qty)
                 p_mat_cost  = 0
@@ -343,6 +355,8 @@ while current_dt <= END_DATE:
         bad_rate   = VENDOR_BAD_RATE.get(raw_vendor, 0.02)
         if phase == 3:
             bad_rate = min(bad_rate * 1.8, 0.12)
+        elif phase == 4:
+            bad_rate = max(0.01, bad_rate * 0.7)
         bad_qty  = max(0, int(work_qty * bad_rate + random.gauss(0, 0.5)))
         good_qty = max(0, work_qty - bad_qty)
 
@@ -595,17 +609,23 @@ def verify_with_analyzer():
     monthly   = result.get('monthly_performance', [])
     p1_months = [m for m in monthly if m['month'] <  PHASE2_START.strftime('%Y-%m')]
     p3_months = [m for m in monthly if m['month'] >= PHASE3_START.strftime('%Y-%m')]
+    p4_months = [m for m in monthly if m['month'] >= PHASE4_START.strftime('%Y-%m')]
+    
     avg_p1 = avg_p3 = None
     if p1_months:
         avg_p1 = sum(m['margin_rate'] for m in p1_months) / len(p1_months)
         print(f"  Phase1 안정기: {avg_p1:.2f}%")
     if p3_months:
         avg_p3 = sum(m['margin_rate'] for m in p3_months) / len(p3_months)
-        print(f"  Phase3 위기기: {avg_p3:.2f}%")
-    if avg_p1 and avg_p3:
-        diff   = avg_p1 - avg_p3
-        status = "✅ 위기 포착 성공" if diff > 1 else "⚠️  위기 포착 미흡"
-        print(f"  하락폭: {diff:.2f}%p → {status}")
+        print(f"  Phase3 위기기 (25년 1~3Q): {avg_p3:.2f}%")
+    if p4_months:
+        avg_p4 = sum(m['margin_rate'] for m in p4_months) / len(p4_months)
+        print(f"  Phase4 회복기 (25년 4Q~): {avg_p4:.2f}%")
+
+    if avg_p3 is not None and avg_p4 is not None:
+        diff = avg_p4 - avg_p3
+        status = "✅ 회복 추세 생성 성공" if diff > 2 else "⚠️  회복폭 미흡"
+        print(f"  반등폭: {diff:.2f}%p → {status}")
 
     ca = result.get('cancel_analysis', {})
     print(f"\n[취소·미결 분석]")

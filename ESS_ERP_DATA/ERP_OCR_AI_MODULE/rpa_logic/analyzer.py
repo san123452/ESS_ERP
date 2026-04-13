@@ -28,7 +28,7 @@ def _build_cost_map(cost_list):
 
     item_col   = next((c for c in cost_df.columns if c.replace('_','') == 'itemcd'),    None)
     price_col  = next((c for c in cost_df.columns if c.replace('_','') == 'unitprice'), None)
-    req_col    = next((c for c in cost_df.columns if c.replace('_','') == 'reqqty'),    None)
+    req_col    = next((c for c in cost_df.columns if c.replace('_','') in ('reqqty', 'qty')), None)
     parent_col = next((c for c in cost_df.columns
                        if c.replace('_','') in ('parentcd','parentitem')), None)
 
@@ -36,16 +36,17 @@ def _build_cost_map(cost_list):
         print("[WARN] cost_list에 itemCd/unitPrice 컬럼 없음. 기본값 사용.")
         return {}
 
-    if req_col:
+    # [수정] req_col이 없더라도 parent_col이 있으면 BOM으로 간주하여 합산 처리
+    if req_col or parent_col:
         cost_df['line_cost'] = (pd.to_numeric(cost_df[price_col], errors='coerce') *
-                                pd.to_numeric(cost_df[req_col],   errors='coerce'))
+                                pd.to_numeric(cost_df[req_col] if req_col else 1, errors='coerce').fillna(1))
         if parent_col:
             cost_map = cost_df.groupby(parent_col)['line_cost'].sum().to_dict()
         elif len(cost_df[item_col].unique()) == 1:
             cost_map = {'__default__': cost_df['line_cost'].sum()}
         else:
             cost_map = cost_df.groupby(item_col)['line_cost'].sum().to_dict()
-            print("[INFO] parentCd 없음 → itemCd 기준 원가 맵으로 구성합니다.")
+            print("[INFO] parentCd 없음 → itemCd(BOM) 기준 원가 합산.")
     else:
         cost_map = cost_df.groupby(item_col)[price_col].mean().to_dict()
 
@@ -70,6 +71,11 @@ def _build_timeseries_cost_map(cost_df, date_col):
                        if c.replace('_','') in ('parentcd','parentitem')), None)
     item_col   = next((c for c in cost_df.columns if c.replace('_','') in ('itemcd', 'childitemcd')), None)
 
+    # STS 대응: parentcd가 없고 itemcd와 childitemcd가 같이 있다면 itemcd를 부모로 간주
+    if not parent_col and 'itemcd' in cost_df.columns and 'childitemcd' in cost_df.columns:
+        parent_col = 'itemcd'
+        item_col = 'childitemcd'
+
     if not price_col:
         print("[WARN] 시계열 cost_list에 unitPrice 컬럼 없음.")
         return {}
@@ -78,31 +84,31 @@ def _build_timeseries_cost_map(cost_df, date_col):
     cost_df[price_col] = pd.to_numeric(cost_df[price_col], errors='coerce')
     cost_df = cost_df.dropna(subset=[date_col, price_col]).sort_values(date_col)
 
-    ts_map = {}
-
-    if req_col and parent_col:
-        # [A] BOM 부품 형태 — parentCd 기준으로 날짜별 line_cost 합산
-        # 예: F-ESS-500 = H-RACK-50(reqQty=10, price=2800만) → 2.8억
-        cost_df[req_col] = pd.to_numeric(cost_df[req_col], errors='coerce').fillna(1)
-        cost_df['line_cost'] = cost_df[price_col] * cost_df[req_col]
-
-        for parent_cd, grp in cost_df.groupby(parent_col):
-            # 날짜별로 모든 부품의 line_cost 합산 → 완제품 1개 원가
-            daily = grp.groupby(date_col)['line_cost'].sum().reset_index()
-            daily.columns = ['cost_date', 'unit_cost']
-            ts_map[parent_cd] = daily
-            print(f"[BOM 시계열] {parent_cd}: {len(daily)}개 시점, "
-                  f"최근원가={daily['unit_cost'].iloc[-1]:,.0f}원")
+    # [수정] 개별 라인 원가 계산 (수량 반영)
+    if req_col:
+        cost_df['line_cost'] = cost_df[price_col] * pd.to_numeric(cost_df[req_col], errors='coerce').fillna(1)
     else:
-        # [B] 완제품 직접 형태 — unitPrice를 그대로 사용
-        key_col = parent_col or item_col
-        if not key_col:
-            print("[WARN] 시계열 cost_list에 parentCd/itemCd 컬럼 없음.")
-            return {}
-        for item_cd, grp in cost_df.groupby(key_col):
-            ts_map[item_cd] = grp[[date_col, price_col]].rename(
-                columns={date_col: 'cost_date', price_col: 'unit_cost'}
-            ).reset_index(drop=True)
+        cost_df['line_cost'] = cost_df[price_col]
+
+    ts_map = {}
+    key_col = parent_col or item_col
+    if not key_col:
+        print("[WARN] 시계열 cost_list에 parentCd/itemCd 컬럼 없음.")
+        return {}
+
+    # [수정] 로직 통합: parent_col이나 req_col이 있으면 SUM(BOM 합산), 없으면 MEAN(단순 시세 평균)
+    for code, grp in cost_df.groupby(key_col):
+        if parent_col or req_col:
+            # BOM 형태: 날짜별로 모든 부품 원가 합산하여 완제품 1개 원가 산출
+            daily = grp.groupby(date_col)['line_cost'].sum().reset_index()
+        else:
+            # 단순 시세 형태: 날짜별 평균값 사용 (중복 데이터 방어)
+            daily = grp.groupby(date_col)['line_cost'].mean().reset_index()
+        
+        daily.columns = ['cost_date', 'unit_cost']
+        ts_map[code] = daily.sort_values('cost_date')
+        print(f"[{'BOM' if parent_col or req_col else '시세'}] {code}: "
+              f"{len(daily)}개 시점, 최근원가={daily['unit_cost'].iloc[-1]:,.0f}원")
 
     print(f"[시계열 원가 맵] {len(ts_map)}개 품목, "
           f"총 {sum(len(v) for v in ts_map.values())}개 데이터포인트")
@@ -297,10 +303,10 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
         total_profit = total_rev - total_cost
         total_orders = len(df)
         results['financial_summary'] = {
-            "total_revenue":   round(total_rev),
-            "total_cost":      round(total_cost),
-            "gross_profit":    round(total_profit),
-            "net_margin_rate": round((total_profit / total_rev) * 100, 2) if total_rev > 0 else 0,
+            "total_revenue":   int(round(total_rev)),
+            "total_cost":      int(round(total_cost)),
+            "gross_profit":    int(round(total_profit)),
+            "net_margin_rate": float(round((total_profit / total_rev) * 100, 2)) if total_rev > 0 else 0.0,
             "total_orders":    total_orders,
             "avg_order_value": round(df['amount'].mean()) if total_orders > 0 else 0
         }
@@ -362,7 +368,6 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
         daily_series  = df.groupby('date')['amount'].sum().asfreq('D', fill_value=0)
         forecast_days = 60
         avg_margin    = (total_profit / total_rev) if total_rev > 0 else 0
-        cost_ratio    = (total_cost   / total_rev) if total_rev > 0 else 0
 
         non_zero_days = (daily_series > 0).sum()
         if non_zero_days < 2 or total_rev == 0:
@@ -407,20 +412,37 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
         }
 
         # [AI 예측 2] 12개월 장기
-        monthly_series = daily_series.resample('ME').sum()
-        if len(monthly_series) >= 12:
+        # [수정] 원가율도 함께 집계하여 시계열 생성
+        monthly_df = df.resample('ME', on='date').agg({'amount': 'sum', 'cost': 'sum'})
+        
+        if len(monthly_df) >= 12:
             try:
-                forecast_12m = ExponentialSmoothing(
-                    monthly_series, trend="add", seasonal="add", seasonal_periods=12
-                ).fit().forecast(12)
+                # 1. 매출 예측 모델
+                rev_model = ExponentialSmoothing(
+                    monthly_df['amount'], trend="add", seasonal="add", seasonal_periods=12
+                ).fit()
+                f_rev = rev_model.forecast(12)
+
+                # 2. 원가율 예측 모델 (Dynamic Cost Ratio)
+                # 매출이 없는 달의 원가율 오류 방지 및 결측치 처리
+                avg_cr = total_cost / total_rev if total_rev > 0 else 0.8
+                monthly_df['cost_ratio'] = (monthly_df['cost'] / monthly_df['amount']).replace([np.inf, -np.inf], np.nan).fillna(avg_cr)
+                
+                # [수정] damping_trend -> damped_trend (statsmodels 매개변수명 오류 수정)
+                cr_model = ExponentialSmoothing(monthly_df['cost_ratio'], trend="add", damped_trend=True).fit()
+                f_cr = cr_model.forecast(12)
+
                 results['long_term_forecast'] = []
-                for i, val in enumerate(forecast_12m):
-                    rev    = round(max(0, val))
-                    cost   = round(rev * cost_ratio)
+                for i in range(12):
+                    rev    = round(max(0, f_rev.iloc[i]))
+                    # 예측된 원가율 적용 (비현실적 수치 방지를 위해 0.5~1.2 사이로 클리핑)
+                    pred_cr = max(0.5, min(1.2, f_cr.iloc[i]))
+                    cost   = round(rev * pred_cr)
                     prof   = rev - cost
                     margin = round((prof / rev) * 100, 2) if rev > 0 else 0
+                    
                     results['long_term_forecast'].append({
-                        "month":             (monthly_series.index[-1] + pd.DateOffset(months=i+1)).strftime('%Y-%m'),
+                        "month":             (monthly_df.index[-1] + pd.DateOffset(months=i+1)).strftime('%Y-%m'),
                         "predicted_revenue": rev, "predicted_cost": cost,
                         "predicted_profit":  prof, "margin_rate": margin
                     })
