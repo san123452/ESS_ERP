@@ -38,7 +38,7 @@ public class FinanceController {
         System.out.println("BOM 원가 샘플: " + (bomCostList.isEmpty() ? "없음" : bomCostList.get(0)));
         try {
             RestTemplate restTemplate = new RestTemplate();
-            // ✅ 세 가지 데이터를 하나의 Map으로 묶어서 전송
+            // 세 가지 데이터를 하나의 Map으로 묶어서 전송
             Map<String, Object> payload = new HashMap<>();
             payload.put("sales_list",      sales);
             payload.put("bom_cost", bomCostList);   // 매입 → 원가 계산용
