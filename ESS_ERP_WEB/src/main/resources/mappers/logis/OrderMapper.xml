@@ -110,14 +110,14 @@
 	        A.ACCT_CD AS acctCd,
 	        A.STATUS AS status,
 	        B.ITEM_CD AS itemCd,
-	        B.QTY AS qtY,
+	        B.QTY AS qty,
 	        B.UNIT_PRICE AS unitPrice,
-	        B.AMT AS amT
+	        B.AMT AS amt
 	    FROM TB_ORDER A
 	        LEFT JOIN TB_ORDER_DETAIL B ON A.ORDER_NO = B.ORDER_NO
 	    WHERE ORDER_TYPE = 'SELL'
 	</select>
-	
+		
 	<!-- 매입 데이터 조회 (발주 전표 + 상세 + BOM 원가) -->
 	<select id="getPurchaseData" resultType="map">
 	    SELECT 
@@ -151,6 +151,7 @@
 	    FROM TB_WORK_PERF P
 	        LEFT JOIN TB_WORK_ORDER W ON P.WORK_NO = W.WORK_NO
 	        LEFT JOIN TB_ITEM C ON W.ITEM_CD = C.ITEM_CD
+	        WHERE C.ITEM_CD IS NOT NULL
 	</select>
 	
 	<!-- 생산 실적 전체 (양품률 계산용) -->
@@ -166,24 +167,24 @@
 	</select>
 	
 	<!-- 품목 마스터 -->
-	<select id="getItemMasterData" resultType="map">
-	    SELECT
-	        ITEM_CD AS itemCd,
-	        ITEM_NM AS itemNm,
-	        PRICE AS price,
-	        STOCK_QTY AS stockQty
-	    FROM TB_ITEM
-	    WHERE USE_YN = 'Y'
-	</select>
-	
-	<!-- BOM 기반 표준원가 -->
+		<select id="getItemMasterData" resultType="map">
+		    SELECT
+		        ITEM_CD AS itemCd,
+		        ITEM_NM AS itemNm,
+		        PRICE AS price,
+		        STOCK_QTY AS stockQty
+		    FROM TB_ITEM
+		    WHERE USE_YN = 'Y'
+		</select>
+		
+		<!-- BOM 기반 표준원가 -->
 	<select id="getBomCostListData" resultType="map">
 	    SELECT
 	        B.PARENT_CD AS itemCd,
 	        B.CHILD_CD AS childItemCd,
 	        B.REQ_QTY AS qty,
-	        I.PRICE AS price,
-	        (B.REQ_QTY * I.PRICE) AS totalCost
+	        I.PRICE AS unitPrice,
+	        B.REG_DT AS costDate
 	    FROM TB_BOM B
 	    LEFT JOIN TB_ITEM I ON B.CHILD_CD = I.ITEM_CD
 	</select>
