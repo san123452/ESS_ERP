@@ -15,4 +15,5 @@ public interface DashboardMapper {
     
     // [추가] 사용자의 권한 리스트를 기반으로 접근 가능한 메뉴 리스트를 조회
     List<Map<String, Object>> selectUserMenuList(@Param("roles") List<String> roles);
+    
 }

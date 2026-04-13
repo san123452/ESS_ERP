@@ -1,6 +1,8 @@
 package com.ess.erp.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ess.erp.domain.OrderDetailDTO;
 import com.ess.erp.domain.OrderDTO;
 import com.ess.erp.domain.ItemDTO; // ItemDTO 임포트 필요
@@ -29,4 +31,11 @@ public interface OrderMapper {
     		@Param("orderNo") String orderNo,
     		@Param("empId") String empId
     		);
-}
+	 // 재무제표용
+	    List<Map<String, Object>> getSalesData();      // 매출
+	    List<Map<String, Object>> getPurchaseData();   // 매입
+	    List<Map<String, Object>> getBadLossData();    // 불량 손실
+	    List<Map<String, Object>> getProductionData();  // 생산실적
+	    List<Map<String, Object>> getItemMasterData();  // 품목마스터
+	    List<Map<String, Object>> getBomCostListData();
+	}
