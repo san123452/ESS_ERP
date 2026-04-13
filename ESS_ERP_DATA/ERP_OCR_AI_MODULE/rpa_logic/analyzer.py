@@ -55,18 +55,23 @@ def _build_cost_map(cost_list):
 
 def _build_timeseries_cost_map(cost_df, date_col):
     """
-    시계열 원가 맵.
-    반환: {'__timeseries__': {item_cd: DataFrame(index=date, columns=['price'])}}
-    merge_asof를 위해 DataFrame 형태로 저장.
+    시계열 원가 맵 구성.
+
+    Spring에서 보내는 두 가지 형태를 모두 지원:
+    [A] BOM 부품 형태 (parentCd + itemCd + reqQty + unitPrice + costDate)
+        → parentCd 기준으로 날짜별 line_cost(unitPrice × reqQty) 합산
+        → 완제품 1개당 실제 제조원가를 날짜별로 계산
+    [B] 완제품 직접 형태 (parentCd or itemCd + unitPrice + costDate, reqQty 없음)
+        → unitPrice를 완제품 원가로 직접 사용
     """
     price_col  = next((c for c in cost_df.columns if c.replace('_','') == 'unitprice'), None)
+    req_col    = next((c for c in cost_df.columns if c.replace('_','') in ('reqqty', 'qty')), None)
     parent_col = next((c for c in cost_df.columns
                        if c.replace('_','') in ('parentcd','parentitem')), None)
-    item_col   = next((c for c in cost_df.columns if c.replace('_','') == 'itemcd'), None)
-    key_col    = parent_col or item_col
+    item_col   = next((c for c in cost_df.columns if c.replace('_','') in ('itemcd', 'childitemcd')), None)
 
-    if not key_col or not price_col:
-        print("[WARN] 시계열 cost_list에 키/단가 컬럼 없음.")
+    if not price_col:
+        print("[WARN] 시계열 cost_list에 unitPrice 컬럼 없음.")
         return {}
 
     cost_df[date_col]  = pd.to_datetime(cost_df[date_col], errors='coerce').dt.as_unit('ns')
@@ -74,10 +79,30 @@ def _build_timeseries_cost_map(cost_df, date_col):
     cost_df = cost_df.dropna(subset=[date_col, price_col]).sort_values(date_col)
 
     ts_map = {}
-    for item_cd, grp in cost_df.groupby(key_col):
-        ts_map[item_cd] = grp[[date_col, price_col]].rename(
-            columns={date_col: 'cost_date', price_col: 'unit_cost'}
-        ).reset_index(drop=True)
+
+    if req_col and parent_col:
+        # [A] BOM 부품 형태 — parentCd 기준으로 날짜별 line_cost 합산
+        # 예: F-ESS-500 = H-RACK-50(reqQty=10, price=2800만) → 2.8억
+        cost_df[req_col] = pd.to_numeric(cost_df[req_col], errors='coerce').fillna(1)
+        cost_df['line_cost'] = cost_df[price_col] * cost_df[req_col]
+
+        for parent_cd, grp in cost_df.groupby(parent_col):
+            # 날짜별로 모든 부품의 line_cost 합산 → 완제품 1개 원가
+            daily = grp.groupby(date_col)['line_cost'].sum().reset_index()
+            daily.columns = ['cost_date', 'unit_cost']
+            ts_map[parent_cd] = daily
+            print(f"[BOM 시계열] {parent_cd}: {len(daily)}개 시점, "
+                  f"최근원가={daily['unit_cost'].iloc[-1]:,.0f}원")
+    else:
+        # [B] 완제품 직접 형태 — unitPrice를 그대로 사용
+        key_col = parent_col or item_col
+        if not key_col:
+            print("[WARN] 시계열 cost_list에 parentCd/itemCd 컬럼 없음.")
+            return {}
+        for item_cd, grp in cost_df.groupby(key_col):
+            ts_map[item_cd] = grp[[date_col, price_col]].rename(
+                columns={date_col: 'cost_date', price_col: 'unit_cost'}
+            ).reset_index(drop=True)
 
     print(f"[시계열 원가 맵] {len(ts_map)}개 품목, "
           f"총 {sum(len(v) for v in ts_map.values())}개 데이터포인트")
