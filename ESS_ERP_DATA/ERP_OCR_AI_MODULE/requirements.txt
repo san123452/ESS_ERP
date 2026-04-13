@@ -1,0 +1,13 @@
+pytesseract
+pillow
+pandas>=2.0.0
+fastapi
+uvicorn
+python-multipart
+openpyxl
+numpy
+scikit-learn
+statsmodels
+opencv-python
+pydantic
+pdf2image
