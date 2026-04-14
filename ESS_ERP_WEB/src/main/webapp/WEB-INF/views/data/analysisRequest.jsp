@@ -29,15 +29,10 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h5 class="card-title fw-bold mb-3">데이터 분석 실행</h5>
-                        <form id="uploadForm">
-                            <div class="input-group mb-3">
-                                <input type="file" class="form-control" id="dataFile" accept=".xlsx, .csv, .pdf, .png, .jpg">
-                                <button class="btn btn-primary" type="button" onclick="requestAnalysis()">
-                                    <i class="fas fa-robot"></i> 분석 실행
-                                </button>
-                            </div>
-                            <small class="text-muted">* 파이썬(FastAPI) 서버로 전송할 엑셀, PDF, 이미지 데이터를 업로드해주세요.</small>
-                        </form>
+                        <p class="text-muted mb-3">버튼을 클릭하면 AI 서버가 실시간 DB 데이터를 바탕으로 분석을 수행합니다.</p>
+                        <button class="btn btn-primary btn-lg" type="button" onclick="requestAnalysis()">
+                            <i class="fas fa-robot"></i> AI 분석 요청하기
+                        </button>
                     </div>
                 </div>
             </div>
@@ -67,31 +62,30 @@
 
         // 파이썬 FastAPI 서버와 통신하는 Fetch API 코드
         function requestAnalysis() {
-            const fileInput = document.getElementById('dataFile');
+            console.log('파이썬 서버에 분석 요청 중...');
             
-            if (!fileInput.files.length) {
-                alert('분석할 파일을 먼저 선택해주세요!');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-
-            console.log('파이썬 서버로 데이터 전송 중...');
-            
-            fetch('http://localhost:8000/ocr', {
+            // 본인(파이썬 담당)이 설정한 분석 API 주소로 요청 (예: /analyze)
+            fetch('http://localhost:8000/analyze', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({}) // 필요한 조건(예: 날짜 범위 등)이 있다면 여기에 넣어서 보냅니다.
             })
             .then(response => response.json())
             .then(data => {
                 console.log('분석 결과:', data);
-                if(data.status === 'success') {
-                    alert('AI 분석이 완료되었습니다!');
-                    // 👉 여기서 data.items 값을 이용해 Chart.js 그래프를 갱신하면 됩니다!
-                } else {
-                    alert('분석 중 오류가 발생했습니다.');
-                }
+                alert('AI 분석이 완료되었습니다!');
+                
+                // 👉 [주희님 작업 구간] 파이썬에서 넘겨준 데이터를 변수에 담아 차트 업데이트
+                // (아래 코드는 파이썬에서 {"labels": ["A","B"], "values": [100, 200]} 형태로 보냈다고 가정한 예시입니다)
+                
+                /*
+                analysisChart.data.labels = data.labels; // X축 라벨 갱신
+                analysisChart.data.datasets[0].data = data.values; // Y축 데이터 갱신
+                analysisChart.update(); // 차트 새로고침 (애니메이션과 함께 스르륵 바뀜!)
+                */
+                
             })
             .catch(error => {
                 console.error('Error:', error);
