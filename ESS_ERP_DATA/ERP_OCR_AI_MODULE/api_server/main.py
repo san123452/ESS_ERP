@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Body
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field # 데이터 검증용
+from pydantic import BaseModel, Field, ConfigDict # ConfigDict 추가
 from typing import List, Any, Optional
 import logging
 import uvicorn
@@ -36,6 +36,7 @@ app.add_middleware(
 
 # [Step 3] 분석용 데이터 모델 정의 (Java에서 보낼 JSON 구조)
 class SalesRecord(BaseModel):
+    model_config = ConfigDict(populate_by_name=True) # 별칭과 실제 필드명 모두 허용
     orderDate: Any = Field(..., description="주문 날짜 (문자열 또는 타임스탬프)")
     itemCd: str = Field(..., description="품목 코드")
     qty: int = Field(..., alias="qtY", description="판매 수량")
@@ -43,9 +44,11 @@ class SalesRecord(BaseModel):
     status: Optional[str] = "DONE"
 
 class AnalysisRequest(BaseModel):
-    sales_list: List[SalesRecord]
-    production_list: Optional[List[dict]] = None
-    bom_cost: Optional[List[dict]] = None
+    model_config = ConfigDict(populate_by_name=True)
+    # Spring에서 보낼 수 있는 다양한 키 이름을 별칭으로 대응
+    sales_list: List[SalesRecord] = Field(..., alias="salesList")
+    production_list: Optional[List[dict]] = Field(None, alias="productionList")
+    bom_cost: Optional[List[dict]] = Field(None, alias="bomCost")
 
 # [Step 4] DB 저장용 데이터 모델
 class OrderItem(BaseModel):
