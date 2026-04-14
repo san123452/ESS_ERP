@@ -80,7 +80,7 @@ def _build_timeseries_cost_map(cost_df, date_col):
         print("[WARN] 시계열 cost_list에 unitPrice 컬럼 없음.")
         return {}
 
-    cost_df[date_col]  = pd.to_datetime(cost_df[date_col], errors='coerce').dt.as_unit('ns')
+    cost_df[date_col]  = pd.to_datetime(cost_df[date_col], errors='coerce').astype('datetime64[ns]')
     cost_df[price_col] = pd.to_numeric(cost_df[price_col], errors='coerce')
     cost_df = cost_df.dropna(subset=[date_col, price_col]).sort_values(date_col)
 
@@ -126,7 +126,7 @@ def _apply_timeseries_cost(df, cost_map):
 
     for item_cd, sub_df in df.groupby('item'):
         sub = sub_df.copy().sort_values('date')
-        sub['date'] = sub['date'].dt.as_unit('ns')  # 타입 통일
+        sub['date'] = sub['date'].astype('datetime64[ns]')  # 타입 통일
         if item_cd in ts_map:
             cost_ts = ts_map[item_cd].copy()
             merged  = pd.merge_asof(
@@ -165,7 +165,7 @@ def _get_unit_cost(item_cd, cost_map, fallback_map=None):
 # ── 메인 분석 함수 ────────────────────────────────────────────
 
 def analyze_sales_data(sales_list, production_list=None, cost_list=None,
-                       vat_included=True, fallback_cost_map=None):
+                       vat_included=True, vat_rate=0.1, fallback_cost_map=None):
     """
     ERP 데이터 통합 분석.
 
@@ -205,10 +205,18 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
                 df['date'] = pd.to_datetime(df['date'], errors='coerce')
         df = df.dropna(subset=['date'])
 
-    # [analyzer 1번] VAT 처리 — vat_included 플래그로 제어
-    if vat_included:
-        df['amount'] = df['amount'] / 1.1
-    # vat_included=False이면 그대로 사용 (이미 공급가액)
+    # [수정] 취소 분석을 VAT 차감 전에 수행하여 Spring 원장 금액(VAT 포함)과 일치시킴
+    if 'status' in df.columns:
+        df['status'] = df['status'].str.upper().fillna('UNKNOWN')
+    else:
+        df['status'] = 'DONE'
+
+    cancel_df = df[df['status'] == 'CANCEL'].copy()
+    df = df[df['status'] != 'CANCEL'].copy()
+
+    # VAT 차감 (공급가액 변환)
+    if vat_included and vat_rate > 0:
+        df['amount'] = df['amount'] / (1 + vat_rate)
 
     # 원가 맵 구성
     cost_map = _build_cost_map(cost_list)
@@ -240,15 +248,7 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
 
     df['cost'] = df['qty'] * df['unit_cost']
 
-    # status 정규화 및 취소건 분리
-    if 'status' in df.columns:
-        df['status'] = df['status'].str.upper().fillna('UNKNOWN')
-    else:
-        df['status'] = 'DONE'
-
-    cancel_df = df[df['status'] == 'CANCEL'].copy()
-    df        = df[df['status'] != 'CANCEL'].copy()
-
+    # [중복 제거] 위에서 처리됨
     df['profit'] = df['amount'] - df['cost']
     df = df.sort_values('date')
 
@@ -417,9 +417,12 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
         
         if len(monthly_df) >= 12:
             try:
+                # [버그 수정] 데이터가 24개월 미만이면 seasonal="add" 사용 시 statsmodels 에러 발생 가능
+                use_seasonal = "add" if len(monthly_df) >= 24 else None
+                
                 # 1. 매출 예측 모델
                 rev_model = ExponentialSmoothing(
-                    monthly_df['amount'], trend="add", seasonal="add", seasonal_periods=12
+                    monthly_df['amount'], trend="add", seasonal=use_seasonal, seasonal_periods=12 if use_seasonal else None
                 ).fit()
                 f_rev = rev_model.forecast(12)
 
@@ -428,15 +431,15 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
                 avg_cr = total_cost / total_rev if total_rev > 0 else 0.8
                 monthly_df['cost_ratio'] = (monthly_df['cost'] / monthly_df['amount']).replace([np.inf, -np.inf], np.nan).fillna(avg_cr)
                 
-                # [수정] damping_trend -> damped_trend (statsmodels 매개변수명 오류 수정)
+                # [수정] damped_trend 매개변수 확인 및 적용
                 cr_model = ExponentialSmoothing(monthly_df['cost_ratio'], trend="add", damped_trend=True).fit()
                 f_cr = cr_model.forecast(12)
 
                 results['long_term_forecast'] = []
                 for i in range(12):
                     rev    = round(max(0, f_rev.iloc[i]))
-                    # 예측된 원가율 적용 (비현실적 수치 방지를 위해 0.5~1.2 사이로 클리핑)
-                    pred_cr = max(0.5, min(1.2, f_cr.iloc[i]))
+                    # [수정] 원가율 2.0(적자 100%)까지 허용하여 위기 시나리오 반영
+                    pred_cr = max(0.1, min(2.0, f_cr.iloc[i]))
                     cost   = round(rev * pred_cr)
                     prof   = rev - cost
                     margin = round((prof / rev) * 100, 2) if rev > 0 else 0

@@ -28,7 +28,8 @@ try:
 except ImportError:
     HAS_PDF_LIB = False
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# 환경 변수 'TESSERACT_PATH'가 있으면 사용하고, 없으면 기본 경로 사용
+pytesseract.pytesseract.tesseract_cmd = os.getenv('TESSERACT_PATH', r'C:\Program Files\Tesseract-OCR\tesseract.exe')
 
 # [추가] Poppler 경로 자동 설정 (external 폴더 활용)
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))  # .../ocr_engine
