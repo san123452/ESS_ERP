@@ -41,14 +41,22 @@ def _style_body_row(ws, row_num, ncols, alt=False):
         else:
             cell.alignment = C_LEFT
 
+def _get_visual_length(text):
+    """한글은 2, 나머지는 1로 계산하여 시각적 길이를 측정합니다."""
+    length = 0
+    for char in str(text):
+        length += 2 if ord(char) > 128 else 1
+    return length
+
 def _auto_col_width(ws):
     for col in ws.columns:
         max_len = 0
         col_letter = get_column_letter(col[0].column)
         for cell in col:
             if cell.value:
-                max_len = max(max_len, len(str(cell.value)))
-        ws.column_dimensions[col_letter].width = min(max(max_len * 1.6, 13), 52)
+                max_len = max(max_len, _get_visual_length(cell.value))
+        ws.column_dimensions[col_letter].width = min(max(max_len * 1.1 + 5, 16), 70) 
+
 
 
 def generate_excel_report(analysis_data):
