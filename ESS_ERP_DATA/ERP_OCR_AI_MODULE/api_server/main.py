@@ -1,8 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Body
 from fastapi.responses import StreamingResponse
-from fastapi.middleware.cors import CORSMiddleware # 추가
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field # 데이터 검증용
-from typing import List, Any   # Any 추가
+from typing import List, Any, Optional
+import logging
 import uvicorn
 import sys
 import os
@@ -17,11 +18,18 @@ from ocr_engine.formatter import format_to_dataframe
 from rpa_logic.analyzer import analyze_sales_data
 from rpa_logic.excel_maker import generate_excel_report
 
+# 로깅 설정
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("ERP_AI_MODULE")
+
 app = FastAPI()
+
+# CORS 설정 (환경 변수에 따라 제한 가능하도록 구성)
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 모든 도메인에서의 접속 허용 (테스트용)
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -30,8 +38,14 @@ app.add_middleware(
 class SalesRecord(BaseModel):
     orderDate: Any = Field(..., description="주문 날짜 (문자열 또는 타임스탬프)")
     itemCd: str = Field(..., description="품목 코드")
-    qtY: int = Field(..., description="판매 수량")
-    amT: int = Field(..., description="판매 금액")
+    qty: int = Field(..., alias="qtY", description="판매 수량")
+    amt: int = Field(..., alias="amT", description="판매 금액")
+    status: Optional[str] = "DONE"
+
+class AnalysisRequest(BaseModel):
+    sales_list: List[SalesRecord]
+    production_list: Optional[List[dict]] = None
+    bom_cost: Optional[List[dict]] = None
 
 # [Step 4] DB 저장용 데이터 모델
 class OrderItem(BaseModel):
@@ -72,9 +86,7 @@ async def perform_ocr(file: UploadFile = File(...)):
         if os.path.exists(temp_filename):
             os.remove(temp_filename)
     
-    # [서버 로그] 분석된 데이터 터미널에 출력 (디버깅용)
-    print(f"\n[🔍 Server Log] 분석 결과 ({len(df)}건 감지):")
-    print(df[['item_name', 'quantity', 'unit_price']].to_string(index=False))
+    logger.info(f"OCR 처리 완료: {len(df)}건의 품목 감지")
 
     return {
         "status": "success",
@@ -84,47 +96,13 @@ async def perform_ocr(file: UploadFile = File(...)):
 
 # [Step 3] 수익 분석 API 엔드포인트
 @app.post("/analyze")
-async def analyze_sales(payload: Any = Body(...)):
+async def analyze_sales(request: AnalysisRequest):
     """
-    Spring에서 보낸 판매 기록 리스트(List) 또는 래핑된 객체(Dict)를 분석하여 반환합니다.
-    - List 형태: [{"orderDate": ..., "itemCd": ..., ...}, ...]
-    - Dict 래핑 형태: {"sales": [...], "production": [...], "cost": [...]}
+    Pydantic 모델을 통해 검증된 데이터를 분석하여 반환합니다.
     """
-    if isinstance(payload, list):
-        # 기존 방식: 리스트 직접 전달
-        data_list = payload
-        production_list = None
-        cost_list = None
-    elif isinstance(payload, dict):
-        # 신규 방식: dict로 래핑하여 전달
-        # "sales" 또는 "salesList" 키 둘 다 대응
-        data_list = payload.get("sales_list",          # ✅ 실제 키
-                    payload.get("sales", 
-                    payload.get("salesList", [])))
-    
-        production_list = payload.get("production_list",  # ✅ 실제 키
-                          payload.get("production",
-                          payload.get("productionList", None)))
-    
-        cost_list = payload.get("bom_cost",
-                    payload.get("cost_list",
-                    payload.get("cost",
-                    payload.get("costList", None))))
-        print(f"[DEBUG cost_list]: {cost_list}")  # ✅ 이 줄 추가
-    else:
-        return {"error": "지원하지 않는 데이터 형식입니다. List 또는 Dict로 전송해주세요."}
-
-    # ✅ 여기 추가
-    print(f"[PAYLOAD TYPE]: {type(payload)}")
-    print(f"[PAYLOAD KEYS]: {list(payload.keys()) if isinstance(payload, dict) else 'LIST'}")
-    print(f"[DATA_LIST 길이]: {len(data_list)}")
-    print(f"[DATA_LIST 첫번째 항목]: {data_list[0] if data_list else '없음'}")
-
-    result = analyze_sales_data(data_list, production_list, cost_list)
-
-    # ✅ 여기 추가
-    print(f"[RESULT KEYS]: {list(result.keys())}")
-    print(f"[RESULT financial_summary]: {result.get('financial_summary')}")
+    data_list = [s.dict(by_alias=True) for s in request.sales_list]
+    result = analyze_sales_data(data_list, request.production_list, request.bom_cost)
+    logger.info(f"분석 요청 처리 완료: {len(data_list)}건 판매 데이터")
 
     return result
 

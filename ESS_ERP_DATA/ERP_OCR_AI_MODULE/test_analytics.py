@@ -23,11 +23,11 @@ test_analytics.py v5
 """
 
 # ── 기본 설정 ──────────────────────────────────────────────────
-START_DATE   = datetime.now() - timedelta(days=730)
+START_DATE   = datetime.now() - timedelta(days=1095) # 3년(1095일)으로 확장
 END_DATE     = datetime.now()
-PHASE2_START = START_DATE + timedelta(days=180) 
-PHASE3_START = datetime(2025, 1, 1)   # 25년 1분기~3분기 (위기기 시작)
-PHASE4_START = datetime(2025, 10, 1)  # 25년 4분기~ (회복 및 안정기 시작)
+PHASE2_START = START_DATE + timedelta(days=400) # 약 13개월 후
+PHASE3_START = START_DATE + timedelta(days=700) # 약 23개월 후 (위기기: 원가 폭등)
+PHASE4_START = START_DATE + timedelta(days=950) # 약 31개월 후 (회복기)
 
 SALES_EMP = '12345'
 MGMT_EMP  = '2026001'
@@ -96,29 +96,29 @@ def get_phase(dt):
 def get_raw_price(item_cd, dt):
     base  = BASE_PRICES[item_cd]
     phase = get_phase(dt)
-    if phase == 1:   m = random.uniform(0.96, 1.04)
-    elif phase == 2: m = random.uniform(1.02, 1.10)
-    elif phase == 3: m = random.uniform(1.18, 1.35) # 위기기: 원가 대폭 폭등
-    else:            m = random.uniform(0.95, 1.03) # 회복기: 원가 안정화
+    if phase == 1:   m = random.uniform(0.95, 1.05)
+    elif phase == 2: m = random.uniform(1.05, 1.15)
+    elif phase == 3: m = random.uniform(1.35, 1.70) # 위기기: 원가 대폭 폭등 (적자 유도)
+    else:            m = random.uniform(0.95, 1.02) # 회복기: 원가 안정화
     return int(base * m)
 
 def get_cancel_rate(vendor, dt):
     phase = get_phase(dt)
     if vendor in HIGH_CANCEL_VENDORS:
-        if phase == 3: return 0.22 # 위기기: 취소율 급증
-        if phase == 4: return 0.05 # 회복기: 취소율 안정
+        if phase == 3: return 0.30 # 위기기: 취소율 30%까지 급증
+        if phase == 4: return 0.04 # 회복기: 취소율 안정
         return 0.06
     return 0.02
 
 def get_emp_and_sell_price(item_cd, phase):
     if phase == 3 and random.random() < 0.6:
-        # 위기기: 덤핑 판매로 인한 가격 하락
-        return SALES_EMP, int(BASE_PRICES[item_cd] * random.uniform(0.85, 0.91))
+        # 위기기: 시장 점유율 유지를 위한 고육지책 덤핑
+        return SALES_EMP, int(BASE_PRICES[item_cd] * random.uniform(0.70, 0.85))
     elif phase == 2:
         return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(0.98, 1.03))
     elif phase == 4:
-        # 회복기: 제값 받기 시작 + 프리미엄 전략
-        return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(1.02, 1.07))
+        # 회복기: 브랜드 가치 회복 및 단가 인상
+        return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(1.05, 1.10))
     else:
         return MGMT_EMP,  int(BASE_PRICES[item_cd] * random.uniform(0.99, 1.01))
 
@@ -141,7 +141,8 @@ def fifo_cost(item_cd, qty):
         if take == lot_qty: q.popleft()
         else:               q[0] = (lot_qty - take, lot_price)
     if remaining > 0:
-        total_cost += remaining * BASE_PRICES[item_cd]
+        # 재고 부족 시 마지막으로 확인된 단가 혹은 마스터 단가 사용
+        total_cost += remaining * (q[-1][1] if q else BASE_PRICES[item_cd])
     return total_cost
 
 
@@ -299,8 +300,11 @@ while current_dt <= END_DATE:
                 _production_list.append({"GOOD_QTY": p_good_qty, "BAD_QTY": p_bad_qty, "itemCd": p_parent})
             else:
                 still_waiting.append((expire_dt, p_parent, p_work_qty, p_wk_no, p_due_wk))
-        # [test 3번] 만료 항목 제거 + 큐 크기 상한(품목당 최대 5건) 메모리 방어
-        pending_production[queue_key] = still_waiting[-5:]
+        # [test 3번] 큐 상한을 늘려 리드타임이 긴 원자재 대응력 강화
+        # [버그 수정] 정렬 후 할당
+        still_waiting.sort(key=lambda x: x[0])
+        pending_production[queue_key] = still_waiting[-10:]
+
 
     # ── 생산 ─────────────────────────────────────────────────
     prod_order = ['H-CELL-100', 'H-MOD-10', 'H-RACK-50', 'F-ESS-500']
@@ -333,21 +337,17 @@ while current_dt <= END_DATE:
                         for c, r in children if effective_stock[c] < work_qty*r]
             stockout_events.append((current_dt, parent, shortage))
 
-            # [2번] 생산 대기 큐 등록 — 최대 3일간 대기 후 재시도
-            # 이미 대기 중인 동일 품목이 없을 때만 등록 (중복 방지)
-            already_waiting = any(
-                p_parent == parent
-                for _, p_parent, _, _, _ in pending_production.get(parent, [])
-            ) if hasattr(pending_production, 'get') else False
-
             queue_key = parent
-            if queue_key not in pending_production:
-                pending_production[queue_key] = []
-            # 대기 만료일: 오늘로부터 3일
-            expire_dt = current_dt + timedelta(days=3)
-            pending_production[queue_key].append(
-                (expire_dt, parent, work_qty, wk_no, due_wk)
-            )
+            # [버그 수정] already_waiting 로직이 가드 조건문에서 누락되었던 점 해결
+            already_waiting = any(p[1] == parent for p in pending_production.get(queue_key, []))
+            
+            if not already_waiting:
+                if queue_key not in pending_production:
+                    pending_production[queue_key] = []
+                expire_dt = current_dt + timedelta(days=3)
+                pending_production[queue_key].append(
+                    (expire_dt, parent, work_qty, wk_no, due_wk)
+                )
             work_counter += 1
             continue
 
