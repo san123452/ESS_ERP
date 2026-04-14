@@ -366,7 +366,7 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
 
         # [AI 예측] 60일
         daily_series  = df.groupby('date')['amount'].sum().asfreq('D', fill_value=0)
-        forecast_days = 60
+        forecast_days = 90
         avg_margin    = (total_profit / total_rev) if total_rev > 0 else 0
 
         non_zero_days = (daily_series > 0).sum()
@@ -392,9 +392,35 @@ def analyze_sales_data(sales_list, production_list=None, cost_list=None,
                     daily_series, trend="add", seasonal="add", seasonal_periods=7
                 ).fit()
                 predictions       = model.forecast(forecast_days)
-                predicted_revenue = round(sum(max(0, p) for p in predictions))
-                predicted_profit  = round(predicted_revenue * blended_margin)
                 model_name        = "Holt-Winters (계절성+추세)"
+
+                # [신규] 예측 데이터를 분기별 실적에 통합하기 위한 처리
+                last_date = df['date'].max()
+                forecast_dates = [last_date + timedelta(days=i) for i in range(1, forecast_days + 1)]
+                forecast_df = pd.DataFrame({
+                    'date': forecast_dates,
+                    'amount': [max(0, p) for p in predictions]
+                })
+                forecast_df['profit'] = forecast_df['amount'] * blended_margin
+                forecast_df['cost'] = forecast_df['amount'] - forecast_df['profit']
+                forecast_df['quarter'] = forecast_df['date'].dt.to_period('Q').astype(str)
+
+                q_forecast = forecast_df.groupby('quarter').agg({'amount':'sum', 'cost':'sum', 'profit':'sum'}).reset_index()
+                for _, row in q_forecast.iterrows():
+                    results['quarterly_chart'].append({
+                        "quarter": row['quarter'],
+                        "label": f"{row['quarter'][:4]}년 {row['quarter'][-1]}분기 (예측)",
+                        "revenue": round(row['revenue'] if 'revenue' in row else row['amount']),
+                        "cost": round(row['cost']),
+                        "profit": round(row['profit']),
+                        "margin_rate": round(blended_margin * 100, 2),
+                        "order_count": "-", # 예측치는 건수 제외
+                        "is_forecast": True
+                    })
+                
+                predicted_revenue = round(forecast_df['amount'].sum())
+                predicted_profit  = round(predicted_revenue * blended_margin)
+
             except Exception as e:
                 print(f"[Warning] 시계열 분석 실패({e}), 선형 회귀 전환.")
                 predicted_revenue, model_name = _predict_linear_fallback(daily_series, forecast_days)

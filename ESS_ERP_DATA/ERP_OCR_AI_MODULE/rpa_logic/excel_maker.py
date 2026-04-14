@@ -12,6 +12,7 @@ HEADER_FONT  = Font(name="Arial", color="FFFFFF", bold=True, size=10)
 BODY_FONT    = Font(name="Arial", size=10)
 BOLD_FONT    = Font(name="Arial", bold=True, size=10)
 TITLE_FONT   = Font(name="Arial", bold=True, size=14, color="1F4E79")
+FORECAST_FONT = Font(name="Arial", color="FF8C00", italic=True, size=10) # 예측 데이터용 주황색 폰트
 C_CENTER     = Alignment(horizontal="center", vertical="center")
 C_RIGHT      = Alignment(horizontal="right",  vertical="center")
 C_LEFT       = Alignment(horizontal="left",   vertical="center")
@@ -213,6 +214,7 @@ def generate_excel_report(analysis_data):
             _style_header_row(ws3, 2, len(cols))
 
             for ri, q in enumerate(quarterly_data, 3):
+                is_fc = q.get('is_forecast', False)
                 row_vals = [
                     q.get('label', q.get('quarter', '')),
                     q.get('revenue', 0), q.get('cost', 0), q.get('profit', 0),
@@ -221,7 +223,7 @@ def generate_excel_report(analysis_data):
                 for ci, val in enumerate(row_vals, 1):
                     cell = ws3.cell(row=ri, column=ci, value=val)
                     cell.border = BORDER
-                    cell.font   = BODY_FONT
+                    cell.font   = FORECAST_FONT if is_fc else BODY_FONT
                     if ci == 1:
                         cell.alignment = C_CENTER
                     elif ci == 5:
