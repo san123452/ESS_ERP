@@ -72,7 +72,7 @@
 
             <!-- (임시) 분석 요청 페이지 바로가기 링크 -->
             <li class="nav-item mt-2">
-                <a class="nav-link text-white fw-bold" href="/data/analyze">
+                <a class="nav-link text-white fw-bold" href="/finance/report">
                     <i class="fas fa-chart-line"></i> AI 분석 요청
                 </a>
             </li>
