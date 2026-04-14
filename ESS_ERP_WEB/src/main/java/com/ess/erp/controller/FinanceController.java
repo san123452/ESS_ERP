@@ -8,25 +8,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import com.ess.erp.service.SalesOrderService;
+
+import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/finance")
 public class FinanceController {
     @Autowired
     private SalesOrderService salesOrderService;
     @GetMapping("/report")
-    public String report() {
+    public String report(HttpSession session, Model model) {
+    	Map<String, Object>analyzeResult = 
+    			(Map<String,Object>) session.getAttribute("analyzeResult");
+        if (analyzeResult != null) {
+            model.addAttribute("result", analyzeResult); // JSP로 전달
+        }
         return "finance/report";
     }
     // 1단계: 분석결과를 JSON으로 반환 (차트 표시용)
     @PostMapping("/report/analyze")
-    @ResponseBody
-    public ResponseEntity<byte[]> analyze() {
+    public String analyze(HttpSession session) {
         // DB 데이터 수집
         List<Map<String, Object>> sales       = salesOrderService.getSalesData();
         List<Map<String, Object>> purchase    = salesOrderService.getPurchaseData();
@@ -45,33 +52,41 @@ public class FinanceController {
             payload.put("production_list", badLoss);    // 생산실적/불량 → 양품률·손실 계산용
             payload.put("production_data", production); // 생산실적 전체 → 양품률 계산용
             payload.put("item_list",       itemMaster); // 품목 마스터 → 단가 계산용
-           
-            
+
             // 1단계: Python 분석 요청
             String pythonUrl = "http://192.168.0.221:8000/analyze";
             Map<String, Object> result = restTemplate.postForObject(pythonUrl, payload, Map.class);
-            System.out.println("Python 분석 결과: " + result);
-            
-            // 2단계: 엑셀 생성 요청
-            String excelUrl = "http://192.168.0.221:8000/generate-excel";
-            byte[] excelBytes = restTemplate.postForObject(excelUrl, result, byte[].class);
-            System.out.println("엑셀 생성 결과: " + excelBytes.length + " bytes");
-            
-            // 3단계: 브라우저로 엑셀 다운로드
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-            headers.add("Content-Disposition", "attachment; filename=report.xlsx");
-            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
-            
+            //(분석 결과 세션에 저장후 페이지로 돌아가게 함)
+            session.setAttribute("analyzeResult", result);
+            return "redirect:/finance/report?analyzed=true";
+
         } catch (Exception e) {
-            System.err.println("Python 서버 오류: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        	return "redirect:/finance/report?error=true";
         }
     }
-       
-    @PostMapping("/report/download")
-    public String download() {
-        return "finance/report";
-    }
+	 // 2단계: 엑셀 다운로드
+	    @PostMapping("/report/download")
+	    @ResponseBody
+	    public ResponseEntity<byte[]> download(HttpSession session) {
+	        Map<String, Object> analyzeResult = 
+	                (Map<String, Object>) session.getAttribute("analyzeResult");
+	
+	        try {
+	            RestTemplate restTemplate = new RestTemplate();
+	
+	            String excelUrl = "http://192.168.0.221:8000/generate-excel";
+	            byte[] excelBytes = restTemplate.postForObject(excelUrl, analyzeResult, byte[].class);
+	            System.out.println("엑셀 생성 결과: " + excelBytes.length + " bytes");
+	
+	            HttpHeaders headers = new HttpHeaders();
+	            headers.setContentType(MediaType.parseMediaType(
+	                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+	            headers.add("Content-Disposition", "attachment; filename=report.xlsx");
+	            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+	
+	        } catch (Exception e) {
+	            System.err.println("엑셀 생성 오류: " + e.getMessage());
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
 }

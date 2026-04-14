@@ -114,7 +114,7 @@
                     </button>
                 </form>
                 <!-- 2단계: 엑셀 다운로드 -->
-                <form action="/finance/report/analyze" method="post">
+                <form action="/finance/report/download" method="post">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <button type="submit" class="btn btn-success btn-lg px-5">
                         <i class="fas fa-file-excel me-2"></i> 2단계: 엑셀 다운로드
