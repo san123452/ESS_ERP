@@ -106,49 +106,154 @@
         </div>
         <div class="card-body text-center py-5">
             <p class="text-muted mb-4">DB 데이터를 분석하여 손익계산서(P&L) 형태의 엑셀 파일을 생성합니다.</p>
-            <div class="d-flex justify-content-center gap-3">
-                <!-- 1단계: 분석 요청 -->
-				<form action="/finance/report/analyze" method="post">
-				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				    <button type="submit" class="btn btn-primary btn-lg px-5">
-				        <i class="fas fa-search me-2"></i> 1단계: 데이터 분석 요청
-				    </button>
-				</form>
-				
+			<c:if test="${param.analyzed == 'true'}">
+			    <script>alert('데이터 분석이 완료되었습니다!');</script>
+			</c:if>
+			<c:if test="${param.error == 'true'}">
+			    <script>alert('분석 중 오류가 발생했습니다. 다시 시도해주세요.');</script>
+			</c:if>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+            <!-- 1단계: 분석 요청 -->
+		    <form action="/finance/report/analyze" method="post">
+		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		        <button type="submit" class="btn btn-primary btn-lg px-5">
+		            <i class="fas fa-search me-2"></i> 1단계: 데이터 분석 요청
+		        </button>
+		    </form>
+		    <!-- 2단계: 엑셀 다운로드 -->
+		    <form action="/finance/report/download" method="post">
+		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		        <button type="submit" class="btn btn-success btn-lg px-5">
+		            <i class="fas fa-file-excel me-2"></i> 2단계: 엑셀 다운로드
+		        </button>
+		    </form>
+		</div>
 				<!-- 버튼 아래에 차트 표시 -->
 				<c:if test="${result != null}">
-				    <div class="mt-4 w-100">
-				        <canvas id="myChart"></canvas>
-				    </div>
+				    <div class="row g-3">
+				    <!-- 월별 손익 -->
+					    <div class="col-md-6">
+					        <div class="card border-0 shadow-sm">
+					            <div class="card-header bg-white fw-bold">📊 월별 순이익 (억원 단위)</div>
+					            <div class="card-body">
+					                <canvas id="monthlyChart" height="150"></canvas>
+					            </div>
+					        </div>
+					    </div>
+					    <!-- AI 장기 예측 -->
+					    <div class="col-md-6">
+					        <div class="card border-0 shadow-sm">
+					            <div class="card-header bg-white fw-bold">🔮 AI 장기 예측 매출 / 이익 (억원 단위)</div>
+					            <div class="card-body">
+					                <canvas id="forecastChart" height="150"></canvas>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					<!-- 분기별 이익률 + ai예측 이익률 -->
+					<div class="col-md-12 mt-3">
+					    <div class="card border-0 shadow-sm">
+					        <div class="card-header bg-white fw-bold">📊 분기별 실적 + AI 예측</div>
+					        <div class="card-body">
+					            <canvas id="quarterlyChart" height="80"></canvas>
+					        </div>
+					    </div>
+					</div>
 				    <script>
-				    const data = [
+				    // 월별 손익
+				    const monthly = [
 				        <c:forEach var="m" items="${result.monthly_performance}" varStatus="vs">
 				            { month: '${m.month}', profit: ${m.profit} }<c:if test="${!vs.last}">,</c:if>
 				        </c:forEach>
 				    ];
-				    new Chart(document.getElementById('myChart'), {
+				    new Chart(document.getElementById('monthlyChart'), {
 				        type: 'bar',
 				        data: {
-				            labels: data.map(d => d.month),
-				            datasets: [{
-				                label: '월별 이익',
-				                data: data.map(d => d.profit),
-				                backgroundColor: 'rgba(54,162,235,0.6)'
+				            labels: monthly.map(d => d.month.substring(2).replace('-', '.')),
+				            datasets: [{ 
+				                label: '월별 이익 (원)', 
+				                data: monthly.map(d => d.profit), // profit 매출이익률
+				                backgroundColor: monthly.map(d => d.profit >= 0 ? 'rgba(54,162,235,0.6)' : 'rgba(255,99,132,0.6)')
 				            }]
+				        },
+				        options: {
+				            plugins: {
+				                tooltip: {
+				                    callbacks: {
+				                        label: ctx => '이익: ' + (ctx.raw / 100000000).toFixed(1) + '억원'
+				                    }
+				                }
+				            },
+				            scales: {
+				                y: {
+				                    ticks: {
+				                        callback: val => (val / 100000000).toFixed(0) + '억'
+				                    }
+				                }
+				            }
+				        }
+				    });
+				
+				    // AI 장기 예측
+				    const forecast = [
+				        <c:forEach var="f" items="${result.long_term_forecast}" varStatus="vs">
+				            { month: '${f.month}', revenue: ${f.predicted_revenue}, profit: ${f.predicted_profit} }<c:if test="${!vs.last}">,</c:if>
+				        </c:forEach>
+				    ];
+				    new Chart(document.getElementById('forecastChart'), {
+				        type: 'line',
+				        data: {
+				            labels: forecast.map(d => d.month.substring(2).replace('-', '.')),
+				            datasets: [
+				                { label: '예측 매출', data: forecast.map(d => d.revenue), borderColor: 'rgba(54,162,235,1)', tension: 0.3 },
+				                { label: '예측 이익', data: forecast.map(d => d.profit), borderColor: 'rgba(75,192,192,1)', tension: 0.3 }
+				            ]
+				        },
+				        options: {
+				            scales: {
+				                y: {
+				                    ticks: {
+				                        callback: val => (val / 100000000).toFixed(0) + '억'
+				                    }
+				                }
+				            }
+				        }
+				    });
+				    // 분기별 이익률 + AI예측
+				    const quarterly = [
+				        <c:forEach var="q" items="${result.quarterly_chart}" varStatus="vs">
+				            { label: '${q.label}', profit: ${q.profit}}<c:if test="${!vs.last}">,</c:if>
+				        </c:forEach>
+				    ];
+
+				    new Chart(document.getElementById('quarterlyChart'), {
+				        type: 'bar',
+				        data: {
+				        	labels: quarterly.map(d => d.label.replace('2023년', '23년').replace('2024년', '24년').replace('2025년', '25년').replace('2026년', '26년')),
+				            datasets: [
+				                {
+				                    label: '분기별 매출이익',
+				                    data: quarterly.map(d => d.profit),
+				                    backgroundColor: quarterly.map(d => 
+				                    d.label.includes('예측') ? 'rgba(255,159,64,0.6)' :  // 예측 → 주황색
+				                    d.profit >= 0 ? 'rgba(54,162,235,0.6)' :              // 이익 → 파란색
+				                    'rgba(255,99,132,0.6)'                                 // 손실 → 빨간색
+				                )
+				                }
+				            ]
+				        },
+				        options: {
+				            scales: {
+				                y: {
+				                    ticks: {
+				                        callback: val => (val / 100000000).toFixed(0) + '억'
+				                    }
+				                }
+				            }
 				        }
 				    });
 				    </script>
 				</c:if>
-				
-                <!-- 2단계: 엑셀 다운로드 -->
-                <form action="/finance/report/download" method="post">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-success btn-lg px-5">
-                        <i class="fas fa-file-excel me-2"></i> 2단계: 엑셀 다운로드
-                    </button>
-                </form>
-			
-
             </div>
         </div>
     </div>
