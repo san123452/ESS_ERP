@@ -15,6 +15,7 @@
         .sidebar .nav-item .submenu .nav-link { padding-left: 50px; font-size: 0.9em; }
         .main-content { flex-grow: 1; overflow-y: auto; padding: 30px; }
     </style>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -107,12 +108,38 @@
             <p class="text-muted mb-4">DB 데이터를 분석하여 손익계산서(P&L) 형태의 엑셀 파일을 생성합니다.</p>
             <div class="d-flex justify-content-center gap-3">
                 <!-- 1단계: 분석 요청 -->
-                <form action="/finance/report/analyze" method="post">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-primary btn-lg px-5">
-                        <i class="fas fa-search me-2"></i> 1단계: 데이터 분석 요청
-                    </button>
-                </form>
+				<form action="/finance/report/analyze" method="post">
+				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				    <button type="submit" class="btn btn-primary btn-lg px-5">
+				        <i class="fas fa-search me-2"></i> 1단계: 데이터 분석 요청
+				    </button>
+				</form>
+				
+				<!-- 버튼 아래에 차트 표시 -->
+				<c:if test="${result != null}">
+				    <div class="mt-4 w-100">
+				        <canvas id="myChart"></canvas>
+				    </div>
+				    <script>
+				    const data = [
+				        <c:forEach var="m" items="${result.monthly_performance}" varStatus="vs">
+				            { month: '${m.month}', profit: ${m.profit} }<c:if test="${!vs.last}">,</c:if>
+				        </c:forEach>
+				    ];
+				    new Chart(document.getElementById('myChart'), {
+				        type: 'bar',
+				        data: {
+				            labels: data.map(d => d.month),
+				            datasets: [{
+				                label: '월별 이익',
+				                data: data.map(d => d.profit),
+				                backgroundColor: 'rgba(54,162,235,0.6)'
+				            }]
+				        }
+				    });
+				    </script>
+				</c:if>
+				
                 <!-- 2단계: 엑셀 다운로드 -->
                 <form action="/finance/report/download" method="post">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

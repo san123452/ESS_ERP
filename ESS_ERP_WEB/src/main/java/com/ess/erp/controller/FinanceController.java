@@ -58,7 +58,9 @@ public class FinanceController {
             Map<String, Object> result = restTemplate.postForObject(pythonUrl, payload, Map.class);
             //(분석 결과 세션에 저장후 페이지로 돌아가게 함)
             session.setAttribute("analyzeResult", result);
+            System.out.println("Python 분석 결과: " + result);
             return "redirect:/finance/report?analyzed=true";
+            
 
         } catch (Exception e) {
         	return "redirect:/finance/report?error=true";
