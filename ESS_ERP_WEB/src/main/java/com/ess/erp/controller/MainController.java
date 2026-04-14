@@ -12,4 +12,9 @@ public class MainController {
         return "index"; // src/main/webapp/WEB-INF/views/index.jsp를 호출
     }
 
+    // 3. 분석 요청 페이지 연결
+    @GetMapping("/data/analyze")
+    public String analysisPage() {
+        return "data/analysisRequest"; // /WEB-INF/views/data/analysisRequest.jsp 호출 (JSP 파일명은 실제 파일에 맞게 수정)
+    }
 }
