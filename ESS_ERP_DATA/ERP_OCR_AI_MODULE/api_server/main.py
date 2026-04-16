@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Body
+from fastapi import FastAPI, UploadFile, File, Body, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ConfigDict # ConfigDict 추가
@@ -16,7 +16,7 @@ from ocr_engine.processor import extract_text
 from ocr_engine.formatter import format_to_dataframe
 
 from rpa_logic.analyzer import analyze_sales_data
-from rpa_logic.excel_maker import generate_excel_report
+from rpa_logic.excel_maker import build_macro_enabled_report, MissingMacroTemplateError
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -103,7 +103,7 @@ async def analyze_sales(request: AnalysisRequest):
     """
     Pydantic 모델을 통해 검증된 데이터를 분석하여 반환합니다.
     """
-    data_list = [s.dict(by_alias=True) for s in request.sales_list]
+    data_list = [s.model_dump(by_alias=True) for s in request.sales_list]
     result = analyze_sales_data(data_list, request.production_list, request.bom_cost)
     logger.info(f"분석 요청 처리 완료: {len(data_list)}건 판매 데이터")
 
@@ -115,14 +115,20 @@ async def download_excel_report(analysis_data: dict):
     """
     프론트엔드에서 받은 분석 데이터를 엑셀 파일로 변환하여 반환합니다.
     """
-    output = generate_excel_report(analysis_data)
-    
+    try:
+        artifact = build_macro_enabled_report(analysis_data)
+    except MissingMacroTemplateError as exc:
+        logger.error("Excel macro template is missing: %s", exc)
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
     headers = {
-        'Content-Disposition': 'attachment; filename="ERP_Sales_Report.xlsx"'
+        "Content-Disposition": f'attachment; filename="{artifact.filename}"'
     }
-    return StreamingResponse(output, 
-                             media_type='application/vnd.openpyxlformats-officedocument.spreadsheetml.sheet', 
-                             headers=headers)
+    return StreamingResponse(
+        artifact.buffer,
+        media_type=artifact.media_type,
+        headers=headers,
+    )
 
 # [Step 4] 전표 저장 API (DB 연결 시뮬레이션)
 @app.post("/order/save")
