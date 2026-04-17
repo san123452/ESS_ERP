@@ -83,7 +83,7 @@ public class FinanceController {
 	            HttpHeaders headers = new HttpHeaders();
 	            headers.setContentType(MediaType.parseMediaType(
 	                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-	            headers.add("Content-Disposition", "attachment; filename=report.xlsx");
+	            headers.add("Content-Disposition", "attachment; filename=report.xlsm");
 	            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
 	
 	        } catch (Exception e) {
