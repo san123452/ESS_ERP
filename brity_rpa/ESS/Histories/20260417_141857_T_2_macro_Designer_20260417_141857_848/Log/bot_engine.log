@@ -1,0 +1,551 @@
+﻿2026-04-17 14:18:58,931 [T1] INFO  EngineStarter
+BOT Engine Start - v3.1.126.00128 at 2026-04-17 오후 2:18:58
+EngineID: D_20260417_141858_195
+PID : 10436
+PPID: 14300
+Working Directory: C:\Users\3class_007\AppData\Roaming\Brity RPA Designer
+
+2026-04-17 14:18:58,945 [T1] INFO  EngineStarter
+System Language: ko-KR
+Resolution: 1920 x 1200
+
+2026-04-17 14:18:59,155 [T1] INFO  Config
+Initialize Config
+
+2026-04-17 14:18:59,195 [T1] DEBUG Config
+Config Loaded
+
+2026-04-17 14:18:59,196 [T1] DEBUG Config
+Backup config file.
+
+2026-04-17 14:18:59,208 [T1] INFO  Config
+Orchestrator Service => https://bwrpa.samsungsds.com:8777
+
+2026-04-17 14:18:59,209 [T1] INFO  Config
+Initialize Resource Config
+
+2026-04-17 14:18:59,237 [T1] DEBUG Config
+Refresh Language Information
+
+2026-04-17 14:18:59,317 [T1] INFO  Config
+All Config Initialized.
+
+2026-04-17 14:18:59,321 [T1] DEBUG KeyManager
+Initialize KeyManager
+
+2026-04-17 14:18:59,324 [T1] DEBUG KeyManager
+Load device unique id.
+
+2026-04-17 14:18:59,332 [T1] DEBUG KeyManager
+Device ID is initialized. (Type: 7)
+
+2026-04-17 14:18:59,335 [T1] INFO  Config
+Activated License Type : StandAloneDesigner
+
+2026-04-17 14:18:59,424 [T4] DEBUG JobService
+Connect to agent service
+
+2026-04-17 14:18:59,437 [T1] DEBUG ApplicationInitializer
+InitMode: Thread
+
+2026-04-17 14:18:59,448 [T1] INFO  LibraryManager
+Load Libraries - Started
+
+2026-04-17 14:18:59,459 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Chrome
+
+2026-04-17 14:18:59,460 [T4] DEBUG JobService
+JobService URL : net.tcp://127.0.0.1:59001/rpa/agent
+
+2026-04-17 14:18:59,461 [T4] DEBUG JobService
+Open connection
+
+2026-04-17 14:18:59,504 [T4] DEBUG JobService
+Register engine to agent
+
+2026-04-17 14:18:59,532 [T4] DEBUG JobService
+Engine is connected to agent service.
+
+2026-04-17 14:18:59,532 [T4] DEBUG JobService
+Owner Process PID: 14300
+
+2026-04-17 14:18:59,536 [T4] INFO  JobService
+Start monitoring owner process is terminated.
+
+2026-04-17 14:18:59,673 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Desktop
+
+2026-04-17 14:18:59,849 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Excel
+
+2026-04-17 14:18:59,884 [T8] INFO  JobService
+Start Job: T_2_macro (Foreground)
+{
+  "JobType": 1,
+  "State": 0,
+  "IsRunning": false,
+  "ResultMessage": null,
+  "StartTime": "2026-04-17 14:18:58",
+  "EndTime": null,
+  "JobId": "Designer_20260417_141857_848",
+  "UserAuthentication": null,
+  "ProcessPath": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\T_2_macro.proc",
+  "ProcessId": "a04dcbbb-a34e-4929-b6da-a5a995ffdc74",
+  "ProcessVer": "",
+  "ProcessArgs": null,
+  "RequesterType": 3,
+  "RequesterId": "designer",
+  "RequesterPID": 14300,
+  "OptionsJsonString": null,
+  "TimeoutSec": 0,
+  "EngineID": "D_20260417_141858_195",
+  "EnginePID": 0,
+  "EngineRecommededVersion": "",
+  "JobWorkDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_141857_T_2_macro_Designer_20260417_141857_848",
+  "JobLogDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_141857_T_2_macro_Designer_20260417_141857_848\\Log",
+  "JobScreenshotDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_141857_T_2_macro_Designer_20260417_141857_848\\Log\\Screenshot"
+}
+
+2026-04-17 14:19:00,008 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Flow
+
+2026-04-17 14:19:00,027 [T7] DEBUG JobService
+Waiting library loading...
+
+2026-04-17 14:19:00,258 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.IE
+
+2026-04-17 14:19:00,421 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ImageConverter
+
+2026-04-17 14:19:00,519 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ImageRecognition
+
+2026-04-17 14:19:00,725 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.MicrosoftOCR
+
+2026-04-17 14:19:00,781 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Net
+
+2026-04-17 14:19:00,857 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Orchestra
+
+2026-04-17 14:19:00,932 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ProcessFlow
+
+2026-04-17 14:19:01,007 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.SAP
+
+2026-04-17 14:19:01,085 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Web
+
+2026-04-17 14:19:01,182 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Win
+
+2026-04-17 14:19:01,296 [T1] INFO  ScreenCapture
+Default Screen Capture Bounds: 0,0,1920,1200
+
+2026-04-17 14:19:01,328 [T1] DEBUG AddInLoader
+Load Assembly : BrityRPA.AddIn.NativeApp
+
+2026-04-17 14:19:01,433 [T1] DEBUG AddInLoader
+Load Assembly : BrityWorks.AddIn.Outlook
+
+2026-04-17 14:19:01,498 [T1] DEBUG AddInLoader
+Load Assembly : BrityWorks.AddIn.Pdf
+
+2026-04-17 14:19:01,578 [T1] DEBUG LibraryManager
+Load Library - Chrome
+
+2026-04-17 14:19:01,594 [T1] DEBUG LibraryManager
+Load Library - Desktop
+
+2026-04-17 14:19:01,610 [T1] DEBUG LibraryManager
+Load Library - Excel
+
+2026-04-17 14:19:01,626 [T1] DEBUG LibraryManager
+Load Library - Flow
+
+2026-04-17 14:19:01,641 [T1] DEBUG LibraryManager
+Load Library - IE
+
+2026-04-17 14:19:01,657 [T1] DEBUG LibraryManager
+Load Library - ImageConverter
+
+2026-04-17 14:19:01,672 [T1] DEBUG LibraryManager
+Load Library - ImageRecognition
+
+2026-04-17 14:19:01,688 [T1] DEBUG LibraryManager
+Load Library - MicrosoftOCR
+
+2026-04-17 14:19:01,703 [T1] DEBUG LibraryManager
+Load Library - NativeApp
+
+2026-04-17 14:19:01,719 [T1] DEBUG LibraryManager
+Load Library - Net
+
+2026-04-17 14:19:01,735 [T1] DEBUG LibraryManager
+Load Library - Orchestra
+
+2026-04-17 14:19:01,750 [T1] DEBUG LibraryManager
+Load Library - Outlook
+
+2026-04-17 14:19:01,766 [T1] DEBUG LibraryManager
+Load Library - Pdf
+
+2026-04-17 14:19:01,782 [T1] DEBUG LibraryManager
+Load Library - SAP
+
+2026-04-17 14:19:01,798 [T1] DEBUG LibraryManager
+Load Library - Web
+
+2026-04-17 14:19:01,813 [T1] DEBUG LibraryManager
+Load Library - Win
+
+2026-04-17 14:19:01,829 [T1] DEBUG LibraryManager
+Load Library - WorkFlow
+
+2026-04-17 14:19:01,834 [T1] DEBUG LibraryManager
+Load built-in script libraries
+
+2026-04-17 14:19:02,065 [T1] INFO  LibraryManager
+Load Libraries - Completed.
+
+2026-04-17 14:19:02,075 [T1] INFO  App
+Launch Arguments: Total: 6 |  -eid D_20260417_141858_195 -runtype ProcRunner -ppid 14300
+
+2026-04-17 14:19:02,075 [T1] DEBUG Config
+Refresh Language Information
+
+2026-04-17 14:19:02,076 [T1] DEBUG LibraryManager
+LibraryManager Initialized.
+
+2026-04-17 14:19:02,086 [T7] DEBUG Config
+Reload User Settings
+
+2026-04-17 14:19:02,089 [T7] INFO  JobService
+Config Loading Completed.
+
+2026-04-17 14:19:02,089 [T7] DEBUG JobService
+Config Loading Time: 2062 ms.
+
+2026-04-17 14:19:02,095 [T7] DEBUG JobService
+Check Shared Token
+
+2026-04-17 14:19:02,097 [T7] DEBUG TokenManager
+Load connection token
+
+2026-04-17 14:19:02,098 [T7] DEBUG TokenManager
+Clear Connection Token - No Shared Token
+
+2026-04-17 14:19:02,105 [T7] DEBUG ServerInformationClient
+get server features for engine bot from config.
+
+2026-04-17 14:19:02,107 [T7] INFO  Config
+Try to load server features from config.
+
+2026-04-17 14:19:02,109 [T7] DEBUG ServerInformationClient
+get server features for engine bot from config.
+
+2026-04-17 14:19:02,110 [T7] INFO  TokenManager
+SecurityType in server feature : v2
+
+2026-04-17 14:19:02,110 [T7] INFO  TokenManager
+SecurityType : v2
+
+2026-04-17 14:19:02,112 [T7] INFO  JobService
+Shared Token - No Token
+
+2026-04-17 14:19:02,116 [T7] INFO  JobManager
+Create JobManager instance for job T_2_macro(Designer_20260417_141857_848)
+
+2026-04-17 14:19:02,123 [T7] INFO  JobRequest
+Job ID : Designer_20260417_141857_848
+Project Path  : C:\Users\3class_007\Documents\Brity RPA Projects\ESS\ESS.proj
+Process Name  : T_2_macro
+Engine Mode   : Designer
+Requester Type: Designer
+Requester PID : 14300
+
+2026-04-17 14:19:02,125 [T6] INFO  JobRequest
+Start Callback Sender
+
+2026-04-17 14:19:02,125 [T6] DEBUG JobRequest
+Step Callback Interval: 500
+
+2026-04-17 14:19:02,171 [T7] DEBUG ProjectManager
+Set Project Information
+
+2026-04-17 14:19:02,197 [T7] INFO  PlayOptionManager
+PlayOption
+- Step Interval : 1
+- Disable DrawBounds : False
+- Invoke First : False
+- Allow Upload of DumpScreen results : False
+
+2026-04-17 14:19:02,199 [T7] INFO  JobRunner
+Initialize Script Engine
+
+2026-04-17 14:19:02,214 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Initializing
+##############################################################
+
+
+2026-04-17 14:19:02,244 [T6] DEBUG JobRequest
+Callback - State: Initializing
+
+
+2026-04-17 14:19:03,163 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Ready
+##############################################################
+
+
+2026-04-17 14:19:03,174 [T6] DEBUG JobRequest
+Callback - State: Ready
+
+
+2026-04-17 14:19:03,182 [T7] INFO  JobRunnerHook
+HotKey Hook Started
+
+2026-04-17 14:19:03,183 [T7] INFO  JobRequest
+##############################################################
+### STATE: Starting
+##############################################################
+
+
+2026-04-17 14:19:03,185 [T11-ScriptEngine] INFO  JobRunner
+RunProcess start
+
+2026-04-17 14:19:03,187 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Running
+##############################################################
+
+
+2026-04-17 14:19:03,187 [T11-ScriptEngine] INFO  JobRequest
+Last job life cycle state: Running
+
+2026-04-17 14:19:03,190 [T6] DEBUG JobRequest
+Callback - State: Starting
+
+
+2026-04-17 14:19:03,206 [T6] DEBUG JobRequest
+Callback - State: Running
+
+
+2026-04-17 14:19:04,165 [T11-ScriptEngine] DEBUG ScreenCapture
+DirectX Screen Capture Initialized.
+
+2026-04-17 14:19:04,238 [T11-ScriptEngine] DEBUG JobRunner
+DirectX ScreenCapture Checked.
+
+2026-04-17 14:19:04,270 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: StartProcess - T_2_macro
+##############################################################
+a04dcbbb-a34e-4929-b6da-a5a995ffdc74
+T_2_macro
+
+
+2026-04-17 14:19:04,331 [T11-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: T_2_macro
+**************************************************************
+ - STEP 1: S1684f8361913481d869ef775e78ae6bf (1/22) - (1/22)
+ - [1] ExecuteCmd
+
+
+2026-04-17 14:19:04,750 [T11-ScriptEngine] INFO  JobRequest
+ - STEP 2: Saaa675c2aeac403d861f73a25c98d26d (2/22) - (2/22)
+ - [2] OpenExcel
+
+
+2026-04-17 14:19:04,790 [T11-ScriptEngine] ERROR OpenExcel
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+2026-04-17 14:19:04,790 [T11-ScriptEngine] ERROR OpenExcel
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+2026-04-17 14:19:04,793 [T11-ScriptEngine] DEBUG ExcelBase
+DisposeExcel
+
+2026-04-17 14:19:17,709 [T11-ScriptEngine] WARN  ScriptSupport
+[CATCH_STEP_EXCEPTION] Process: T_2_macro
+Step: OpenExcel (2/22)
+
+Error: 지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+2026-04-17 14:19:17,719 [T11-ScriptEngine] FINE  JobRunner
+RunTask ExceptionOccured. TASK: T_2_macro => 지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+2026-04-17 14:19:17,733 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: EndProcess - T_2_macro
+##############################################################
+a04dcbbb-a34e-4929-b6da-a5a995ffdc74
+T_2_macro
+
+
+2026-04-17 14:19:17,746 [T11-ScriptEngine] ERROR JobRunner
+Process: T_2_macro
+Step: OpenExcel (2/22)
+
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+[CallStack]
+  - T_2_macro: [2] OpenExcel
+
+[Global Variables]
+  - RESULT = <null> (Any)
+
+[T_2_macro Variables]
+  - latest_report_path = '' (String)
+  - reportgood = <undefined> (Undefined)
+  - mcr_reset = <undefined> (Undefined)
+  - mcr_security = <undefined> (Undefined)
+  - officeoff = <undefined> (Undefined)
+
+2026-04-17 14:19:17,747 [T11-ScriptEngine] DEBUG JobManager
+Set Result State: ExceptionOccured
+
+2026-04-17 14:19:28,607 [T11-ScriptEngine] INFO  JobRunner
+Make report.
+
+2026-04-17 14:19:28,770 [T11-ScriptEngine] INFO  JobRunner
+Start to clean up resources.
+
+2026-04-17 14:19:28,772 [T7] DEBUG JobRunner
+Start timer for checking the job to be completed.
+
+2026-04-17 14:19:28,774 [T11-ScriptEngine] DEBUG JobRunner
+OnProcessFailed
+
+2026-04-17 14:19:28,775 [T11-ScriptEngine] INFO  JobRunner
+Start to clean up resources.
+
+2026-04-17 14:19:28,778 [T11-ScriptEngine] DEBUG JobRunner
+Remove all libraries
+
+2026-04-17 14:19:28,852 [T11-ScriptEngine] DEBUG NetPlayer
+WebPlayer OnDispose
+
+2026-04-17 14:19:28,856 [T11-ScriptEngine] DEBUG WebPlayer
+WebPlayer OnDispose : Do Nothing
+
+2026-04-17 14:19:28,861 [T11-ScriptEngine] DEBUG UiaAppHelper
+WinHelper DisposeAppList Count: 0
+
+2026-04-17 14:19:28,902 [T11-ScriptEngine] INFO  JobRunner
+All Resources Clear
+
+2026-04-17 14:19:28,907 [T11-ScriptEngine] DEBUG JobRunner
+OnCompleted
+
+2026-04-17 14:19:28,908 [T11-ScriptEngine] DEBUG JobRunner
+SendJobResult: ExceptionOccured
+
+2026-04-17 14:19:28,908 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: ExceptionOccured
+##############################################################
+Process: T_2_macro
+Step: OpenExcel (2/22)
+
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+[CallStack]
+  - T_2_macro: [2] OpenExcel
+
+[Global Variables]
+  - RESULT = <null> (Any)
+
+[T_2_macro Variables]
+  - latest_report_path = '' (String)
+  - reportgood = <undefined> (Undefined)
+  - mcr_reset = <undefined> (Undefined)
+  - mcr_security = <undefined> (Undefined)
+  - officeoff = <undefined> (Undefined)
+
+
+2026-04-17 14:19:28,908 [T11-ScriptEngine] INFO  JobRequest
+Last job life cycle state: ExceptionOccured
+
+2026-04-17 14:19:28,911 [T11-ScriptEngine] DEBUG JobDBManager
+Set last life-cycle state: ExceptionOccured - Process: T_2_macro
+Step: OpenExcel (2/22)
+
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+[CallStack]
+  - T_2_macro: [2] OpenExcel
+
+[Global Variables]
+  - RESULT = <null> (Any)
+
+[T_2_macro Variables]
+  - latest_report_path = '' (String)
+  - reportgood = <undefined> (Undefined)
+  - mcr_reset = <undefined> (Undefined)
+  - mcr_security = <undefined> (Undefined)
+  - officeoff = <undefined> (Undefined)
+
+2026-04-17 14:19:28,952 [T11-ScriptEngine] INFO  JobRequest
+##############################################################
+### JOB COMPLETED
+##############################################################
+
+
+2026-04-17 14:19:28,960 [T6] DEBUG JobRequest
+Callback - State: ExceptionOccured
+Process: T_2_macro
+Step: OpenExcel (2/22)
+
+지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.
+=> Path: 
+
+[CallStack]
+  - T_2_macro: [2] OpenExcel
+
+[Global Variables]
+  - RESULT = <null> (Any)
+
+[T_2_macro Variables]
+  - latest_report_path = '' (String)
+  - reportgood = <undefined> (Undefined)
+  - mcr_reset = <undefined> (Undefined)
+  - mcr_security = <undefined> (Undefined)
+  - officeoff = <undefined> (Undefined)
+
+2026-04-17 14:19:28,961 [T6] INFO  JobRequest
+Callback - EngineClosed
+
+2026-04-17 14:19:28,962 [T6] INFO  JobService
+Disconnect agent service
+
+2026-04-17 14:19:28,964 [T6] DEBUG JobRequest
+End of Callback Sender
+
+2026-04-17 14:19:28,974 [T11-ScriptEngine] INFO  JobRunner
+RunProcess end
+
+2026-04-17 14:19:28,974 [T1] INFO  JobService
+Exit - Shutdown Engine BOT
+
+2026-04-17 14:19:28,975 [T1] INFO  EngineStarter
+EngineBOT MainWindow Closing
+
+2026-04-17 14:19:28,975 [T1] INFO  EngineStarter
+EngineBOT MainWindow Closed
+
+2026-04-17 14:19:28,976 [T1] INFO  EngineStarter
+EngineBOT Application Exit
+

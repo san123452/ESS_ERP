@@ -1,0 +1,44 @@
+<Project id="6715a7cb-1048-4cce-be95-780059bced31" namespace="" name="ESS" category="project" workType="foreground" version="1.00" lastPublishedDate="" lastPublishedBy="" createdDate="2026-03-19 11:01:38" createdBy="" latestProcess="P_ESS" designerVersion="3.1.126.00128" DesignedBy="">
+  <SharedTask isExpended="false" />
+  <NormalTask isExpended="true">
+    <LinkItem id="1badd194-2111-4277-98f2-9734fbed1351" category="NormalTask" isChanged="Y" desc="" stepCount="17" name="T_1_ERP분석">
+      <Properties />
+    </LinkItem>
+    <LinkItem id="a04dcbbb-a34e-4929-b6da-a5a995ffdc74" category="NormalTask" isChanged="Y" desc="" stepCount="24" name="T_2_macro">
+      <Properties />
+    </LinkItem>
+    <LinkItem id="007a7b4f-3a96-4763-b206-a77072b5ef8f" category="NormalTask" isChanged="Y" desc="" stepCount="2" name="T_3_SMTP">
+      <Properties />
+    </LinkItem>
+  </NormalTask>
+  <Event isExpended="false" />
+  <Process isExpended="true">
+    <LinkItem id="ff74b226-9194-47e8-a2bb-06592cc20f4a" category="Process" isChanged="Y" desc="default process" stepCount="3" name="P_ESS">
+      <Properties />
+    </LinkItem>
+  </Process>
+  <CustomLibraries isExpended="false" />
+  <LibraryTemplate isExpended="false" />
+  <Resources isExpended="false" />
+  <RemoteProcess isExpended="false" />
+  <RecorderData isExpended="false" />
+  <Asset />
+  <Library />
+  <Variables />
+  <Properties>
+    <Property key="PlayOption_StepInterval" controlType="Int32" valueType="System.Int32" formatType="Integer" required="False" visible="True" readonly="False" encrypted="False" isChanged="N" value="1" />
+    <Property key="PlayOption_DisableDrawBounds" controlType="Boolean" valueType="System.Boolean" formatType="Boolean" required="False" visible="True" readonly="False" encrypted="False" isChanged="N" value="False" />
+    <Property key="PlayOption_InvokeFirst" controlType="Boolean" valueType="System.Boolean" formatType="Boolean" required="False" visible="True" readonly="False" encrypted="False" isChanged="N" value="False" />
+    <Property key="PlayOption_AllowUploadDumpScreenResult" controlType="Boolean" valueType="System.Boolean" formatType="Boolean" required="False" visible="True" readonly="False" encrypted="False" isChanged="N" value="False" />
+  </Properties>
+  <DisplayLibraries>
+    <string>Flow</string>
+    <string>Win</string>
+    <string>Net</string>
+    <string>Excel</string>
+    <string>Desktop</string>
+    <string>Chrome</string>
+    <string>ImageRecognition</string>
+    <string>DataConverter</string>
+  </DisplayLibraries>
+</Project>

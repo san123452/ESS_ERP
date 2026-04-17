@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Result id="a04dcbbb-a34e-4929-b6da-a5a995ffdc74" name="T_2_macro" result="Fail" detail="경로에 잘못된 문자가 있습니다.&#xA;&#xA;-- Recent Warning Messages --&#xA;Process: T_2_macro&#xA;Step: OpenExcel (3/23)&#xA;&#xA;Error: 경로에 잘못된 문자가 있습니다." start="2026-04-17T05:23:24.837" end="2026-04-17T05:23:47.731" jobId="Designer_20260417_142322_086">
+  <Step id="S1684f8361913481d869ef775e78ae6bf" taskName="T_2_macro" type="Desktop" name="ExecuteCmd" displayName="ExecuteCmd" callDepth="1" depth="1" num="1" result="Pass" start="2026-04-17T05:23:24.897" end="2026-04-17T05:23:25.244" displayTime="0.3s">
+    <Variables>
+      <Variable name="latest_report_path" scope="Normal" owner="T_2_macro" declareType="Any" isChanged="false" isChangable="true" runtimeType="Undefined" value="&lt;undefined&gt;" />
+    </Variables>
+    <Properties setIndex="0">
+      <Property value="" runtimeType="String" key="Options_OnError" displayKey="On Error" visible="true" required="false" />
+      <Property value="" runtimeType="String" key="Key_Description" displayKey="Description" visible="true" required="false" />
+      <Property value="'powershell.exe'" runtimeType="String" key="Command_Command" displayKey="Command" visible="true" required="true" />
+      <Property value="&lt;Too Long&gt; '-NoProfile -Command &quot;Get-ChildItem \'C:\\Users\\3class_007\\Downloads\' -Filter \'*report*.xlsm\' | ... 92 more" runtimeType="String" key="Command_Arguments" displayKey="Arguments" visible="true" required="false" />
+      <Property value="10000" runtimeType="Integer" key="Command_Timeout" displayKey="Timeout(ms)" visible="true" required="true" />
+      <Property value="this.latest_report_path : 'C:\\Users\\3class_007\\Downloads\\report.xlsm\r\n'" runtimeType="String" key="Command_Output" displayKey="Output" visible="true" required="false" />
+    </Properties>
+  </Step>
+  <Step id="S6ce26cd947bc4032b6946d1b99d34fc5" taskName="T_2_macro" type="Desktop" name="MessageBox" displayName="MessageBox" callDepth="1" depth="1" num="2" result="Pass" start="2026-04-17T05:23:25.252" end="2026-04-17T05:23:34.539" displayTime="9.3s">
+    <Variables>
+      <Variable name="latest_report_path" scope="Normal" owner="T_2_macro" declareType="Any" isChanged="false" isChangable="true" runtimeType="String" value="'C:\\Users\\3class_007\\Downloads\\report.xlsm\r\n'" />
+    </Variables>
+    <Properties setIndex="0">
+      <Property value="" runtimeType="String" key="Options_OnError" displayKey="On Error" visible="true" required="false" />
+      <Property value="" runtimeType="String" key="Key_Description" displayKey="Description" visible="true" required="false" />
+      <Property value="'C:\\Users\\3class_007\\Downloads\\report.xlsm\r\n'" runtimeType="String" key="Conditions_Arguments" displayKey="Arguments" visible="true" required="false" />
+      <Property value="&lt;undefined&gt;" runtimeType="Undefined" key="Command_Timeout" displayKey="Timeout (Sec)" visible="true" required="false" />
+    </Properties>
+  </Step>
+  <Step id="Saaa675c2aeac403d861f73a25c98d26d" taskName="T_2_macro" type="Excel" name="OpenExcel" displayName="OpenExcel" callDepth="1" depth="1" num="3" result="Fail" detail="경로에 잘못된 문자가 있습니다." start="2026-04-17T05:23:34.549" end="2026-04-17T05:23:47.728" displayTime="13.2s">
+    <Variables>
+      <Variable name="RESULT" scope="System" declareType="Any" isChanged="false" isChangable="true" runtimeType="Any" value="&lt;null&gt;" />
+      <Variable name="latest_report_path" scope="Normal" owner="T_2_macro" declareType="Any" isChanged="false" isChangable="true" runtimeType="String" value="'C:\\Users\\3class_007\\Downloads\\report.xlsm\r\n'" />
+    </Variables>
+    <Properties setIndex="0">
+      <Property value="" runtimeType="String" key="Options_OnError" displayKey="On Error" visible="true" required="false" />
+      <Property value="" runtimeType="String" key="Key_Description" displayKey="Description" visible="true" required="false" />
+      <Property value="RESULT : " runtimeType="Any" key="Output_OutputExcel" displayKey="Excel" visible="true" required="true" />
+      <Property value="'C:\\Users\\3class_007\\Downloads\\report.xlsm\r\n'" runtimeType="String" key="File_Path" displayKey="Path" visible="true" required="true" />
+      <Property value="false" runtimeType="Boolean" key="File_Invisible" displayKey="Invisible" visible="true" required="false" />
+      <Property value="false" runtimeType="Boolean" key="File_ReadOnly" displayKey="ReadOnly" visible="true" required="false" />
+      <Property value="true" runtimeType="Boolean" key="File_Maximize" displayKey="Maximize" visible="true" required="false" />
+      <Property value="false" runtimeType="Boolean" key="File_ExecuteShell" displayKey="Execute Shell" visible="true" required="false" />
+      <Property value="60" runtimeType="Integer" key="File_Timeout" displayKey="Timeout" visible="false" required="true" />
+      <Property value="false" runtimeType="Boolean" key="File_UsePassword" displayKey="UsePassword" visible="true" required="false" />
+      <Property value="&lt;Secure Data&gt;" runtimeType="String" key="File_OpenPassword" displayKey="OpenPassword" visible="false" required="false" />
+      <Property value="&lt;Secure Data&gt;" runtimeType="String" key="File_WritePassword" displayKey="WritePassword" visible="false" required="false" />
+      <Property value="Comma(,)" runtimeType="String" key="File_TextDelimiter" displayKey="Text Delimiter" visible="true" required="false" />
+    </Properties>
+  </Step>
+  <JobInfo>
+    <Info name="Bot Version" value="3.1.126.00128" />
+    <Info name="Resolution" value="1920 x 1200" />
+    <Info name="Language" value="한국어 (대한민국)" />
+    <Info name="BotID" value="S-DESIGNER-OERKB" />
+  </JobInfo>
+</Result>

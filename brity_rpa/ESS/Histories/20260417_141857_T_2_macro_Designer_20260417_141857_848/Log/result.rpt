@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Result id="a04dcbbb-a34e-4929-b6da-a5a995ffdc74" name="T_2_macro" result="Fail" detail="지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.&#xA;=&gt; Path: &#xA;&#xA;-- Recent Warning Messages --&#xA;Process: T_2_macro&#xA;Step: OpenExcel (2/22)&#xA;&#xA;Error: 지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.&#xA;=&gt; Path: " start="2026-04-17T05:19:04.265" end="2026-04-17T05:19:17.732" jobId="Designer_20260417_141857_848">
+  <Step id="S1684f8361913481d869ef775e78ae6bf" taskName="T_2_macro" type="Desktop" name="ExecuteCmd" displayName="ExecuteCmd" callDepth="1" depth="1" num="1" result="Pass" start="2026-04-17T05:19:04.333" end="2026-04-17T05:19:04.742" displayTime="0.4s">
+    <Variables>
+      <Variable name="latest_report_path" scope="Normal" owner="T_2_macro" declareType="Any" isChanged="false" isChangable="true" runtimeType="Undefined" value="&lt;undefined&gt;" />
+    </Variables>
+    <Properties setIndex="0">
+      <Property value="" runtimeType="String" key="Options_OnError" displayKey="On Error" visible="true" required="false" />
+      <Property value="" runtimeType="String" key="Key_Description" displayKey="Description" visible="true" required="false" />
+      <Property value="'powershell.exe'" runtimeType="String" key="Command_Command" displayKey="Command" visible="true" required="true" />
+      <Property value="&lt;Too Long&gt; '-NoProfile -Command &quot;$cutoff=(Get-Date).AddMinutes(-10); Get-ChildItem \'C:\\Users\\3class_007\\Dow ... 176 more" runtimeType="String" key="Command_Arguments" displayKey="Arguments" visible="true" required="false" />
+      <Property value="10000" runtimeType="Integer" key="Command_Timeout" displayKey="Timeout(ms)" visible="true" required="true" />
+      <Property value="this.latest_report_path : ''" runtimeType="String" key="Command_Output" displayKey="Output" visible="true" required="false" />
+    </Properties>
+  </Step>
+  <Step id="Saaa675c2aeac403d861f73a25c98d26d" taskName="T_2_macro" type="Excel" name="OpenExcel" displayName="OpenExcel" callDepth="1" depth="1" num="2" result="Fail" detail="지정된 경로에 열수 있는 파일이 없습니다. 경로를 확인 해주십시요.&#xA;=&gt; Path: " start="2026-04-17T05:19:04.750" end="2026-04-17T05:19:17.731" displayTime="13s">
+    <Variables>
+      <Variable name="RESULT" scope="System" declareType="Any" isChanged="false" isChangable="true" runtimeType="Any" value="&lt;null&gt;" />
+      <Variable name="latest_report_path" scope="Normal" owner="T_2_macro" declareType="Any" isChanged="false" isChangable="true" runtimeType="String" value="''" />
+    </Variables>
+    <Properties setIndex="0">
+      <Property value="" runtimeType="String" key="Options_OnError" displayKey="On Error" visible="true" required="false" />
+      <Property value="" runtimeType="String" key="Key_Description" displayKey="Description" visible="true" required="false" />
+      <Property value="RESULT : " runtimeType="Any" key="Output_OutputExcel" displayKey="Excel" visible="true" required="true" />
+      <Property value="''" runtimeType="String" key="File_Path" displayKey="Path" visible="true" required="true" />
+      <Property value="false" runtimeType="Boolean" key="File_Invisible" displayKey="Invisible" visible="true" required="false" />
+      <Property value="false" runtimeType="Boolean" key="File_ReadOnly" displayKey="ReadOnly" visible="true" required="false" />
+      <Property value="true" runtimeType="Boolean" key="File_Maximize" displayKey="Maximize" visible="true" required="false" />
+      <Property value="false" runtimeType="Boolean" key="File_ExecuteShell" displayKey="Execute Shell" visible="true" required="false" />
+      <Property value="60" runtimeType="Integer" key="File_Timeout" displayKey="Timeout" visible="false" required="true" />
+      <Property value="false" runtimeType="Boolean" key="File_UsePassword" displayKey="UsePassword" visible="true" required="false" />
+      <Property value="&lt;Secure Data&gt;" runtimeType="String" key="File_OpenPassword" displayKey="OpenPassword" visible="false" required="false" />
+      <Property value="&lt;Secure Data&gt;" runtimeType="String" key="File_WritePassword" displayKey="WritePassword" visible="false" required="false" />
+      <Property value="Comma(,)" runtimeType="String" key="File_TextDelimiter" displayKey="Text Delimiter" visible="true" required="false" />
+    </Properties>
+  </Step>
+  <JobInfo>
+    <Info name="Bot Version" value="3.1.126.00128" />
+    <Info name="Resolution" value="1920 x 1200" />
+    <Info name="Language" value="한국어 (대한민국)" />
+    <Info name="BotID" value="S-DESIGNER-OERKB" />
+  </JobInfo>
+</Result>

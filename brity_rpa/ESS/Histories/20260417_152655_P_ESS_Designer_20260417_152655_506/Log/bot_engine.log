@@ -1,0 +1,938 @@
+﻿2026-04-17 14:37:06,569 [T1] INFO  EngineStarter
+BOT Engine Start - v3.1.126.00128 at 2026-04-17 오후 2:37:06
+EngineID: D_20260417_143705_925
+PID : 18496
+PPID: 14300
+Working Directory: C:\Users\3class_007\AppData\Roaming\Brity RPA Designer
+
+2026-04-17 14:37:06,585 [T1] INFO  EngineStarter
+System Language: ko-KR
+Resolution: 1920 x 1200
+
+2026-04-17 14:37:06,793 [T1] INFO  Config
+Initialize Config
+
+2026-04-17 14:37:06,831 [T1] DEBUG Config
+Config Loaded
+
+2026-04-17 14:37:06,835 [T1] DEBUG Config
+Backup config file.
+
+2026-04-17 14:37:06,848 [T1] INFO  Config
+Orchestrator Service => https://bwrpa.samsungsds.com:8777
+
+2026-04-17 14:37:06,848 [T1] INFO  Config
+Initialize Resource Config
+
+2026-04-17 14:37:06,876 [T1] DEBUG Config
+Refresh Language Information
+
+2026-04-17 14:37:06,938 [T1] INFO  Config
+All Config Initialized.
+
+2026-04-17 14:37:06,944 [T1] DEBUG KeyManager
+Initialize KeyManager
+
+2026-04-17 14:37:06,947 [T1] DEBUG KeyManager
+Load device unique id.
+
+2026-04-17 14:37:06,953 [T1] DEBUG KeyManager
+Device ID is initialized. (Type: 7)
+
+2026-04-17 14:37:06,957 [T1] INFO  Config
+Activated License Type : StandAloneDesigner
+
+2026-04-17 14:37:07,027 [T4] DEBUG JobService
+Connect to agent service
+
+2026-04-17 14:37:07,050 [T4] DEBUG JobService
+JobService URL : net.tcp://127.0.0.1:59001/rpa/agent
+
+2026-04-17 14:37:07,052 [T4] DEBUG JobService
+Open connection
+
+2026-04-17 14:37:07,055 [T1] DEBUG ApplicationInitializer
+InitMode: Thread
+
+2026-04-17 14:37:07,067 [T1] INFO  LibraryManager
+Load Libraries - Started
+
+2026-04-17 14:37:07,068 [T4] DEBUG JobService
+Register engine to agent
+
+2026-04-17 14:37:07,079 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Chrome
+
+2026-04-17 14:37:07,079 [T4] DEBUG JobService
+Engine is connected to agent service.
+
+2026-04-17 14:37:07,079 [T4] DEBUG JobService
+Owner Process PID: 14300
+
+2026-04-17 14:37:07,083 [T4] INFO  JobService
+Start monitoring owner process is terminated.
+
+2026-04-17 14:37:07,326 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Desktop
+
+2026-04-17 14:37:07,467 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Excel
+
+2026-04-17 14:37:07,604 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Flow
+
+2026-04-17 14:37:07,724 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.IE
+
+2026-04-17 14:37:07,804 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ImageConverter
+
+2026-04-17 14:37:07,867 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ImageRecognition
+
+2026-04-17 14:37:08,048 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.MicrosoftOCR
+
+2026-04-17 14:37:08,105 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Net
+
+2026-04-17 14:37:08,189 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Orchestra
+
+2026-04-17 14:37:08,270 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.ProcessFlow
+
+2026-04-17 14:37:08,371 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.SAP
+
+2026-04-17 14:37:08,451 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Web
+
+2026-04-17 14:37:08,554 [T1] DEBUG AddInLoader
+Load Assembly : IPA.Lib.Win
+
+2026-04-17 14:37:08,682 [T1] INFO  ScreenCapture
+Default Screen Capture Bounds: 0,0,1920,1200
+
+2026-04-17 14:37:08,712 [T1] DEBUG AddInLoader
+Load Assembly : BrityRPA.AddIn.NativeApp
+
+2026-04-17 14:37:08,816 [T1] DEBUG AddInLoader
+Load Assembly : BrityWorks.AddIn.Outlook
+
+2026-04-17 14:37:08,877 [T1] DEBUG AddInLoader
+Load Assembly : BrityWorks.AddIn.Pdf
+
+2026-04-17 14:37:08,961 [T1] DEBUG LibraryManager
+Load Library - Chrome
+
+2026-04-17 14:37:08,977 [T1] DEBUG LibraryManager
+Load Library - Desktop
+
+2026-04-17 14:37:08,993 [T1] DEBUG LibraryManager
+Load Library - Excel
+
+2026-04-17 14:37:09,008 [T1] DEBUG LibraryManager
+Load Library - Flow
+
+2026-04-17 14:37:09,023 [T1] DEBUG LibraryManager
+Load Library - IE
+
+2026-04-17 14:37:09,039 [T1] DEBUG LibraryManager
+Load Library - ImageConverter
+
+2026-04-17 14:37:09,054 [T1] DEBUG LibraryManager
+Load Library - ImageRecognition
+
+2026-04-17 14:37:09,069 [T1] DEBUG LibraryManager
+Load Library - MicrosoftOCR
+
+2026-04-17 14:37:09,085 [T1] DEBUG LibraryManager
+Load Library - NativeApp
+
+2026-04-17 14:37:09,100 [T1] DEBUG LibraryManager
+Load Library - Net
+
+2026-04-17 14:37:09,115 [T1] DEBUG LibraryManager
+Load Library - Orchestra
+
+2026-04-17 14:37:09,131 [T1] DEBUG LibraryManager
+Load Library - Outlook
+
+2026-04-17 14:37:09,146 [T1] DEBUG LibraryManager
+Load Library - Pdf
+
+2026-04-17 14:37:09,162 [T1] DEBUG LibraryManager
+Load Library - SAP
+
+2026-04-17 14:37:09,178 [T1] DEBUG LibraryManager
+Load Library - Web
+
+2026-04-17 14:37:09,193 [T1] DEBUG LibraryManager
+Load Library - Win
+
+2026-04-17 14:37:09,209 [T1] DEBUG LibraryManager
+Load Library - WorkFlow
+
+2026-04-17 14:37:09,213 [T1] DEBUG LibraryManager
+Load built-in script libraries
+
+2026-04-17 14:37:09,499 [T1] INFO  LibraryManager
+Load Libraries - Completed.
+
+2026-04-17 14:37:09,508 [T1] INFO  App
+Launch Arguments: Total: 6 |  -eid D_20260417_143705_925 -runtype ProcRunner -ppid 14300
+
+2026-04-17 14:37:09,509 [T1] DEBUG Config
+Refresh Language Information
+
+2026-04-17 14:37:09,510 [T1] DEBUG LibraryManager
+LibraryManager Initialized.
+
+2026-04-17 15:26:55,876 [T8] INFO  JobService
+Start Job: P_ESS (Foreground)
+{
+  "JobType": 1,
+  "State": 0,
+  "IsRunning": false,
+  "ResultMessage": null,
+  "StartTime": "2026-04-17 15:26:55",
+  "EndTime": null,
+  "JobId": "Designer_20260417_152655_506",
+  "UserAuthentication": null,
+  "ProcessPath": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\P_ESS.proc",
+  "ProcessId": "ff74b226-9194-47e8-a2bb-06592cc20f4a",
+  "ProcessVer": "",
+  "ProcessArgs": null,
+  "RequesterType": 3,
+  "RequesterId": "designer",
+  "RequesterPID": 14300,
+  "OptionsJsonString": null,
+  "TimeoutSec": 0,
+  "EngineID": "D_20260417_143705_925",
+  "EnginePID": 0,
+  "EngineRecommededVersion": "",
+  "JobWorkDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_152655_P_ESS_Designer_20260417_152655_506",
+  "JobLogDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_152655_P_ESS_Designer_20260417_152655_506\\Log",
+  "JobScreenshotDir": "C:\\Users\\3class_007\\Documents\\Brity RPA Projects\\ESS\\Histories\\20260417_152655_P_ESS_Designer_20260417_152655_506\\Log\\Screenshot"
+}
+
+2026-04-17 15:26:56,009 [T9] DEBUG JobService
+Waiting library loading...
+
+2026-04-17 15:26:56,011 [T9] DEBUG Config
+Reload User Settings
+
+2026-04-17 15:26:56,015 [T9] INFO  Config
+UserSettings Reloaded =>
+ - LastExecution : wWEBpAGhxaBinOXztzTXCO9E0WLJOaTTKBC8tmd3/r8= -> th/DxRlMtxTaQ+EwypLtfdo3cb6LHX4Nd7iQujV67rQ=
+
+2026-04-17 15:26:56,015 [T9] INFO  JobService
+Config Loading Completed.
+
+2026-04-17 15:26:56,015 [T9] DEBUG JobService
+Config Loading Time: 5 ms.
+
+2026-04-17 15:26:56,019 [T9] DEBUG JobService
+Check Shared Token
+
+2026-04-17 15:26:56,024 [T9] DEBUG TokenManager
+Load connection token
+
+2026-04-17 15:26:56,032 [T9] DEBUG TokenManager
+Clear Connection Token - No Shared Token
+
+2026-04-17 15:26:56,050 [T9] DEBUG ServerInformationClient
+get server features for engine bot from config.
+
+2026-04-17 15:26:56,055 [T9] INFO  Config
+Try to load server features from config.
+
+2026-04-17 15:26:56,094 [T9] DEBUG ServerInformationClient
+get server features for engine bot from config.
+
+2026-04-17 15:26:56,095 [T9] INFO  TokenManager
+SecurityType in server feature : v2
+
+2026-04-17 15:26:56,095 [T9] INFO  TokenManager
+SecurityType : v2
+
+2026-04-17 15:26:56,099 [T9] INFO  JobService
+Shared Token - No Token
+
+2026-04-17 15:26:56,104 [T9] INFO  JobManager
+Create JobManager instance for job P_ESS(Designer_20260417_152655_506)
+
+2026-04-17 15:26:56,109 [T9] INFO  JobRequest
+Job ID : Designer_20260417_152655_506
+Project Path  : C:\Users\3class_007\Documents\Brity RPA Projects\ESS\ESS.proj
+Process Name  : P_ESS
+Engine Mode   : Designer
+Requester Type: Designer
+Requester PID : 14300
+
+2026-04-17 15:26:56,143 [T11] INFO  JobRequest
+Start Callback Sender
+
+2026-04-17 15:26:56,143 [T11] DEBUG JobRequest
+Step Callback Interval: 500
+
+2026-04-17 15:26:56,201 [T9] DEBUG ProjectManager
+Set Project Information
+
+2026-04-17 15:26:56,236 [T9] INFO  PlayOptionManager
+PlayOption
+- Step Interval : 1
+- Disable DrawBounds : False
+- Invoke First : False
+- Allow Upload of DumpScreen results : False
+
+2026-04-17 15:26:56,237 [T9] INFO  JobRunner
+Initialize Script Engine
+
+2026-04-17 15:26:56,255 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Initializing
+##############################################################
+
+
+2026-04-17 15:26:56,306 [T11] DEBUG JobRequest
+Callback - State: Initializing
+
+
+2026-04-17 15:26:57,582 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Ready
+##############################################################
+
+
+2026-04-17 15:26:57,593 [T9] INFO  JobRunnerHook
+HotKey Hook Started
+
+2026-04-17 15:26:57,594 [T9] INFO  JobRequest
+##############################################################
+### STATE: Starting
+##############################################################
+
+
+2026-04-17 15:26:57,596 [T13-ScriptEngine] INFO  JobRunner
+RunProcess start
+
+2026-04-17 15:26:57,598 [T11] DEBUG JobRequest
+Callback - State: Ready
+
+
+2026-04-17 15:26:57,598 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Running
+##############################################################
+
+
+2026-04-17 15:26:57,598 [T13-ScriptEngine] INFO  JobRequest
+Last job life cycle state: Running
+
+2026-04-17 15:26:57,600 [T11] DEBUG JobRequest
+Callback - State: Starting
+
+
+2026-04-17 15:26:57,614 [T11] DEBUG JobRequest
+Callback - State: Running
+
+
+2026-04-17 15:26:58,580 [T13-ScriptEngine] DEBUG ScreenCapture
+DirectX Screen Capture Initialized.
+
+2026-04-17 15:26:58,658 [T13-ScriptEngine] DEBUG JobRunner
+DirectX ScreenCapture Checked.
+
+2026-04-17 15:26:58,685 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: StartProcess - P_ESS
+##############################################################
+ff74b226-9194-47e8-a2bb-06592cc20f4a
+P_ESS
+
+
+2026-04-17 15:26:58,756 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: P_ESS
+**************************************************************
+ - STEP 1: S6f1eb665414240a4ba9bb81ebdc82df3 (1/3) - (1/46)
+ - [1] RunTask
+
+
+2026-04-17 15:26:58,849 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: StartTask - T_1_ERP분석
+##############################################################
+1badd194-2111-4277-98f2-9734fbed1351
+T_1_ERP분석
+
+
+2026-04-17 15:26:58,870 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: T_1_ERP분석
+**************************************************************
+ - STEP 2: S43f2ae63ed7d4449b07d72055a5c5c29 (1/17) - (2/46)
+ - [1] InputBox
+
+
+2026-04-17 15:27:07,235 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 3: S482787b8f7ae468287bb1edfaee1af48 (2/17) - (3/46)
+ - [2] InputBox
+
+
+2026-04-17 15:27:09,029 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 4: Se302109d2a6040bfb826b931ae68c58c (3/17) - (4/46)
+ - [3] ChromeOpen
+
+
+2026-04-17 15:27:13,446 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 5: S9d9e752e39864fa383fa25a44a3f24b9 (4/17) - (5/46)
+ - [4] TextInput
+
+
+2026-04-17 15:27:13,604 [T10] DEBUG UIAEventHandler
+Start UIA event handler
+
+2026-04-17 15:27:13,805 [T10] DEBUG UIAEventHandler
+UI Structure Changed Count: 0
+
+2026-04-17 15:27:13,805 [T10] DEBUG UIAEventHandler
+Waiting additional time 138 msec for the screen structure is changing. Requested interval: 200 msec.
+
+2026-04-17 15:27:13,837 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:13,844 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - Login - Chrome')
+
+2026-04-17 15:27:13,917 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:14,099 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: 'ID (사번)'
+ - value: ''
+
+2026-04-17 15:27:16,363 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 6: S739fab99b6e842ee9f5535c873c0b55b (5/17) - (6/46)
+ - [5] TextInput
+
+
+2026-04-17 15:27:16,391 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:16,391 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - Login - Chrome')
+
+2026-04-17 15:27:16,415 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:16,477 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: 'Password'
+ - value: ''
+
+2026-04-17 15:27:18,630 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 7: S8e2df62b267a4f9dbcb48320dc879849 (6/17) - (7/46)
+ - [6] WaitAppear
+
+
+2026-04-17 15:27:19,682 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:19,683 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 메인 대시보드 - Chrome')
+
+2026-04-17 15:27:19,694 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:19,759 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: ''
+ - value: ''
+
+2026-04-17 15:27:19,781 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 8: S8e94a06c41ad47e49b53da2c4372fe2a (7/17) - (8/46)
+ - [7] IfThen
+
+
+2026-04-17 15:27:19,797 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 9: S5484d476af3f416caed647f9c98008bf (8/17) - (9/46)
+ - [8] Click
+
+
+2026-04-17 15:27:19,846 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:19,847 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 메인 대시보드 - Chrome')
+
+2026-04-17 15:27:19,866 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:19,922 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: '사용하지 않음'
+ - value: ''
+
+2026-04-17 15:27:20,331 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 10: S4d42a3f3db7f4cca8b96229135adf793 (9/17) - (10/46)
+ - [9] End-IfThen
+
+
+2026-04-17 15:27:20,347 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 11: S88968a1b2cfe45f6924790fa6ae6aa7e (10/17) - (11/46)
+ - [10] Click
+
+
+2026-04-17 15:27:20,380 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:20,380 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 메인 대시보드 - Chrome')
+
+2026-04-17 15:27:20,411 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:20,480 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: ' AI 분석 요청'
+ - value: 'http://localhost:8081/finance/report'
+
+2026-04-17 15:27:20,906 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 12: Se5fb2a93a42b45818a4fb5e40eb3a921 (11/17) - (12/46)
+ - [11] Click
+
+
+2026-04-17 15:27:20,956 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:20,956 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 재무제표 - Chrome')
+
+2026-04-17 15:27:20,989 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:21,063 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: ' 1단계: 데이터 분석 요청'
+ - value: ''
+
+2026-04-17 15:27:21,480 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 13: Sc1c2994411e84a619febaa2c4d673a34 (12/17) - (13/46)
+ - [12] WaitAppear
+
+
+2026-04-17 15:27:22,517 [T10] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:22,518 [T10] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 재무제표 - Chrome')
+
+2026-04-17 15:27:22,526 [T10] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:22,601 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: 'localhost:8081 내용:'
+ - value: ''
+
+2026-04-17 15:27:22,614 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 14: S50cefdb772d747f6b495ba13ffb98b62 (13/17) - (14/46)
+ - [13] IfThen
+
+
+2026-04-17 15:27:22,629 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 15: S139246cb23974b49a6bd0113782acccd (14/17) - (15/46)
+ - [14] Click
+
+
+2026-04-17 15:27:22,660 [T21] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:22,661 [T21] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 재무제표 - Chrome')
+
+2026-04-17 15:27:22,680 [T21] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:22,746 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: '확인'
+ - value: ''
+
+2026-04-17 15:27:23,173 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 16: S83706ced4e1e427793cd94d75efb2c75 (15/17) - (16/46)
+ - [15] End-IfThen
+
+
+2026-04-17 15:27:23,188 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 17: Sb759c5e0f80946a38ccde18a6c84bb72 (16/17) - (17/46)
+ - [16] Click
+
+
+2026-04-17 15:27:23,228 [T24] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 2
+
+2026-04-17 15:27:23,228 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (Foreground) (name: 'ESS ERP - 재무제표 - Chrome')
+
+2026-04-17 15:27:23,264 [T24] INFO  WinFinder
+ . Finding Object by 'RelativePoint Search' (Try: 1) ... 
+
+2026-04-17 15:27:23,337 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: Found by 'ObjectPathEx' method. (Total: 1)
+ - name: ' 2단계: 엑셀 다운로드'
+ - value: ''
+
+2026-04-17 15:27:23,752 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 18: Sba949b982b9646e89dadb86b2a42bf61 (17/17) - (18/46)
+ - [17] Delay
+
+
+2026-04-17 15:27:26,766 [T13-ScriptEngine] INFO  JobRunner
+[PASS] TASK: T_1_ERP분석
+
+2026-04-17 15:27:26,775 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: EndTask - T_1_ERP분석
+##############################################################
+1badd194-2111-4277-98f2-9734fbed1351
+T_1_ERP분석
+
+
+2026-04-17 15:27:26,782 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: P_ESS
+**************************************************************
+ - STEP 19: S59e52235548647e7a4905005831d0722 (2/3) - (19/46)
+ - [2] RunTask
+
+
+2026-04-17 15:27:26,799 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: StartTask - T_2_macro
+##############################################################
+a04dcbbb-a34e-4929-b6da-a5a995ffdc74
+T_2_macro
+
+
+2026-04-17 15:27:26,814 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: T_2_macro
+**************************************************************
+ - STEP 20: S1684f8361913481d869ef775e78ae6bf (1/24) - (20/46)
+ - [1] ExecuteCmd
+
+
+2026-04-17 15:27:27,067 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 21: S6ce26cd947bc4032b6946d1b99d34fc5 (2/24) - (21/46)
+ - [2] MessageBox
+
+
+2026-04-17 15:27:27,096 [T13-ScriptEngine] INFO  ScriptSupport
+C:\Users\3class_007\Downloads\report (3).xlsm
+
+2026-04-17 15:27:30,412 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 22: Saaa675c2aeac403d861f73a25c98d26d (3/24) - (22/46)
+ - [3] OpenExcel
+
+
+2026-04-17 15:27:33,374 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 23: S2e06fab818254c398fa1f2e33e0ee4f6 (4/24) - (23/46)
+ - [4] WaitAppear
+
+
+2026-04-17 15:27:34,410 [T22] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:34,413 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:36,197 [T22] INFO  WinFinder
+Finding Object In App... Try: 2, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:36,199 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:37,767 [T22] INFO  WinFinder
+Finding Object In App... Try: 3, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:37,768 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:39,335 [T22] INFO  WinFinder
+Finding Object In App... Try: 4, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:39,336 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:40,896 [T22] INFO  WinFinder
+Finding Object In App... Try: 5, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:40,896 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:42,462 [T22] INFO  WinFinder
+Finding Object In App... Try: 6, IsLastTry: True. AppCount: 1
+
+2026-04-17 15:27:42,463 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:44,069 [T22] INFO  WinFinder
+Finding Object In App... Try: 7, IsLastTry: True. AppCount: 1
+
+2026-04-17 15:27:44,069 [T22] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:44,715 [T13-ScriptEngine] DEBUG WinFinder
+UI Inspection Time: 11 seconds.
+
+2026-04-17 15:27:44,715 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: NoTarget
+
+2026-04-17 15:27:44,721 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 24: S95e2481d3260496db11fd2c4a45ed34a (5/24) - (24/46)
+ - [5] IfThen
+
+
+2026-04-17 15:27:44,737 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 25: S5f764c4723b54dd58b9e7c0894c37764 (7/24) - (26/46)
+ - [7] End-IfThen
+
+
+2026-04-17 15:27:44,753 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 26: S26d9b2af7c514b898fa6d7c77318aa0b (8/24) - (27/46)
+ - [8] WaitAppear
+
+
+2026-04-17 15:27:45,796 [T24] INFO  WinFinder
+Finding Object In App... Try: 1, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:45,797 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:47,352 [T24] INFO  WinFinder
+Finding Object In App... Try: 2, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:47,353 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:48,863 [T24] INFO  WinFinder
+Finding Object In App... Try: 3, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:48,864 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:50,408 [T24] INFO  WinFinder
+Finding Object In App... Try: 4, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:50,409 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:51,925 [T24] INFO  WinFinder
+Finding Object In App... Try: 5, IsLastTry: False. AppCount: 1
+
+2026-04-17 15:27:51,926 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:53,435 [T24] INFO  WinFinder
+Finding Object In App... Try: 6, IsLastTry: True. AppCount: 1
+
+2026-04-17 15:27:53,436 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:54,960 [T24] INFO  WinFinder
+Finding Object In App... Try: 7, IsLastTry: True. AppCount: 1
+
+2026-04-17 15:27:54,960 [T24] DEBUG WinElementTargetFinder
+## Object Find In App (name: 'report (3) - Excel')
+
+2026-04-17 15:27:55,483 [T13-ScriptEngine] INFO  WinFinder
+Finding Result: NoTarget
+
+2026-04-17 15:27:55,487 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 27: Sc9fb38daaa4f490ba6e4da2abf0a0477 (9/24) - (28/46)
+ - [9] IfElse
+
+
+2026-04-17 15:27:55,503 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 28: S7e17e3a07ae943c483e55511399bfe72 (19/24) - (38/46)
+ - [19] Else
+
+
+2026-04-17 15:27:55,518 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 29: Sa762b467c1bd4598b4ffdb64d3359b06 (20/24) - (39/46)
+ - [20] ExecuteMacro
+
+
+2026-04-17 15:27:57,364 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 30: S7585b873b56b4777ba1e112aa21383d6 (21/24) - (40/46)
+ - [21] End-IfElse
+
+
+2026-04-17 15:27:57,379 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 31: S93225445689e4658bd3937a2af8c2eee (22/24) - (41/46)
+ - [22] ExecuteScript
+
+
+2026-04-17 15:27:57,395 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 32: Sf64cf8db362b44818c80ab31dee6086b (23/24) - (42/46)
+ - [23] SaveExcel
+
+
+2026-04-17 15:27:58,189 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 33: S075b5ca974f64c1db63eaa7f4096d245 (24/24) - (43/46)
+ - [24] CloseExcel
+
+
+2026-04-17 15:27:58,274 [T13-ScriptEngine] DEBUG ExcelBase
+DisposeExcel
+
+2026-04-17 15:27:59,555 [T13-ScriptEngine] INFO  JobRunner
+[PASS] TASK: T_2_macro => Microsoft.ClearScript.V8.V8ScriptItem
+
+2026-04-17 15:27:59,555 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: EndTask - T_2_macro
+##############################################################
+a04dcbbb-a34e-4929-b6da-a5a995ffdc74
+T_2_macro
+
+
+2026-04-17 15:27:59,569 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: P_ESS
+**************************************************************
+ - STEP 34: Sb18fb3f3e3a44cca990c40bfde6c14be (3/3) - (44/46)
+ - [3] RunTask
+
+
+2026-04-17 15:27:59,574 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: StartTask - T_3_SMTP
+##############################################################
+007a7b4f-3a96-4763-b206-a77072b5ef8f
+T_3_SMTP
+
+
+2026-04-17 15:27:59,584 [T13-ScriptEngine] INFO  JobRequest
+**************************************************************
+*** TASK: T_3_SMTP
+**************************************************************
+ - STEP 35: S5cd5504cc6964f0692b67748e0403467 (1/2) - (45/46)
+ - [1] ExecuteScript
+
+
+2026-04-17 15:27:59,600 [T13-ScriptEngine] INFO  JobRequest
+ - STEP 36: S219319c22bbb47f685a99a92d6a12fed (2/2) - (46/46)
+ - [2] SendMail
+
+
+2026-04-17 15:28:05,339 [T13-ScriptEngine] INFO  JobRunner
+[PASS] TASK: T_3_SMTP
+
+2026-04-17 15:28:05,340 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: EndTask - T_3_SMTP
+##############################################################
+007a7b4f-3a96-4763-b206-a77072b5ef8f
+T_3_SMTP
+
+
+2026-04-17 15:28:05,340 [T13-ScriptEngine] INFO  JobRunner
+[PASS] TASK: P_ESS
+
+2026-04-17 15:28:05,341 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: EndProcess - P_ESS
+##############################################################
+ff74b226-9194-47e8-a2bb-06592cc20f4a
+P_ESS
+
+
+2026-04-17 15:28:05,354 [T13-ScriptEngine] INFO  JobRunner
+RunProcess - Job Result: {}
+
+2026-04-17 15:28:05,355 [T13-ScriptEngine] DEBUG JobManager
+Set Result State: Completed
+
+2026-04-17 15:28:05,359 [T13-ScriptEngine] INFO  JobRunner
+Make report.
+
+2026-04-17 15:28:05,410 [T13-ScriptEngine] INFO  JobRunner
+Start to clean up resources.
+
+2026-04-17 15:28:05,411 [T13-ScriptEngine] DEBUG JobRunner
+OnProcessCompleted
+
+2026-04-17 15:28:05,411 [T21] DEBUG JobRunner
+Start timer for checking the job to be completed.
+
+2026-04-17 15:28:05,413 [T13-ScriptEngine] INFO  JobRunner
+Start to clean up resources.
+
+2026-04-17 15:28:05,415 [T13-ScriptEngine] DEBUG JobRunner
+Remove all libraries
+
+2026-04-17 15:28:05,416 [T13-ScriptEngine] DEBUG NetPlayer
+WebPlayer OnDispose
+
+2026-04-17 15:28:05,418 [T13-ScriptEngine] DEBUG WebPlayer
+WebPlayer OnDispose : Do Nothing
+
+2026-04-17 15:28:05,418 [T13-ScriptEngine] DEBUG UIAEventHandler
+Stop UIA event handler
+
+2026-04-17 15:28:05,419 [T13-ScriptEngine] DEBUG UIAEventHandler
+Stop UIA event handler
+
+2026-04-17 15:28:05,430 [T13-ScriptEngine] DEBUG UiaAppHelper
+WinHelper DisposeAppList Count: 0
+
+2026-04-17 15:28:05,430 [T13-ScriptEngine] INFO  JobRunner
+All Resources Clear
+
+2026-04-17 15:28:05,432 [T13-ScriptEngine] DEBUG JobRunner
+OnCompleted
+
+2026-04-17 15:28:05,433 [T13-ScriptEngine] DEBUG JobRunner
+SendJobResult: Completed
+
+2026-04-17 15:28:05,433 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### STATE: Completed
+##############################################################
+{}
+
+
+2026-04-17 15:28:05,433 [T13-ScriptEngine] INFO  JobRequest
+Last job life cycle state: Completed
+
+2026-04-17 15:28:05,433 [T13-ScriptEngine] INFO  JobRequest
+Update skipped current step informations.
+
+2026-04-17 15:28:05,436 [T13-ScriptEngine] DEBUG JobDBManager
+Set last life-cycle state: Completed - {}
+
+2026-04-17 15:28:05,456 [T11] DEBUG JobRequest
+Callback - State: Completed
+{}
+
+2026-04-17 15:28:05,460 [T13-ScriptEngine] INFO  JobRequest
+##############################################################
+### JOB COMPLETED
+##############################################################
+
+
+2026-04-17 15:28:05,473 [T11] INFO  JobRequest
+Callback - EngineClosed
+
+2026-04-17 15:28:05,473 [T11] INFO  JobService
+Disconnect agent service
+
+2026-04-17 15:28:05,475 [T11] DEBUG JobRequest
+End of Callback Sender
+
