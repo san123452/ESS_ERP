@@ -1312,7 +1312,7 @@ Sub Create_Run_Button()
     End With
 End Sub
 
-Sub Run_All_Reports()
+Private Sub Run_All_Reports_Core(Optional ByVal showSuccessMessage As Boolean = True)
     Dim currentStep As String
     On Error GoTo EH
     Application.ScreenUpdating = False
@@ -1333,13 +1333,23 @@ Sub Run_All_Reports()
     Application.Calculation = xlCalculationAutomatic
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
-    MsgBox K(Array(48372, 44256, 49436, 44032, 32, 49373, 49457, 46104, 50632, 49845, 45768, 45796)), vbInformation, "ESS ERP"
+    If showSuccessMessage Then
+        MsgBox K(Array(48372, 44256, 49436, 44032, 32, 49373, 49457, 46104, 50632, 49845, 45768, 45796)), vbInformation, "ESS ERP"
+    End If
     Exit Sub
 EH:
     Application.Calculation = xlCalculationAutomatic
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     MsgBox K(Array(50724, 47448)) & ": " & Err.Number & " / " & Err.Description & vbCrLf & "Step: " & currentStep, vbCritical, "ESS ERP"
+End Sub
+
+Sub Run_All_Reports()
+    Run_All_Reports_Core True
+End Sub
+
+Sub Run_All_Reports_Silent()
+    Run_All_Reports_Core False
 End Sub
 
 Sub Reset_All_Reports()
